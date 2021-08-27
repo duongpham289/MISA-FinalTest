@@ -1,0 +1,15 @@
+D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Infrastructure\bin\Debug\net5.0\MISA.Test.Infrastructure.deps.json
+D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Infrastructure\bin\Debug\net5.0\MISA.Test.Infrastructure.dll
+D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Infrastructure\bin\Debug\net5.0\ref\MISA.Test.Infrastructure.dll
+D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Infrastructure\bin\Debug\net5.0\MISA.Test.Infrastructure.pdb
+D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Infrastructure\bin\Debug\net5.0\MISA.Test.Core.dll
+D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Infrastructure\bin\Debug\net5.0\MISA.Test.Core.pdb
+D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Infrastructure\obj\Debug\net5.0\MISA.Test.Infrastructure.csproj.AssemblyReference.cache
+D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Infrastructure\obj\Debug\net5.0\MISA.Test.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Infrastructure\obj\Debug\net5.0\MISA.Test.Infrastructure.AssemblyInfoInputs.cache
+D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Infrastructure\obj\Debug\net5.0\MISA.Test.Infrastructure.AssemblyInfo.cs
+D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Infrastructure\obj\Debug\net5.0\MISA.Test.Infrastructure.csproj.CoreCompileInputs.cache
+D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Infrastructure\obj\Debug\net5.0\MISA.Test.Infrastructure.csproj.CopyComplete
+D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Infrastructure\obj\Debug\net5.0\MISA.Test.Infrastructure.dll
+D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Infrastructure\obj\Debug\net5.0\ref\MISA.Test.Infrastructure.dll
+D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Infrastructure\obj\Debug\net5.0\MISA.Test.Infrastructure.pdb

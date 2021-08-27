@@ -1,0 +1,67 @@
+/* Content: Nơi chứa table dữ liệu và các filter */
+.content {
+    width: calc(100% - 221px);
+	height: calc(100% - 49px);
+	position: absolute;
+	top: 48px;
+	left: 220px;
+	padding: 16px;
+    background-color: var(--color-secondary-hover);
+	transition: 0.2s all ease-in-out;
+}
+/* Mở rộng khi Menu thu nhỏ */
+.content--extend {
+	width: calc(100% - 64px);
+	left: 64px;
+}
+    /* Phần Header của Content */
+    .content .content__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .content .content__header .header__title {
+        font-size: 24px;
+        font-family: GoogleSans-Bold;
+/*         font-weight: bold; */
+    }
+    .content .content__header .button__container{
+        display: flex;
+        gap: 16px;
+    }
+    .content .content__header .button__container #button__delete-employee {
+        background-color: var(--color-alert);
+    }
+    .content .content__header .button__container #button__delete-employee .button__text {
+        margin: 0
+    }
+
+    /* Phần Filter của Content */
+    .content .content__filter {
+        display: flex;
+        margin-top: 8px;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .content .content__filter .content__filter--left {
+        display: flex;
+        align-content: center;
+    }
+
+/* Content Footer */
+.content__footer {
+	width: 100%;
+	height: 56px;
+    padding: 0 16px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+#content-area{
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+}
