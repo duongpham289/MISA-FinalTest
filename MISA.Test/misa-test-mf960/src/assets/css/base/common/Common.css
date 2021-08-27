@@ -1,13 +1,13 @@
 :root {
-    --color-primary: #019160;
-    --color-primary-active: #01B075;
-    --color-primary-hover: #2FBE8E;
+    --color-primary: #2ca01c;
+    --color-primary-active: #248b15;
+    --color-primary-hover: #35bf22;
     --color-toast-ok: #BAFFE7;
     --color-primary-focus: #EBF9F4;
     --color-secondary: #E5E5E5;
     --color-secondary-hover: #E9EBEE;
+    --color-background-table: #f4f5f8;
     --color-content-text: #454545;
-    --color--menu-active: #2ca01c;
     --color-required:#FF4747;
     --color-alert: #F65454;
     --color-alert-hover: #f5263a;
@@ -162,4 +162,24 @@
 
 .rotate-180 {
     transform: rotate(180deg);
+}
+
+.flex {
+    display: flex!important;
+}
+
+.items-center {
+    align-items: center!important;
+}
+
+.bg-white {
+    background-color: #fff!important;
+}
+
+.relative {
+    position: relative!important;
+}
+
+.flex{
+    display: flex !important;
 }

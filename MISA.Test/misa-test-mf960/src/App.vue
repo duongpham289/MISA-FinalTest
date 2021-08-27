@@ -1,24 +1,30 @@
 <template>
-  <div id="app">
-   <Menu />
-   <Header />
-   <!-- <Content /> -->
+  <div class="layout-main">
+    <Menu />
+    <div class="main-content">
+      <Header />
+      <Content />
+    </div>
   </div>
 </template>
 
 <script>
-import Header from './components/layouts/TheHeader.vue'
-import Menu from './components/layouts/TheMenu.vue'
+import Content from "./components/layouts/TheContent.vue";
+
+import Header from "./components/layouts/TheHeader.vue";
+import Menu from "./components/layouts/TheMenu.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-   Header,Menu
-  }
-}
+    Content,
+    Menu,
+    Header,
+  },
+};
 </script>
 
 <style>
-  @import url('./assets/css/base/Style.css');
-  @import url('./assets/fonts/fontawesome-5.15.1/css/all.min.css');
+@import url("./assets/css/base/Style.css");
+@import url("./assets/fonts/fontawesome-5.15.1/css/all.min.css");
 </style>

@@ -39,7 +39,7 @@
         <div class="menu-item__icon">
             <div class="mi mi-24 mi-sidebar-invoice"></div>
         </div>
-        <div class="menu-item__title">Quán lý hóa đơn</div>
+        <div class="menu-item__title">Quản lý hóa đơn</div>
       </div>
       <div class="menu-item">
         <div class="menu-item__icon">

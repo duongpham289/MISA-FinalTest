@@ -62,8 +62,8 @@
 
 .menu-item.active{
     position: relative;
-    border-left-color: var(--color--menu-active) !important;
-    font-weight: 700;
+    border-left-color: var(--color-primary) !important;
+    font-weight: 600;
 }
 
 .menu-item.active:before{
@@ -83,12 +83,55 @@
     margin-right: 16px;
 }
 
-
-
+.menu-item.active .menu-item__icon .mi-sidebar-dashboard {
+    background-position: -30px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-cash {
+    background-position: -73px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-bank{
+    background-position: -117px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-pu{
+    background-position: -161px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-sale{
+    background-position: -204px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-invoice{
+    background-position: -249px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-stock{
+    background-position: -291px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-tools{
+    background-position: -336px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-fixed-assets{
+    background-position: -378px -1587px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-tax{
+    background-position: -423px -1587px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-price{
+    background-position: -467px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-general{
+    background-position: -510px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-budget{
+    background-position: -422px -1659px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-report{
+    background-position: -547px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-finance{
+    background-position: -204px -1664px;
+}
 
 /* Expand */
 .menu-container.expand {
-    width: auto;
+    width: 178px;
 }
 
 .expand .logo-container{

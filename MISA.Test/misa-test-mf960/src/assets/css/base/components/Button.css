@@ -45,10 +45,6 @@
 		align-items: center;
 	}
 
-	.button--primary .button__text {
-		margin-left: 8px;
-	}
-
 /* Button reload*/
 .button__reload{
 	background-color: var(--color-white);
