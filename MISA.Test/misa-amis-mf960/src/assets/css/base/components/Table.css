@@ -1,0 +1,195 @@
+.content__table-container {
+    width: 100%;
+    margin-top: 16px;
+    background-color: var(--color-white);
+}
+
+.table-tool {
+    padding: 16px 16px 10px 16px;
+    justify-content: flex-end;
+}
+
+.input-search {
+    position: relative;
+    width: 240px;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.search-icon {
+    position: absolute;
+    right: 10px;
+    width: 16px;
+    height: 16px;
+}
+
+.table-tool__search {
+    font-family: 'NotoSans-Regular';
+    width: 240px;
+    height: 32px;
+    font-size: 13px;
+    padding: 6px 30px 6px 10px;
+    outline: none;
+    border-radius: 2px;
+    border: 1px solid #babec5;
+}
+
+.table-tool__search:focus {
+    border: 1px solid var(--color-primary);
+}
+
+.table-tool__search::placeholder {
+    font-family: 'NotoSans-Regular';
+    font-style: italic;
+    font-size: 12px;
+}
+
+.table-tool__icon {
+    padding: 0 6px;
+}
+
+
+/* Table */
+.content__table {
+    width: 100%;
+    overflow: auto;
+    min-width: 1366px;
+    padding: 0 12px;
+    font-size: 13px;
+    text-align: left;
+    font-weight: normal;
+    position: relative;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.content__table tr {
+    background-color: var(--color-white);
+}
+
+.content__table tr[check=true] {
+    background-color: var(--color-primary-focus);
+}
+
+.content__table tr[check=true]:hover {
+    background-color: var(--color-primary-focus) !important;
+}
+
+/* Table Header */
+.content__table .table__header th {
+    position: sticky;
+    height: 34px;
+    padding: 0 10px;
+    top: 0;
+    left: 0;
+    /* font-family: NotoSans-Regular; */
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase !important;
+
+    background-color: #eceef1;
+    z-index: 6;
+    border-right: 1px solid #c7c7c7;
+    border-bottom: 1px solid #c7c7c7;
+}
+
+/* Table Body */
+.content__table .table__body tr {
+    cursor: pointer;
+}
+
+.content__table .table__body tr:last-child {
+    border-bottom: 1px solid var(--color-white);
+}
+
+.content__table .table__body tr:hover {
+    background: #f3f8f8 !important;
+}
+
+.td-view {
+    background: #f8f8f8 !important;
+}
+
+.content__table td {
+    overflow: hidden;
+    height: 47px;
+    text-overflow: ellipsis;
+    cursor: default;
+    white-space: nowrap;
+    padding: 5px 10px;
+    color: #111;
+    border-right: 1px dotted #c7c7c7;
+    border-bottom: 1px solid #c7c7c7;
+}
+
+.content__table td:first-child,
+.content__table th:first-child {
+    /* padding: 0 0 0 16px; */
+    width: 36px;
+}
+
+/* Check Box */
+.content__table .delete-box {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    border-radius: 2px;
+    overflow: hidden;
+    border: 0.1px solid var(--color-gray);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+.content__table .delete-box input {
+    position: absolute;
+    opacity: 0;
+    width: inherit;
+    height: inherit;
+    margin: 0;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    cursor: pointer;
+}
+
+.content__table .delete-box .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: var(--color-white);
+}
+
+.content__table .delete-box:hover input~.checkmark {
+    background-color: var(--color-gray);
+}
+
+.content__table .delete-box input:checked~.checkmark {
+    background-color: var(--color-primary);
+}
+
+.content__table .delete-box .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.content__table .delete-box input:checked~.checkmark:after {
+    display: block;
+}
+
+.content__table .delete-box .checkmark:after {
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--color-white);
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
