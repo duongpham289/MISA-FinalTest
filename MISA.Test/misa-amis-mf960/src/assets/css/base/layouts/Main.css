@@ -25,7 +25,7 @@ body {
 body,
 html {
     font-family: NotoSans-Regular !important;
-    font-size: 13px;
+    font-size: 13px !important;
     background: #f8f8f8;
     font-weight: 400;
     overflow-x: hidden;

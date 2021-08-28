@@ -49,18 +49,27 @@
 }
 
 
+
+
+
+.table-view {
+    overflow: auto;
+    margin: 0 12px;
+    max-height: calc(100% - 58px);
+}
+
+
 /* Table */
 .content__table {
-    width: 100%;
-    overflow: auto;
     min-width: 1366px;
-    padding: 0 12px;
-    font-size: 13px;
     text-align: left;
     font-weight: normal;
     position: relative;
     border-collapse: separate;
     border-spacing: 0;
+    width: 100%;
+    font-size: 13px;
+    max-height: 305px;
 }
 
 .content__table tr {
@@ -82,13 +91,10 @@
     padding: 0 10px;
     top: 0;
     left: 0;
-    /* font-family: NotoSans-Regular; */
     font-size: 12px;
     font-weight: 700;
     text-transform: uppercase !important;
-
     background-color: #eceef1;
-    z-index: 6;
     border-right: 1px solid #c7c7c7;
     border-bottom: 1px solid #c7c7c7;
 }
@@ -124,8 +130,111 @@
 
 .content__table td:first-child,
 .content__table th:first-child {
-    /* padding: 0 0 0 16px; */
     width: 36px;
+}
+
+.content__table th:nth-child(1) {
+    min-width: 36px;
+    width: 36px;
+    max-width: 36px;
+    left: 0;
+    z-index: 4;
+}
+
+.content__table tbody td:nth-child(1) {
+    position: sticky;
+    left: 0;
+    background-color: var(--color-white) !important;
+    z-index: 3;
+}
+
+.content__table th:nth-child(2) {
+    width: 144px;
+    min-width: 144px;
+    max-width: 144px;
+    left: 36px;
+    z-index: 4;
+}
+
+.content__table tbody td:nth-child(2) {
+    position: sticky;
+    left: 36px;
+    background-color: var(--color-white) !important;
+    z-index: 3;
+}
+
+.content__table th:nth-child(3) {
+    width: 250px;
+    min-width: 250px;
+    max-width: 250px;
+    left: 179px;
+    z-index: 4;
+}
+
+.content__table tbody td:nth-child(3) {
+    position: sticky;
+    left: 179px;
+    background-color: var(--color-white) !important;
+    z-index: 3;
+}
+
+.content__table th:nth-child(4) {
+    width: 105px;
+    min-width: 105px;
+}
+
+.content__table th:nth-child(5) {
+    width: 150px;
+    min-width: 150px;
+}
+
+.content__table th:nth-child(6) {
+    width: 200px;
+    min-width: 200px;
+}
+
+.content__table th:nth-child(7) {
+    width: 250px;
+    min-width: 250px;
+}
+
+.content__table th:nth-child(8) {
+    width: 250px;
+    min-width: 250px;
+}
+
+.content__table th:nth-child(9) {
+    width: 150px;
+    min-width: 150px;
+}
+
+.content__table th:nth-child(10) {
+    width: 250px;
+    min-width: 250px;
+}
+
+.content__table th:nth-child(11) {
+    width: 250px;
+    min-width: 250px;
+}
+
+.content__table th:nth-child(12) {
+    width: 120px;
+    min-width: 120px;
+    max-width: 120px;
+    right: 0;
+    border-right: none;
+    border-left: 1px solid #c7c7c7;
+    z-index: 4;
+}
+
+.content__table tbody td:nth-child(12) {
+    position: sticky;
+    right: 0;
+    border-right: none;
+    border-left: 1px dotted #c7c7c7;
+    background-color: var(--color-white) !important;
+    z-index: 3;
 }
 
 /* Check Box */

@@ -60,12 +60,10 @@
     min-height: 0;
     min-width: 0;
 }
+#content-area .content-wrapper {
+    min-height: calc(100vh - 48px);
+}
 
 .router-view.fix-view {
     padding: 0 !important;
-}
-
-.router-view .router-content {
-    padding-top: 48px;
-    padding-left: 20px;
 }

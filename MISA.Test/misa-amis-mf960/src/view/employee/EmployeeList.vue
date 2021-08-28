@@ -1,6 +1,7 @@
 <template>
   <div class="employee-list">
-    <div class="content">
+    
+                <div class="content">
       <!-- Phần Header của Content chi tiết:
                         - Header Content
                         - Nút thêm nhân viên
@@ -46,12 +47,12 @@
           @rowOnDblClick="rowOnDblClick"
           @checkBoxOnClick="checkBoxOnClick"
         /> -->
-        <table class="content__table">
+        <div class="table-view">
+          <table class="content__table">
           <thead class="table__header">
             <tr>
               <th>
               </th>
-              <th>Mã nhân viên</th>
               <th>Mã nhân viên</th>
               <th>Mã nhân viên</th>
               <th>Mã nhân viên</th>
@@ -84,7 +85,6 @@
               <td>Mã nhân viên</td>
               <td>Mã nhân viên</td>
               <td>Mã nhân viên</td>
-              <td>Mã nhân viên</td>
             </tr>
             <tr>
               <td>
@@ -104,10 +104,11 @@
               <td>Mã nhân viên</td>
               <td>Mã nhân viên</td>
               <td>Mã nhân viên</td>
-              <td>Mã nhân viên</td>
-            </tr>
+            </tr> 
           </tbody>
         </table>
+        </div>
+        
       </div>
       <div class="content-footer flex items-center">
         <div class="record-display flex">Tổng số: 46 bản ghi</div>
@@ -136,6 +137,7 @@
         </div>
       </div>
     </div>
+    
   </div>
 </template>
 

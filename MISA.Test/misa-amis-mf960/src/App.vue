@@ -1,9 +1,19 @@
 <template>
   <div class="layout-main">
     <Menu />
-    <div class="main-content">
-      <Header />
-      <Content />
+    <div id="content-area">
+      <div id="main-content" class="content-wrapper relative">
+        <Header />
+        <div class="router-view fix-view">
+          <div class="router-content">
+            <div class="content-area__content">
+              <div class="layout-dictionary">
+                <Content />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
