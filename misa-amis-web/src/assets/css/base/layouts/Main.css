@@ -4,12 +4,20 @@
 }
 
 a {
-    text-decoration: none;
+    text-decoration: none !important;
 }
 
 input {
     outline: none;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+/* input[type=number] {
+    -moz-appearance:textfield;
+} */
 
 ::placeholder {
     font-family: 'Notosans-italic';
@@ -28,7 +36,7 @@ input {
 }
 
 body {
-    font-family: 'Notosans-regular';
+    font-family: 'Notosans-regular' !important;
     font-size: var(--fontsize-normal);
     color: var(--text-color);
 }

@@ -106,13 +106,13 @@ export default {
   methods: {
     /**
      * Xử lý thay đổi dữ liệu
-     * Author: PHDUONG(05/08/2021)
+     * CreatedBy: PHDUONG(30/08/2021)
      */
     onChangeInput(event) {
       let tmp = event.target.value;
 
       if (this.format === this.$enum.MONEY) {
-        // event.target.value = FormatData.formatMoneyOnModal(event.target.value);
+        event.target.value = this.$format.formatMoneyOnModal(event.target.value);
         tmp = event.target.value.toString().replaceAll(".", "");
         this.$emit("handleInput", {
           id: this.id,
@@ -124,12 +124,12 @@ export default {
     },
     /**
      * Định dạng dữ liệu chung
-     * Author: PHDUONG(05/08/2021)
+     * CreatedBy: PHDUONG(30/08/2021)
      */
     formatData(value) {
-      // if (this.format === this.$enum.MONEY) {
-      //   return FormatData.formatMoneyOnModal(value);
-      // }
+      if (this.format === this.$enum.MONEY) {
+        return this.$format.formatMoneyOnModal(value);
+      }
 
       return value;
     },

@@ -25,35 +25,28 @@
       </div>
       <div class="content-footer items-center">
         <div class="record-display">Tổng số: 46 bản ghi</div>
-        <!-- <div class="paginate items-center">
-            <b-dropdown
-              class="dropdown-custom items-center"
-              split
-              split-variant="outline-primary"
-              :text="'20 bản ghi trên 1 trang'"
-            >
-              <b-dropdown-item href="#"
-                >10 bản ghi trên 1 trang</b-dropdown-item
-              >
-              <b-dropdown-item href="#"
-                >20 bản ghi trên 1 trang</b-dropdown-item
-              >
-              <b-dropdown-item href="#"
-                >30 bản ghi trên 1 trang</b-dropdown-item
-              >
-            </b-dropdown>
-            <b-pagination
+        <div class="paginate items-center">
+          <multiselect
+            @keyup.native="onKeyup($event, value)"
+            v-model="value"
+            :options="options"
+            :searchable="false"
+            :close-on-select="false"
+            :show-labels="false"
+            :allowEmpty="false"
+          ></multiselect>
+          <b-pagination
               v-model="currentPage"
               :total-rows="rows"
               :per-page="perPage"
-              class="paginate-custom"
+              class="paginate-custom w-200"
               prev-text="Trước"
               next-text="Sau"
               limit="4"
               first-number
               last-number
             ></b-pagination>
-          </div> -->
+        </div>
       </div>
     </div>
     <Modal ref="Modal" :departmentCbb="departmentCbb" />
@@ -110,6 +103,13 @@ export default {
       // employeeGetById: EmployeeModel.initData(),
       employeesToDelete: [],
       columns: columns,
+
+      value: "10 nhân viên/trang",
+      options: [
+        "10 nhân viên/trang",
+        "20 nhân viên/trang",
+        "30 nhân viên/trang",
+      ],
 
       isHiddenDialogDetail: true,
       modeFormDetail: 0,
@@ -176,6 +176,24 @@ export default {
           // var message = vm.responseHandler(err);
           // this.setToast("fail", message);
         });
+    },
+    /**
+     * Bắt sự kiện sử dụng phím mũi tên cho dropdown
+     * CreatedBy: duylv 29/08/2021
+     */
+    onKeyup(event, value) {
+      let index = this.options.indexOf(value);
+      console.log(index);
+      if (event.key == "ArrowUp" && index != -1 && index > 0) {
+        index--;
+      } else if (
+        event.key == "ArrowDown" &&
+        index != -1 &&
+        index < this.options.length - 1
+      ) {
+        index++;
+      }
+      this.value = this.options[index];
     },
     /**
      * Hàm mở form thêm sửa

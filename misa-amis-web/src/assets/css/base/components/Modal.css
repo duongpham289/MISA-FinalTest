@@ -15,32 +15,37 @@
 
 /* Modal Main Content */
 .modal-container .modal-custom {
-    width: 50%;
-    height: 65%;
+    width: 48%;
+    height: 60%;
+    max-height: 100%;
     position: relative;
     margin: auto;
-    padding: 20px 32px 0 !important;
+    padding: 20px 32px 20px !important;
     background-color: var(--color-white);
     animation-name: animatetop;
     animation-duration: 0.4s
 }
 
 /* Modal Header */
-.modal-container .modal-custom .modal-header {
+.modal-container .modal-custom .ms-modal-header {
     display: flex;
     padding: 0;
     padding-bottom: 20px;
     justify-content: flex-start;
 }
 
-.modal-container .modal-custom .modal-header .modal-header__title {
+.modal-container .modal-custom .ms-modal-header .ms-modal-header__title {
     font-size: 24px;
     font-family: OpenSans-Bold;
     font-weight: 700;
 }
 
 /* Modal content */
-.modal-content .content-body .row-input {
+.ms-modal-content{
+    height: 100%;
+    font-size: 13px;
+}
+.ms-modal-content .content-body .row-input {
     padding-bottom: 12px;
 }
 
@@ -135,6 +140,7 @@
 
 .modal-checkbox__title {
     padding-left: 10px;
+    font-size: 13px;
 }
 
 .modal__button-close {
@@ -144,11 +150,23 @@
     padding: 12px 12px;
 }
 
+.ms-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 20px ;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+.option-item-name {
+    display: flex;
+    align-items: center;
+  }
+
 /* Responsive (for laptop screen only) */
 @media only screen and (max-width: 1600px) {
     .modal-container .modal-custom {
-        width: 65%;
-        height: 75%;
+        width: 80%;
+        height: 78%;
     }
 }
 

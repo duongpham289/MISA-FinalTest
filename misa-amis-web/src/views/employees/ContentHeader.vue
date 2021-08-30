@@ -2,7 +2,7 @@
     <div class="content__header">
         <div class="header__title">Nhân viên</div>
         <div class="button__container">
-          <div class="button--primary button__icon" id="button__add-employee" @click="openForm">
+          <div class="misa-button misa-button-primary text-semibold" id="button__add-employee" @click="openForm">
             <!-- <div class="icon-default -add"></div> -->
             <div class="button__text">Thêm mới nhân viên</div>
           </div>

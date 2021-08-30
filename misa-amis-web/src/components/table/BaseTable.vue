@@ -41,8 +41,6 @@
 </template>
 
 <script>
-// import FormatData from "@/utils/format/FormatData.js";
-
 export default {
   name: "base-table",
   props: {
@@ -68,11 +66,7 @@ export default {
   methods: {
     /**
      * Mở modal khi double click
-     * Author: PHDUONG(3/8/2021)
-     */
-    /**
-     * Hàm xử lý click chuột vào row
-     * NVTOAN 07/07/2021
+     * CreatedBy: PHDUONG(30/08/2021)
      */
     dbClickRow(item) {
       this.$emit("dbClickRow", item);
@@ -80,7 +74,7 @@ export default {
 
     /**
      * Thay đổi màu của row khi click vào checkbox
-     * CreatedBy: PHDUONG(19/08/2021)
+     * CreatedBy: PHDUONG(30/08/2021)
      */
     changeColorOnClick(id) {
       var isTrue = false;
@@ -119,24 +113,17 @@ export default {
 
     /**
      * Format dữ liệu trước khi gắn dữ liệu vào bảng
-     * Author: PHDUONG(3/8/2021)
+     * CreatedBy: PHDUONG(30/08/2021)
      */
     formatText(col, item) {
       let tmp = item;
 
-      // if (col.format === this.$enum.DATE) {
-      //   tmp = FormatData.formatDate(tmp, false);
-      // }
-
-      // if (col.format === this.$enum.MONEY) {
-      //   tmp = FormatData.formatMoneyOnTable(tmp);
-      // }
-      // if (col.format === this.$enum.WORK) {
-      //   tmp = FormatData.formatWorkStatus(tmp);
-      // }
-      // if (col.format === this.$enum.GENDER) {
-      //   tmp = FormatData.formatGender(tmp);
-      // }
+      if (col.format === this.$enum.DATE) {
+        tmp = this.$format.formatDate(tmp, false);
+      }
+      if (col.format === this.$enum.GENDER) {
+        tmp = this.$format.formatGender(tmp);
+      }
 
       return tmp;
     },

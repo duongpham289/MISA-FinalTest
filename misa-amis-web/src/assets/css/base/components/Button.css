@@ -1,85 +1,67 @@
-/* Button */
-.button--primary,
-.button--secondary {
-    display: flex;
-	align-items: center;
-	text-align: center;
+
+
+.misa-button {
 	border-radius: 4px;
 	height: 36px;
-	width: auto;
-	padding: 0 24px;
+	display: flex;
+    font-size: 13px;
+	align-items: center;
 	cursor: pointer;
-	transition: 0.2s all ease-in-out;
-	justify-content: space-evenly;
+	padding: 0 16px;
+	font-family: 'Notosans-semibold';
 }
 
-	.button--primary {
-		color: var(--color-white);
-		background-color: var(--color-primary);
-	}
-
-	.button--primary:hover {
-		background-color: var(--color-primary-hover);
-	}
-
-	.button--primary:active {
-		background-color: var(--color-primary-active);
-	}
-
-	.button--secondary {
-		color: var(--color-black);
-		background-color: transparent;
-		border: 1px solid var(--color-gray);
-	}
-
-	.button--secondary:hover {
-		background-color: var(--color-secondary-hover);
-	}
-
-	.button--secondary:active {
-		background-color: var(--color-primary-active);
-	}
-
-	.button__icon {
-		padding: 0 16px;
-		align-items: center;
-	}
-
-/* Button reload*/
-.button__reload{
-	background-color: var(--color-white);
-}
-
-/* Button Close Popup */
-.button__close{
-    border-radius: 0 4px 0 0;
-    border: none;
+/* .misa-button:focus-visible {
+    border: 1px solid #2ca01c;
     outline: none;
-	padding: 0 20px;
-    /* background-image: url('../../../icon/x.svg'); */
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 25px;
-    opacity: .7;
-}
-	.button__close:hover{
-		background-color: var(--color-gray);
-	}
+} */
 
-/* Button Cancel */
-.button__cancel {
-    margin: 10px 0;
-    /* width: 100px; */
-    justify-content: center;
+.misa-button-primary {
+	border: 1px solid transparent;
+	color: #fff;
+	background-color: #2ca01c;
 }
 
-/* Button Save */
-.button__save {
-    margin: 10px 24px 10px 16px;
+.misa-button-primary:hover,
+.misa-button-primary:focus-visible {
+	background-color: #35bf22;
+	outline: none;
 }
 
-.button__text{
-	font-size: 13px;
-	font-weight: 600;
-	font-family: OpenSans-Bold;
+.misa-button-primary:active {
+	background-color: #248b15;
+}
+
+.misa-button-default {
+	border: 1px solid #8d9096;
+	color: #111;
+    font-size: 13px;
+	background-color: transparent;
+}
+
+.misa-button-group {
+	gap: 10px;
+}
+
+.misa-button-default:hover,
+.misa-button-default:focus-visible {
+	background-color: rgba(0, 0, 0, 0.08);
+	outline: none;
+}
+
+.misa-button-default:active {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+.misa-button-danger {
+	background-color: #f65454;
+	color: #fff;
+}
+
+.misa-button-danger:hover {
+	background-color: #fa7e7e;
+}
+
+.misa-button-danger:active {
+	background-color: #f65454;
 }

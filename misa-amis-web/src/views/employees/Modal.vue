@@ -1,8 +1,8 @@
 <template>
   <div class="modal-container" v-if="showForm">
     <div class="modal-custom">
-      <div class="modal-header items-center">
-        <div class="modal-header__title">Thông tin nhân viên</div>
+      <div class="ms-modal-header items-center">
+        <div class="ms-modal-header__title">Thông tin nhân viên</div>
         <div class="modal-checkbox">
           <div class="modal-checkbox__content">
             <input class="checkbox" type="checkbox" />
@@ -25,7 +25,7 @@
           </div>
         </div>
       </div>
-      <div class="modal-content">
+      <div class="ms-modal-content">
         <div class="content-body">
           <div class="d-flex p-b--18">
             <div class="w-50 p-r--26">
@@ -48,29 +48,47 @@
                     id="FullName"
                     placeholder="Nguyễn Văn A..."
                     :value="employee.FullName"
+                    @handleInput="onChangeInput"
                     required
                   />
                 </div>
               </div>
               <div class="row-input">
-                <div class="w-100 p-b--4">
-                  <combo-box
-                    label="Đơn vị"
-                    :required="true"
-                    :data="departmentCbb"
-                    :value="employee.DepartmentId"
-                    id="DepartmentId"
+                <div class="w-100">
+                  <label  class="modal__text text-semibold p-b--4">
+                    Đơn vị
+                    <span class="required">
+                      <span class="required-input">*</span>
+                    </span>
+                  </label>
+                  <multiselect
+                    class="custom-select-form"
+                    :tabindex="3"
+                    v-model="value"
+                    :options="options"
+                    :searchable="true"
+                    :close-on-select="true"
+                    :show-labels="false"
+                    :allowEmpty="false"
+                    :multiple="false"
+                    :custom-label="nameWithLang"
+                    placeholder
                   >
-                    <template #combo-box-options="{ options }">
-                      <combo-box-option
-                        v-for="item in options"
-                        :key="item.DepartmentId"
-                        :dataSrc="item"
-                        :checked="item.DepartmentId === department"
-                        @select-item="selectItem"
-                      ></combo-box-option>
+                    <span slot="noResult">Không tìm thấy đơn vị</span>
+                    <template slot="singleLabel" slot-scope="props">
+                      <span>{{ props.option.DepartmentName }}</span>
                     </template>
-                  </combo-box>
+                    <template slot="option" slot-scope="props">
+                      <div class="option-item-name">
+                        <span class="pr-20">{{
+                          props.option.DepartmentCode
+                        }}</span>
+                        <span class="pl-20">{{
+                          props.option.DepartmentName
+                        }}</span>
+                      </div>
+                    </template>
+                  </multiselect>
                 </div>
               </div>
               <div class="row-input">
@@ -80,6 +98,7 @@
                     id="PositionName"
                     placeholder=""
                     :value="employee.PositionName"
+                    @handleInput="onChangeInput"
                   />
                 </div>
               </div>
@@ -87,27 +106,18 @@
             <div class="w-50">
               <div class="d-flex row-input">
                 <div class="w-40 p-r--6">
-                  <base-input id="DateOfBirth" :hasLabel="true" label="Ngày sinh"></base-input>
+                  <base-input
+                    id="DateOfBirth"
+                    type="date"
+                    @handleInput="onChangeInput"
+                    :value="employee.DateOfBirth"
+                    label="Ngày sinh"
+                  ></base-input>
                 </div>
                 <div class="w-60">
                   <div class="flex flex-column">
                     <div class="label p-l--10">Giới tính</div>
                     <div class="p-l--10 p-t--5 p-b--6">
-                      <label
-                        class="container-radio"
-                        for="0"
-                        @click="onChangeInput({ value: 0, id: 'Gender' })"
-                      >
-                        <input label="0" type="radio" value="0" />
-                        <span class="radio">
-                          <span class="radio-border"></span>
-                          <span
-                            class="radio-circle"
-                            v-show="employee.Gender === 0"
-                          ></span>
-                        </span>
-                        <span class="label-radio">Nữ</span>
-                      </label>
                       <label
                         class="container-radio"
                         for="1"
@@ -125,18 +135,18 @@
                       </label>
                       <label
                         class="container-radio"
-                        for="2"
-                        @click="onChangeInput({ value: 2, id: 'Gender' })"
+                        for="0"
+                        @click="onChangeInput({ value: 0, id: 'Gender' })"
                       >
-                        <input type="radio" label="2" :value="2" />
+                        <input label="0" type="radio" value="0" />
                         <span class="radio">
                           <span class="radio-border"></span>
                           <span
                             class="radio-circle"
-                            v-show="employee.Gender === 2"
+                            v-show="employee.Gender === 0"
                           ></span>
                         </span>
-                        <span class="label-radio">Khác</span>
+                        <span class="label-radio">Nữ</span>
                       </label>
                     </div>
                   </div>
@@ -150,10 +160,17 @@
                     type="number"
                     placeholder="0123456789..."
                     :value="employee.IdentityNumber"
+                    @handleInput="onChangeInput"
                   />
                 </div>
                 <div class="w-40">
-                  <base-input id="IdentityDate" :hasLabel="true" label="Ngày cấp"></base-input>
+                  <base-input
+                    label="Ngày cấp"
+                    id="IdentityDate"
+                    type="date"
+                    @handleInput="onChangeInput"
+                    :value="employee.IdentityDate"
+                  ></base-input>
                 </div>
               </div>
               <div class="row-input">
@@ -164,6 +181,7 @@
                     type="text"
                     placeholder="Hà Nội..."
                     :value="employee.IdentityPlace"
+                    @handleInput="onChangeInput"
                   />
                 </div>
               </div>
@@ -178,6 +196,7 @@
                   type="text"
                   placeholder="Hà Nội..."
                   :value="employee.Address"
+                  @handleInput="onChangeInput"
                 />
               </div>
             </div>
@@ -189,6 +208,7 @@
                   id="MobilePhoneNumber"
                   placeholder="0123456789..."
                   :value="employee.MobilePhoneNumber"
+                  @handleInput="onChangeInput"
                 />
               </div>
               <div class="w-25 p-r--6">
@@ -197,6 +217,7 @@
                   id="TelephoneNumber"
                   placeholder="0123456789..."
                   :value="employee.TelephoneNumber"
+                  @handleInput="onChangeInput"
                 />
               </div>
               <div class="w-25">
@@ -206,6 +227,7 @@
                   type="email"
                   placeholder="example@gmail.com..."
                   :value="employee.Email"
+                  @handleInput="onChangeInput"
                 />
               </div>
             </div>
@@ -218,6 +240,7 @@
                   type="number"
                   placeholder="0123456789..."
                   :value="employee.BankAccount"
+                  @handleInput="onChangeInput"
                 />
               </div>
               <div class="w-25 p-r--6">
@@ -227,6 +250,7 @@
                   type="text"
                   placeholder="ACB..."
                   :value="employee.BankName"
+                  @handleInput="onChangeInput"
                 />
               </div>
               <div class="w-25">
@@ -236,8 +260,37 @@
                   type="text"
                   placeholder="Cầu Giấy..."
                   :value="employee.BankBranch"
+                  @handleInput="onChangeInput"
                 />
               </div>
+            </div>
+          </div>
+        </div>
+        <div class="ms-modal-footer">
+          <div
+            class="misa-button misa-button-default text-semibold"
+            tabindex="0"
+            @click="showForm = false"
+            @keyup.enter="showForm = false"
+          >
+            Hủy
+          </div>
+          <div class="misa-button-group d-flex">
+            <div
+              class="misa-button misa-button-default text-semibold"
+              tabindex="0"
+              @click="saveAndOut"
+              @keyup.enter="saveAndOut"
+            >
+              Cất
+            </div>
+            <div
+              class="misa-button misa-button-primary text-semibold"
+              tabindex="0"
+              @click="saveAndAdd"
+              @keyup.enter="saveAndAdd"
+            >
+              Cất và thêm
             </div>
           </div>
         </div>
@@ -251,12 +304,11 @@ import EmployeeModel from "@/models/EmployeeModel.js";
 import EmployeesAPI from "@/api/components/EmployeesAPI.js";
 
 export default {
-  components: {
-  },
+  components: {},
   props: {
     departmentCbb: {
       type: Array,
-      required: true
+      required: true,
     },
   },
   data() {
@@ -267,6 +319,25 @@ export default {
       department: "1",
       employeeId: null,
       formType: null, // 0: thêm, 1 : sửa, 2 : nhân bản
+      options: [
+        {
+          DepartmentCode: "PB-001",
+          DepartmentName: "CMC",
+        },
+        {
+          DepartmentCode: "PB-002",
+          DepartmentName: "MISA",
+        },
+        {
+          DepartmentCode: "PB-003",
+          DepartmentName: "FSOFT",
+        },
+        {
+          DepartmentCode: "PB-004",
+          DepartmentName: "VTV",
+        },
+      ],
+      value: ""
     };
   },
   methods: {
@@ -277,53 +348,106 @@ export default {
     selectItem({ id, value }) {
       this.employee[id] = value;
     },
+
     /**
-     * Hàm mở form
-     * NVTOAN 06/07/2021
+     * Hàm thêm và thoát form
+     * NVTOAN 08/07/2021
      */
-    openForm(employeeId,employee) {
-      //Gán lại giá trị của form
-      // await Object.assign(this.$data, initState(false));
-      this.showForm = true;
+    saveAndOut() {
+      console.log(this.employee);
+      // this.saveData();
 
-      //Nếu là form sửa
-      if (employeeId.length > 0) {
-        //Xác định formType
-        this.employeeId = employeeId;
-        this.formType = 1;
+      //Nếu thêm thành công
+      // if (this.allInputValid) {
+      //   this.showForm = false;
+      // }
+    },
 
-         EmployeesAPI.getById(employeeId)
+    nameWithLang({ DepartmentCode, DepartmentName }) {
+      return `${DepartmentCode} — [${DepartmentName}]`;
+    },
+    /**
+     * Hàm cất và thêm dữ liệu
+     * NVTOAN 08/07/2021
+     */
+
+    saveAndAdd() {
+      this.saveValidate = true;
+
+      this.saveData();
+
+      //Nếu thêm thành công
+      if (this.allInputValid) {
+        this.saveValidate = false;
+        this.employee = {};
+
+        //Lấy lại mã nhan viên
+
+        EmployeesAPI.getNewCode()
           .then((response) => {
-            this.employee = response.data;
+            this.employee.EmployeeCode = response.data;
+
+            //Lấy dữ liệu gốc để đối chiếu xem người dùng đã thay đổi dữ liệu chưa
+            this.originData = JSON.parse(JSON.stringify(this.employee));
           })
           .catch(() => {
-            //Nếu không lấy được dữ liệu từ db
+            //Nếu không lưu được thì thông báo lỗi
             this.allInputValid = false;
             // this.errorMessage = Resource.Message.ServerError;
             this.showErrorPopup = true;
           });
+      }
+    },
+    /**
+     * Hàm mở form
+     * NVTOAN 06/07/2021
+     */
+    openForm(employeeId, employee) {
+      var vm = this;
+      //Gán lại giá trị của form
+      vm.employee = EmployeeModel.initData();
+      vm.showForm = true;
+
+      //Nếu là form sửa
+      if (employeeId.length > 0) {
+        //Xác định formType
+        vm.employeeId = employeeId;
+        vm.formType = 1;
+
+        EmployeesAPI.getById(employeeId)
+          .then((res) => {
+            vm.employee = res.data;
+            vm.employee.DateOfBirth = vm.$format.formatDate(
+              res.data.DateOfBirth,
+              true
+            );
+
+            vm.employee.IdentityDate = vm.$format.formatDate(
+              res.data.IdentityDate,
+              true
+            );
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       } else {
         //Xác định formType
-        this.formType = 0;
+        vm.formType = 0;
 
         //Nếu có employee thì là nhân bản
         if (employee) {
           //Xác định formType
-          this.formType = 2;
+          vm.formType = 2;
 
-          this.employee = JSON.parse(JSON.stringify(employee));
-          this.employee.employeeName = "";
+          vm.employee = JSON.parse(JSON.stringify(employee));
         }
 
-         EmployeesAPI.getNewCode()
+        EmployeesAPI.getNewCode()
           .then((response) => {
-            this.employee.EmployeeCode = response.data;
+            vm.employee.EmployeeCode = response.data;
           })
-          .catch(() => {
-            //Nếu không lấy được mã nhân viên mới
-            this.allInputValid = false;
-            // this.errorMessage = Resource.Message.GetNewEmployeeCodeError;
-            this.showErrorPopup = true;
+          .catch((err) => {
+            console.log(err);
           });
       }
 
@@ -349,6 +473,9 @@ export default {
       this.showForm = false;
       // }
     },
+  },
+  watch: {
+    employeeId: function () {},
   },
 };
 </script>

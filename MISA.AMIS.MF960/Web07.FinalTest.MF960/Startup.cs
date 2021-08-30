@@ -39,7 +39,7 @@ namespace Web07.FinalTest.MF960
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins("http://localhost:8081")
+                                      builder.WithOrigins("http://localhost:8080")
                                       .AllowAnyHeader()
                                       .AllowAnyMethod();
                                   });

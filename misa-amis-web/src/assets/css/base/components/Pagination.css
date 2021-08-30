@@ -2,11 +2,11 @@
 	display: flex;
 	background-color: var(--color-white);
 	min-height: 46px;
+	padding: 0 30px;
 	justify-content: space-between;
 }
 .record-display{
 	display: flex;
-	padding-left: 30px ;
 	font-size: 13px;
 }
 .paginate{
