@@ -1,0 +1,149 @@
+/* Phần Menu  */
+.menu-container {
+    font-size: 13px;
+    position: relative;
+    background-color: #393a3d;
+    width: 52px;
+}
+
+.menu-container .logo-container {
+    display: flex;
+    background-color: var(--color-light-black);
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-container .logo-container .menu-container-option {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    background: url('../../../img/Sprites.64af8f61.svg') no-repeat -424px -86px;
+}
+
+.menu-container .logo-container .logo {
+    height: 32px;
+    display: block;
+}
+.menu-container .logo-container .logo .img-icon{
+    height: 32px;
+}
+
+.menu-container .menu-item-list{
+    height: calc(100vh - 62px);
+    padding-top: 14px;
+}
+
+.menu-item{
+    line-height: 42px;
+    height: 42px;
+    border-left: 6px solid transparent;
+    padding-left: 8px;
+    padding-right: 14px;
+    color: #fff;
+    position: relative;
+    display: flex;
+    cursor: pointer;
+}
+
+.menu-item:hover:before{
+    content: "";
+    background: #ebedf0;
+    opacity: .2;
+    width: calc(100% + 6px);
+    height: 42px;
+    left: -6px;
+    top: 0;
+    position: absolute;
+}
+
+.menu-item.active{
+    position: relative;
+    border-left-color: var(--color-primary) !important;
+    font-weight: 600;
+}
+
+.menu-item.active:before{
+    content: "";
+    width: 100%;
+    height: 100%;
+    left: 0;
+    background: #ebedf0;
+    opacity: .2;
+    position: absolute;
+}
+
+
+.menu-item .menu-item__icon{
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
+}
+
+/* icon khi menu active */
+.menu-item.active .menu-item__icon .mi-sidebar-dashboard {
+    background-position: -30px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-cash {
+    background-position: -73px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-bank{
+    background-position: -117px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-pu{
+    background-position: -161px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-sale{
+    background-position: -204px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-invoice{
+    background-position: -249px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-stock{
+    background-position: -291px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-tools{
+    background-position: -336px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-fixed-assets{
+    background-position: -378px -1587px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-tax{
+    background-position: -423px -1587px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-price{
+    background-position: -467px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-general{
+    background-position: -510px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-budget{
+    background-position: -422px -1659px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-report{
+    background-position: -547px -1585px;
+}
+.menu-item.active .menu-item__icon .mi-sidebar-finance{
+    background-position: -204px -1664px;
+}
+
+/* Expand */
+.menu-container.expand {
+    width: 178px;
+}
+
+.expand .menu-item{
+    padding-left: 8px;
+}
+
+.expand .logo-container{
+    padding: 0;
+}
+
+.scroller{
+    overflow: auto;
+}
+
+.expand .menu-item .menu-item__icon{
+    margin-right: 8px;
+}
