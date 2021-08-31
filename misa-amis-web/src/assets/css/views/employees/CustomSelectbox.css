@@ -103,6 +103,7 @@
 .multiselect.custom-select-form {
 
   min-height: 36px !important;
+  color: #111;
 }
 
 .multiselect__option--highlight:hover {

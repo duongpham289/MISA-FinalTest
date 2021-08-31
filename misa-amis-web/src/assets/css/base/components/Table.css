@@ -83,6 +83,7 @@
     border-right: 1px solid #c7c7c7;
     border-bottom: 1px solid #c7c7c7;
 }
+
 /* Table Body */
 .table-content .table-body tr {
     cursor: pointer;
@@ -93,7 +94,7 @@
 }
 
 .table-content tbody tr td {
-    /* overflow: hidden; */ 
+    /* overflow: hidden; */
     height: 47px;
     padding: 5px 10px;
     border-right: 1px dotted #c7c7c7;
@@ -109,6 +110,9 @@
     background-color: #f3f8f8;
 }
 
+.table-content tr:last-child td{
+    border-bottom: none;
+}
 .table-content th:nth-child(1) {
     min-width: 39px;
     width: 39px;
@@ -246,30 +250,46 @@
     background-color: var(--color-white);
 }
 
-.table-content .delete-box:hover input~.checkmark {
-    /* background-color: var(--color-gray); */
+.table-function-text {
+    color: #0075c0;
+    font-family: NotoSans-semibold;
 }
 
-.table-content .delete-box input:checked~.checkmark {
-    border-color: var(--color-primary);
+.table-function-dropdown {
+    border: 1px solid transparent;
+    padding: 0 5px;
 }
 
-/* .table-content .delete-box .checkmark:after {
-    border-color: var(--color-primary);
-} */
-
-/* .table-content .delete-box input:checked~.checkmark:after {
-    display: block;
+.table-function-dropdown.active {
+    border: 1px solid #0075c0;
 }
 
-.table-content .delete-box .checkmark:after {
-    left: 5px;
-    top: 1px;
-    width: 5px;
-    height: 10px;
-    border: solid var(--color-white);
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-} */
+.table-funcs {
+    position: absolute;
+    display: none;
+    z-index: 5;
+    font-size: 13px;
+    background-color: white;
+    border: 1px solid #babec5;
+    width: 100px;
+}
+
+.clone-btn {
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.delete-btn {
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.clone-btn:hover {
+    background-color: #ebedf0 !important;
+    color: #2ca01c !important;
+}
+
+.delete-btn:hover {
+    background-color: #ebedf0 !important;
+    color: #2ca01c !important;
+}

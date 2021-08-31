@@ -71,6 +71,9 @@
 .p-t--5{
     padding-top: 5px !important;
 }
+.p-b--5{
+    padding-bottom: 5px !important;
+}
 .p-b--6{
     padding-bottom: 6px !important;
 }
@@ -80,8 +83,14 @@
 .p-b--18{
     padding-bottom: 18px !important;
 }
+.p-l--5{
+    padding-left: 5px !important;
+}
 .p-l--10{
     padding-left: 10px !important;
+}
+.p-r--10{
+    padding-right: 10px !important;
 }
 .p-r--26{
     padding-right: 26px;

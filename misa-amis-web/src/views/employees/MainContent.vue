@@ -1,9 +1,6 @@
 <template>
   <div class="content">
-    <!-- Phần Header của Content chi tiết:
-                        - Header Content
-                        - Nút thêm nhân viên
-                -->
+    <!-- Phần Header của Content -->
 
     <ContentHeader @openForm="openForm" />
 
@@ -19,10 +16,11 @@
           :data="employeesData"
           @dbClickRow="openForm"
           @checkBoxOnClick="checkBoxOnClick"
+          @deleteSelectedRows="deleteSelectedRows"
         />
       </div>
       <div class="content-footer items-center">
-        <div class="record-display">Tổng số: 46 bản ghi</div>
+        <div class="record-display">Tổng số: &nbsp;<span class="text-semibold"> {{totalRecord}}</span>&nbsp; bản ghi</div>
         <div class="paginate items-center">
           <multiselect
             class="custom-select-paging w-200"
@@ -48,7 +46,7 @@
         </div>
       </div>
     </div>
-    <Modal ref="Modal" :departmentCbb="departmentCbb" />
+    <Modal ref="Modal" :departmentCbb="departmentCbb" :mode="mode" />
   </div>
 </template>
 
@@ -80,7 +78,7 @@ export default {
   data() {
     return {
       pageIndex: 1,
-      pageSize: 10,
+      pageSize: 20,
       totalRecord: 0,
 
       isShowToast: false,
@@ -100,7 +98,7 @@ export default {
       employeesToDelete: [],
       columns: columns,
 
-      value: "10 nhân viên/trang",
+      value: "20 nhân viên/trang",
       options: [
         "10 nhân viên/trang",
         "20 nhân viên/trang",
@@ -108,13 +106,19 @@ export default {
       ],
 
       isHiddenDialogDetail: true,
-      modeFormDetail: 0,
+
+      department: "1",
+      mode: 0,
 
       isHiddenPopupMessage: true,
       loading: true,
     };
   },
   methods: {
+    /**
+     * Lấy dữ liệu Dropdown
+     * CreatedBy: PHDUONG(30/07/2021)
+     */
     getDropdownData() {
       var vm = this;
 
@@ -136,7 +140,7 @@ export default {
 
     /**
      * Reload bảng dữ liệu sau khi xóa
-     * Author: PHDUONG(30/07/2021)
+     * CreatedBy: PHDUONG(30/07/2021)
      */
     btnReloadOnClick() {
       // this.employeesToDelete = [];
@@ -150,7 +154,7 @@ export default {
 
     /**
      * Lấy dữ liệu nhân viên từ Api
-     * Author: PHDUONG(08/08/2021)
+     * CreatedBy: PHDUONG(08/08/2021)
      */
     getEmployeePagingData(pageIndex, pageSize, employeeFilter) {
       var vm = this;
@@ -163,11 +167,8 @@ export default {
 
           if (res.data) {
             vm.totalRecord = res.data.totalRecord;
-            // vm.totalPage = Math.ceil(vm.totalRecord / vm.pageSize);
-            // vm.totalPage = 2;
           } else {
             vm.totalRecord = 0;
-            vm.totalPage = 1;
           }
 
           this.loading = false;
@@ -184,6 +185,7 @@ export default {
           // this.setToast("fail", message);
         });
     },
+
     /**
      * Bắt sự kiện sử dụng phím mũi tên cho dropdown
      * CreatedBy: duylv 29/08/2021
@@ -202,9 +204,10 @@ export default {
       }
       this.value = this.options[index];
     },
+
     /**
      * Hiển thị button delete và checkbox
-     * Author: PHDUONG(29/07/2021)
+     * CreatedBy: PHDUONG(29/07/2021)
      */
     checkBoxOnClick(checkedId) {
       if (checkedId.length > 0) {
@@ -221,18 +224,24 @@ export default {
         this.employeesToDelete = [];
       }
     },
-    deleteSelectedRows() {
+    deleteSelectedRows(employeeId) {
+      if (employeeId) {
+        console.log(employeeId);
+      }
       console.log(this.employeesToDelete);
     },
+
     /**
      * Hàm mở form thêm sửa
      * NVTOAN 14/06/2021
      */
-    openForm(employee) {
-      if (employee) {
-        this.$refs.Modal.openForm(employee.EmployeeId);
+    openForm(employeeId,mode) {
+      if (employeeId) {
+        this.mode = mode;
+        this.$refs.Modal.openForm(employeeId, mode);
       } else {
-        this.$refs.Modal.openForm("");
+        this.mode = mode;
+        this.$refs.Modal.openForm("", mode);
       }
     },
   },
@@ -245,13 +254,9 @@ export default {
       );
     },
     value: function () {
-      this.pageSize = this.value.substring(0,2);
+      this.pageSize = this.value.substring(0, 2);
 
-      this.getEmployeePagingData(
-        1,
-        this.pageSize,
-        this.search.employeeFilter
-      );
+      this.getEmployeePagingData(1, this.pageSize, this.search.employeeFilter);
     },
   },
 };

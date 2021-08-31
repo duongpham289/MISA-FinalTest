@@ -19,7 +19,7 @@ export default {
          * NVTOAN 13/06/2021
          */
         openForm() {
-            this.$emit('openForm', null);
+            this.$emit('openForm', null, 0);
         },
     },
 }

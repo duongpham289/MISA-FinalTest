@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    Đây là home, click tổng quan
+    Đây là trang Home
   </div>
 </template>
 

@@ -16,7 +16,7 @@
             <span class="checkmark"> </span>
           </div>
           <div class="modal-checkbox__title">Là nhà cung cấp</div>
-          <div class="modal__button-close" @click="closeForm">
+          <div class="modal__button-close" @click="preCloseForm">
             <div class="mi mi-24 mi-close"></div>
           </div>
         </div>
@@ -61,15 +61,16 @@
                   </label>
                   <multiselect
                     class="custom-select-form"
+                    ref="DepartmentId"
                     v-model="departmentItem"
-                    @input="getDepartmentId"
+                    @input="onChangeInput"
                     :options="departmentList"
                     :searchable="true"
                     :close-on-select="true"
                     :show-labels="false"
                     :allowEmpty="false"
                     :multiple="false"
-                    :custom-label="nameWithLang"
+                    :custom-label="displayName"
                     placeholder
                   >
                     <span
@@ -146,7 +147,7 @@
                         for="0"
                         @click="onChangeInput({ value: 0, id: 'Gender' })"
                       >
-                        <input label="0" type="radio" value="0" />
+                        <input label="0" type="radio" :value="0" />
                         <span class="radio">
                           <span class="radio-border"></span>
                           <span
@@ -155,6 +156,21 @@
                           ></span>
                         </span>
                         <span class="label-radio">Nữ</span>
+                      </label>
+                      <label
+                        class="container-radio"
+                        for="0"
+                        @click="onChangeInput({ value: 2, id: 'Gender' })"
+                      >
+                        <input label="0" type="radio" :value="2" />
+                        <span class="radio">
+                          <span class="radio-border"></span>
+                          <span
+                            class="radio-circle"
+                            v-show="employee.Gender === 2"
+                          ></span>
+                        </span>
+                        <span class="label-radio">Khác</span>
                       </label>
                     </div>
                   </div>
@@ -313,12 +329,16 @@
         </div>
       </div>
     </div>
+    
+    <base-popup :info="popupInfo" @close="closePopup"></base-popup>
   </div>
 </template>
 
 <script>
 import EmployeeModel from "@/models/EmployeeModel.js";
 import EmployeesAPI from "@/api/components/EmployeesAPI.js";
+import ErrorMessage from "@/js/resources/ErrorMsg";
+// import ToastMsg from "@/js/resources/ToastMsg";
 
 export default {
   components: {},
@@ -327,126 +347,44 @@ export default {
       type: Array,
       required: true,
     },
+    mode: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
       showForm: false,
       employee: EmployeeModel.initData(),
       originData: {},
-      department: "1",
       employeeId: null,
       formType: null, // 0: thêm, 1 : sửa, 2 : nhân bản
+      isFormChanged: false,
       departmentList: this.departmentCbb,
       departmentItem: [],
+      toastList: [],
+      
+      popupInfo: {
+        btnLeft: null,
+        btnRightFirst: null,
+        btnRightSec: null,
+        btnCenter: null,
+        isShowed: false,
+        icon: null,
+        message: "",
+        action: null,
+        cancel: null,
+      },
     };
   },
   methods: {
     /**
-     * Xử lý chọn option trong cac combobox
-     * CreateBy: NHHoang(28/08/2021)
-     */
-    selectItem({ id, value }) {
-      this.employee[id] = value;
-    },
-
-    /**
-     * Hàm thêm và thoát form
-     * NVTOAN 08/07/2021
-     */
-    saveAndOut() {
-      console.log(this.employee);
-      let vm = this;
-      if (vm.mode == 0) {
-        EmployeesAPI.create(vm.employee)
-          .then(() => {
-            vm.btnCancelOnClick();
-            setTimeout(function () {
-              vm.reloadTable();
-            }, 3000);
-
-            // vm.$emit("responseHandler", 3, res);
-          })
-          .catch((err) => {
-            console.log(err);
-            // vm.$emit("responseHandler", 1, err);
-          });
-      } else {
-        if (this.checkUpdateData) {
-          EmployeesAPI.update(vm.employee.EmployeeId, vm.employee)
-            .then(() => {
-              vm.btnCancelOnClick();
-              setTimeout(function () {
-                vm.reloadTable();
-              }, 3000);
-
-              // vm.$emit("responseHandler", 4, res);
-            })
-            .catch(() => {
-              // vm.$emit("responseHandler", 1, err);
-            });
-        } else {
-          // vm.$emit("responseHandler", 1, "");
-          console.log(1);
-        }
-      }
-      // this.saveData();
-
-      //Nếu thêm thành công
-      // if (this.allInputValid) {
-      //   this.showForm = false;
-      // }
-    },
-
-    /**
-     * Reload lại bảng
-     * Autthor: PHDUONG(2/8/2021)
-     */
-    reloadTable() {
-      this.$emit("btnReloadOnClick");
-    },
-
-    nameWithLang({ DepartmentCode, DepartmentName }) {
-      return `${DepartmentCode} — [${DepartmentName}]`;
-    },
-    /**
-     * Hàm cất và thêm dữ liệu
-     * NVTOAN 08/07/2021
-     */
-
-    saveAndAdd() {
-      this.saveValidate = true;
-
-      this.saveData();
-
-      //Nếu thêm thành công
-      if (this.allInputValid) {
-        this.saveValidate = false;
-        this.employee = {};
-
-        //Lấy lại mã nhan viên
-
-        EmployeesAPI.getNewCode()
-          .then((response) => {
-            this.employee.EmployeeCode = response.data;
-
-            //Lấy dữ liệu gốc để đối chiếu xem người dùng đã thay đổi dữ liệu chưa
-            this.originData = JSON.parse(JSON.stringify(this.employee));
-          })
-          .catch(() => {
-            //Nếu không lưu được thì thông báo lỗi
-            this.allInputValid = false;
-            // this.errorMessage = Resource.Message.ServerError;
-            this.showErrorPopup = true;
-          });
-      }
-    },
-    /**
      * Hàm mở form
-     * NVTOAN 06/07/2021
+     * PHDUONG 30/08/2021
      */
-    openForm(employeeId, employee) {
+    openForm(employeeId, mode) {
       var vm = this;
-      //Gán lại giá trị của form
+      //Gán lại giá trị của employee
       vm.employee = EmployeeModel.initData();
       vm.departmentItem = [];
       vm.showForm = true;
@@ -454,12 +392,12 @@ export default {
       //Nếu là form sửa
       if (employeeId.length > 0) {
         //Xác định formType
-        vm.employeeId = employeeId;
-        vm.formType = 1;
+        // vm.employeeId = employeeId;
 
         EmployeesAPI.getById(employeeId)
           .then((res) => {
             vm.employee = res.data;
+
             vm.employee.DateOfBirth = vm.$format.formatDate(
               res.data.DateOfBirth,
               true
@@ -473,18 +411,8 @@ export default {
           .catch((err) => {
             console.log(err);
           });
-      } else {
-        //Xác định formType
-        vm.formType = 0;
-
-        //Nếu có employee thì là nhân bản
-        if (employee) {
-          //Xác định formType
-          vm.formType = 2;
-
-          vm.employee = JSON.parse(JSON.stringify(employee));
-        }
-
+      }
+      if (mode != 1) {
         EmployeesAPI.getNewCode()
           .then((response) => {
             vm.employee.EmployeeCode = response.data;
@@ -493,23 +421,112 @@ export default {
             console.log(err);
           });
       }
+    },
 
-      //Lấy dữ liệu gốc để đối chiếu xem người dùng đã thay đổi dữ liệu chưa
-      // this.originData = JSON.parse(JSON.stringify(this.employee));
+    saveData() {
+      let vm = this;
+      if (vm.isFormChanged && this.validateForm()) {
+        if (vm.mode != 1) {
+          EmployeesAPI.create(vm.employee)
+            .then(() => {
+              vm.btnCancelOnClick();
+              setTimeout(function () {
+                vm.reloadTable();
+              }, 3000);
+
+              // vm.$emit("responseHandler", 3, res);
+            })
+            .catch((err) => {
+              console.log(err);
+              // vm.$emit("responseHandler", 1, err);
+            });
+        } else {
+          EmployeesAPI.update(vm.employee.EmployeeId, vm.employee)
+            .then(() => {
+              vm.btnCancelOnClick();
+              setTimeout(function () {
+                vm.reloadTable();
+              }, 3000);
+
+              // vm.$emit("responseHandler", 4, res);
+            })
+            .catch(() => {
+              // vm.$emit("responseHandler", 1, err);
+            });
+        }
+      } else {
+        // vm.$emit("responseHandler", 1, "");
+        console.log("Đã sửa gì đâu :)))) ");
+      }
     },
 
     /**
-     * xử lý onchangeinput
+     * Hàm thêm và thoát form
+     * NVTOAN 08/07/2021
      */
-    onChangeInput({ value }) {
-      console.log(value);
+    saveAndOut() {
+
+      this.saveData();
+
+      //Nếu thêm thành công
+      // if (this.allInputValid) {
+      //   this.showForm = false;
+      // }
     },
     /**
-     * xử lý onchangeinput
+     * Hàm cất và thêm dữ liệu
+     * NVTOAN 08/07/2021
      */
-    getDepartmentId() {
-      this.employee.DepartmentId = this.departmentItem.DepartmentId;
-      // this.employee = value;
+
+    saveAndAdd() {
+
+      this.saveData(); //nếu có lỗi thì sao
+
+      //Nếu thêm thành công
+      this.saveValidate = false;
+      this.employee = {};
+
+      //Lấy lại mã nhân viên
+
+      EmployeesAPI.getNewCode()
+        .then((response) => {
+          this.employee.EmployeeCode = response.data;
+        })
+        .catch(() => {
+          this.allInputValid = false;
+          // this.errorMessage = Resource.Message.ServerError;
+          this.showErrorPopup = true;
+        });
+    },
+
+    /**
+     * Reload lại bảng
+     * Autthor: PHDUONG(2/8/2021)
+     */
+    reloadTable() {
+      this.$emit("btnReloadOnClick");
+    },
+
+    /**
+     * Hiển thị tên đơn vị khi chọn
+     */
+    displayName({ DepartmentName }) {
+      return `${DepartmentName}`;
+    },
+
+    /**
+     * Lưu dữ liệu được nhập vào employee
+     * CreatedBy: PHDUONG(31/08/2021)
+     */
+    onChangeInput({ value, id }) {
+      this.isFormChanged = true;
+      if (
+        this.departmentItem &&
+        this.employee.DepartmentId != this.departmentItem.DepartmentId
+      ) {
+        this.employee.DepartmentId = this.departmentItem.DepartmentId;
+      }
+      this.employee[id] = value;
     },
 
     /**
@@ -517,11 +534,112 @@ export default {
      * NVTOAN 07/06/2021
      */
     closeForm() {
-      // if (this.dataChanged()) {
-      //   this.showConfirmPopup = true;
-      // } else {
+      Object.keys(this.$refs).forEach(
+        (el) => (this.$refs[el].isValidated = true)
+      );
+
+      this.isFormChanged = false;
       this.showForm = false;
-      // }
+    },
+
+    /**
+     * validate form
+     * CreatedBy: NHHoang (28/08/2021)
+     */
+    validateForm() {
+      let isValidated = true;
+
+      Object.keys(this.$refs).forEach((el) => {
+        this.$refs[el].validate();
+
+        if (!this.$refs[el].isValidated) {
+          if (isValidated === true) {
+            let msg = ErrorMessage[this.$refs[el].id];
+            this.setPopup(
+              msg,
+              "icon-error",
+              null,
+              null,
+              null,
+              "Đóng",
+              null,
+              null
+            );
+          }
+
+          isValidated = this.$refs[el].isValidated;
+        }
+      });
+
+      return isValidated;
+    },
+
+    /**
+     * Thiết lập popup
+     * CreatedBy: PHDUONG(31/08/2021)
+     */
+    setPopup(
+      message,
+      icon,
+      btnLef = null,
+      btnRightFirst = null,
+      btnRightSec = null,
+      btnCenter = null,
+      action = null,
+      cancel = null
+    ) {
+      this.popupInfo = {
+        btnLeft: btnLef,
+        btnRightFirst,
+        btnRightSec,
+        btnCenter,
+        isShowed: true,
+        icon: icon,
+        message,
+        action,
+        cancel,
+      };
+    },
+
+    /**
+     * đóng popup
+     * CreatedBy: NHHoang (29/08/2021)
+     */
+    closePopup() {
+      this.popupInfo = {
+        btnLeft: null,
+        btnRightFirst: null,
+        btnRightSec: null,
+        btnCenter: null,
+        isShowed: false,
+        icon: null,
+        message: "",
+        action: null,
+        cancel: null,
+      };
+    },
+
+     /**
+     * Xử lý xem data có thay đổi không và hỏi người dùng muốn lưu data ko? = popup
+     * CreatedBy: NHHoang (29/08/2021)
+     */
+    preCloseForm() {
+      if (this.isFormChanged) {
+        let msg = "Dữ liệu đã bị thay đổi. Bạn có muốn cất không";
+
+        this.setPopup(
+          msg,
+          "mi-ques",
+          "Hủy",
+          "Không",
+          "Có",
+          null,
+          this.saveAndOut(),
+          this.closeForm
+        );
+      } else {
+        this.closeForm();
+      }
     },
   },
   watch: {

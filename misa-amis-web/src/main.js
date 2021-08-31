@@ -18,6 +18,7 @@ import {
   BaseTable,
   // BasePagination
 } from "@/components/table";
+import BasePopup from "@/components/BasePopup";
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
@@ -26,6 +27,7 @@ Vue.config.productionTip = false
 
 Vue.component(BaseInput.name, BaseInput);
 Vue.component(BaseTable.name, BaseTable);
+Vue.component(BasePopup.name, BasePopup);
 
 Vue.component('multiselect', Multiselect)
 

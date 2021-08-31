@@ -57,9 +57,4 @@ export const columns = [
     name: "BankBranch",
     className: "text text-left",
   },
-  {
-    label: "Chức năng",
-    // name: "WorkStatus",
-    className: "text text-left",
-  },
 ];
