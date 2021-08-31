@@ -217,7 +217,7 @@
     height: 18px;
     border-radius: 2px;
     overflow: hidden;
-    border: 0.1px solid var(--color-gray);
+    border: 1px solid var(--color-gray);
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
@@ -247,20 +247,18 @@
 }
 
 .table-content .delete-box:hover input~.checkmark {
-    background-color: var(--color-gray);
+    /* background-color: var(--color-gray); */
 }
 
 .table-content .delete-box input:checked~.checkmark {
-    background-color: var(--color-primary);
+    border-color: var(--color-primary);
 }
 
-.table-content .delete-box .checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-}
+/* .table-content .delete-box .checkmark:after {
+    border-color: var(--color-primary);
+} */
 
-.table-content .delete-box input:checked~.checkmark:after {
+/* .table-content .delete-box input:checked~.checkmark:after {
     display: block;
 }
 
@@ -274,4 +272,4 @@
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
-}
+} */

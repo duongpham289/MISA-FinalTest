@@ -6,18 +6,14 @@
         <div class="modal-checkbox">
           <div class="modal-checkbox__content">
             <input class="checkbox" type="checkbox" />
-            <span class="checkmark">
-              <div class="mi mi-16 mi-checkbox-active"></div
-            ></span>
+            <span class="checkmark"> </span>
           </div>
           <div class="modal-checkbox__title">Là khách hàng</div>
         </div>
         <div class="modal-checkbox items-center">
           <div class="modal-checkbox__content">
             <input class="checkbox" type="checkbox" />
-            <span class="checkmark">
-              <div class="mi mi-16 mi-checkbox-active"></div
-            ></span>
+            <span class="checkmark"> </span>
           </div>
           <div class="modal-checkbox__title">Là nhà cung cấp</div>
           <div class="modal__button-close" @click="closeForm">
@@ -36,6 +32,7 @@
                     label="Mã"
                     id="EmployeeCode"
                     placeholder="NV8888..."
+                    :maxLength="20"
                     :value="employee.EmployeeCode"
                     required
                   >
@@ -46,6 +43,7 @@
                     ref="FullName"
                     label="Tên"
                     id="FullName"
+                    :maxLength="100"
                     placeholder="Nguyễn Văn A..."
                     :value="employee.FullName"
                     @handleInput="onChangeInput"
@@ -55,7 +53,7 @@
               </div>
               <div class="row-input">
                 <div class="w-100">
-                  <label  class="modal__text text-semibold p-b--4">
+                  <label class="modal__text text-semibold p-b--4">
                     Đơn vị
                     <span class="required">
                       <span class="required-input">*</span>
@@ -63,9 +61,9 @@
                   </label>
                   <multiselect
                     class="custom-select-form"
-                    :tabindex="3"
-                    v-model="value"
-                    :options="options"
+                    v-model="departmentItem"
+                    @input="getDepartmentId"
+                    :options="departmentList"
                     :searchable="true"
                     :close-on-select="true"
                     :show-labels="false"
@@ -74,19 +72,28 @@
                     :custom-label="nameWithLang"
                     placeholder
                   >
+                    <span
+                      slot="beforeList"
+                      class="custom-seclect-header d-flex items-center"
+                    >
+                      <div class="de-code w-20 d-flex flex-center">
+                        Mã đơn vị
+                      </div>
+                      <div class="de-name w-40 d-flex flex-center">
+                        Tên đơn vị
+                      </div>
+                    </span>
                     <span slot="noResult">Không tìm thấy đơn vị</span>
                     <template slot="singleLabel" slot-scope="props">
                       <span>{{ props.option.DepartmentName }}</span>
                     </template>
                     <template slot="option" slot-scope="props">
-                      <div class="option-item-name">
-                        <span class="pr-20">{{
-                          props.option.DepartmentCode
-                        }}</span>
-                        <span class="pl-20">{{
-                          props.option.DepartmentName
-                        }}</span>
-                      </div>
+                      <span class="w-20 d-flex flex-center">{{
+                        props.option.DepartmentCode
+                      }}</span>
+                      <span class="w-40 d-flex flex-center">{{
+                        props.option.DepartmentName
+                      }}</span>
                     </template>
                   </multiselect>
                 </div>
@@ -97,6 +104,7 @@
                     label="Chức danh"
                     id="PositionName"
                     placeholder=""
+                    :maxLength="100"
                     :value="employee.PositionName"
                     @handleInput="onChangeInput"
                   />
@@ -155,10 +163,11 @@
               <div class="d-flex row-input">
                 <div class="w-60 p-r--6">
                   <base-input
-                    label="Số CMTND"
+                    label="Số CMND"
                     id="IdentityNumber"
-                    type="number"
+                    type="text"
                     placeholder="0123456789..."
+                    :maxLength="25"
                     :value="employee.IdentityNumber"
                     @handleInput="onChangeInput"
                   />
@@ -179,6 +188,7 @@
                     label="Nơi cấp"
                     id="IdentityPlace"
                     type="text"
+                    :maxLength="255"
                     placeholder="Hà Nội..."
                     :value="employee.IdentityPlace"
                     @handleInput="onChangeInput"
@@ -194,6 +204,7 @@
                   label="Địa chỉ"
                   id="Address"
                   type="text"
+                  :maxLength="255"
                   placeholder="Hà Nội..."
                   :value="employee.Address"
                   @handleInput="onChangeInput"
@@ -207,6 +218,7 @@
                   label="ĐT di động"
                   id="MobilePhoneNumber"
                   placeholder="0123456789..."
+                  :maxLength="50"
                   :value="employee.MobilePhoneNumber"
                   @handleInput="onChangeInput"
                 />
@@ -216,6 +228,7 @@
                   label="ĐT cố định"
                   id="TelephoneNumber"
                   placeholder="0123456789..."
+                  :maxLength="50"
                   :value="employee.TelephoneNumber"
                   @handleInput="onChangeInput"
                 />
@@ -225,6 +238,7 @@
                   label="Email"
                   id="Email"
                   type="email"
+                  :maxLength="50"
                   placeholder="example@gmail.com..."
                   :value="employee.Email"
                   @handleInput="onChangeInput"
@@ -239,6 +253,7 @@
                   id="BankAccount"
                   type="number"
                   placeholder="0123456789..."
+                  :maxLength="25"
                   :value="employee.BankAccount"
                   @handleInput="onChangeInput"
                 />
@@ -248,6 +263,7 @@
                   label="Tên ngân hàng"
                   id="BankName"
                   type="text"
+                  :maxLength="100"
                   placeholder="ACB..."
                   :value="employee.BankName"
                   @handleInput="onChangeInput"
@@ -258,6 +274,7 @@
                   label="Chi nhánh"
                   id="BankBranch"
                   type="text"
+                  :maxLength="100"
                   placeholder="Cầu Giấy..."
                   :value="employee.BankBranch"
                   @handleInput="onChangeInput"
@@ -319,25 +336,8 @@ export default {
       department: "1",
       employeeId: null,
       formType: null, // 0: thêm, 1 : sửa, 2 : nhân bản
-      options: [
-        {
-          DepartmentCode: "PB-001",
-          DepartmentName: "CMC",
-        },
-        {
-          DepartmentCode: "PB-002",
-          DepartmentName: "MISA",
-        },
-        {
-          DepartmentCode: "PB-003",
-          DepartmentName: "FSOFT",
-        },
-        {
-          DepartmentCode: "PB-004",
-          DepartmentName: "VTV",
-        },
-      ],
-      value: ""
+      departmentList: this.departmentCbb,
+      departmentItem: [],
     };
   },
   methods: {
@@ -355,12 +355,54 @@ export default {
      */
     saveAndOut() {
       console.log(this.employee);
+      let vm = this;
+      if (vm.mode == 0) {
+        EmployeesAPI.create(vm.employee)
+          .then(() => {
+            vm.btnCancelOnClick();
+            setTimeout(function () {
+              vm.reloadTable();
+            }, 3000);
+
+            // vm.$emit("responseHandler", 3, res);
+          })
+          .catch((err) => {
+            console.log(err);
+            // vm.$emit("responseHandler", 1, err);
+          });
+      } else {
+        if (this.checkUpdateData) {
+          EmployeesAPI.update(vm.employee.EmployeeId, vm.employee)
+            .then(() => {
+              vm.btnCancelOnClick();
+              setTimeout(function () {
+                vm.reloadTable();
+              }, 3000);
+
+              // vm.$emit("responseHandler", 4, res);
+            })
+            .catch(() => {
+              // vm.$emit("responseHandler", 1, err);
+            });
+        } else {
+          // vm.$emit("responseHandler", 1, "");
+          console.log(1);
+        }
+      }
       // this.saveData();
 
       //Nếu thêm thành công
       // if (this.allInputValid) {
       //   this.showForm = false;
       // }
+    },
+
+    /**
+     * Reload lại bảng
+     * Autthor: PHDUONG(2/8/2021)
+     */
+    reloadTable() {
+      this.$emit("btnReloadOnClick");
     },
 
     nameWithLang({ DepartmentCode, DepartmentName }) {
@@ -406,6 +448,7 @@ export default {
       var vm = this;
       //Gán lại giá trị của form
       vm.employee = EmployeeModel.initData();
+      vm.departmentItem = [];
       vm.showForm = true;
 
       //Nếu là form sửa
@@ -458,8 +501,15 @@ export default {
     /**
      * xử lý onchangeinput
      */
-    onChangeInput({ value, id }) {
-      this.employee[id] = value;
+    onChangeInput({ value }) {
+      console.log(value);
+    },
+    /**
+     * xử lý onchangeinput
+     */
+    getDepartmentId() {
+      this.employee.DepartmentId = this.departmentItem.DepartmentId;
+      // this.employee = value;
     },
 
     /**
@@ -475,7 +525,16 @@ export default {
     },
   },
   watch: {
-    employeeId: function () {},
+    employee: {
+      immediate: true,
+      deep: true,
+      handler() {
+        let index = this.departmentList.find(
+          (item) => item.DepartmentId == this.employee.DepartmentId
+        );
+        this.departmentItem = index ? index : null;
+      },
+    },
   },
 };
 </script>

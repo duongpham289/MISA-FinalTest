@@ -15,20 +15,25 @@
     </thead>
     <tbody class="table-body">
       <tr
+        ref="TableRow"
         v-for="item in data"
         :key="item[columns[0].id]"
         @dblclick="dbClickRow(item)"
       >
         <td>
-          <div class="delete-box">
+          <div class="delete-box" :class="checkboxOnclick(item[columns[0].id]) ? 'border-active' : ''">
             <input
+              ref="TableCheckbox"
               class="checkbox"
               type="checkbox"
               v-model="checkedId"
               :value="{ id: item[columns[0].id], code: item[columns[0].name] }"
             />
             <span class="checkmark"
-              ><div class="mi mi-16 mi-checkbox-active"></div
+              ><div
+                class="mi mi-16 mi-checkbox-active"
+                v-if="checkboxOnclick(item[columns[0].id])"
+              ></div
             ></span>
           </div>
         </td>
@@ -126,6 +131,11 @@ export default {
       }
 
       return tmp;
+    },
+    checkboxOnclick(value) {
+      let index = this.checkedId.find((item) => item.id == value);
+
+      return index ? true : false;
     },
   },
 

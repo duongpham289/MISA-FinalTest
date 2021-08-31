@@ -11,8 +11,8 @@ class EmployeesAPI extends BaseAPI {
    * Hàm lấy dữ liệu phân trang
    * @param {*} payload
    */
-   paging(pageIndex, pageSize, entityFilter, departmentId, positionId) {
-    return BaseAPIConfig.get(`${this.controller}/paging?pageIndex=${pageIndex}&pageSize=${pageSize}&employeeFilter=${entityFilter}&departmentId=${departmentId}&positionId=${positionId}`);
+   paging(pageIndex, pageSize, entityFilter) {
+    return BaseAPIConfig.get(`${this.controller}/paging?pageIndex=${pageIndex}&pageSize=${pageSize}&employeeFilter=${entityFilter}`);
   }
 }
 

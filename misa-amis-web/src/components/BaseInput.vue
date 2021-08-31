@@ -9,10 +9,10 @@
     <div class="field-input">
       <input
         class="input"
-        :class="classes"
         :type="type"
         :max="maxDate"
         :placeholder="placeholder"
+        :maxlength="maxLength"
         :value="attachValue"
         @input="onChangeInput"
       />
@@ -28,15 +28,6 @@ export default {
 
   // #region props
   props: {
-    validateRequired: {
-      type: Boolean,
-    },
-    validateEmail: {
-      type: Boolean,
-    },
-    dirty: {
-      type: Boolean,
-    },
     errorMsg: {
       type: Boolean,
       default: false,
@@ -67,22 +58,10 @@ export default {
     placeholder: {
       type: String,
     },
-    classes: {
-      type: String,
-    },
-    iconLeft: {
-      type: Boolean,
-      default: false,
-    },
-    iconRight: {
-      type: Boolean,
-      default: false,
-    },
     required: {
       type: Boolean,
-      default: false,
     },
-    mode: {
+    maxLength: {
       type: Number,
     },
   },
@@ -110,28 +89,7 @@ export default {
      */
     onChangeInput(event) {
       let tmp = event.target.value;
-
-      if (this.format === this.$enum.MONEY) {
-        event.target.value = this.$format.formatMoneyOnModal(event.target.value);
-        tmp = event.target.value.toString().replaceAll(".", "");
-        this.$emit("handleInput", {
-          id: this.id,
-          value: parseInt(tmp),
-        });
-      } else {
-        this.$emit("handleInput", { id: this.id, value: tmp });
-      }
-    },
-    /**
-     * Định dạng dữ liệu chung
-     * CreatedBy: PHDUONG(30/08/2021)
-     */
-    formatData(value) {
-      if (this.format === this.$enum.MONEY) {
-        return this.$format.formatMoneyOnModal(value);
-      }
-
-      return value;
+      this.$emit("handleInput", { id: this.id, value: tmp });
     },
   },
 };

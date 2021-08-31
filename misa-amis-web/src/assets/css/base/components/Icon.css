@@ -17,6 +17,12 @@
     min-width: 14px;
     min-height: 14px;
 }
+.mi-16 {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
+}
 
 .mi-24 {
     width: 24px;
@@ -138,4 +144,7 @@
 .mi-trashbin{
     background-position:  -464px -313px;
     zoom: 1.2;
+}
+.mi-checkbox-active {
+    background-position: -1224px -360px;
 }

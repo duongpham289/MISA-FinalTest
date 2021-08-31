@@ -43,7 +43,7 @@ export default {
      * NVTOAN 05/07/2021
      */
     refreshData() {
-      this.$emit("refreshData");
+      this.$emit("btnReloadOnClick");
     },
 
     /**
