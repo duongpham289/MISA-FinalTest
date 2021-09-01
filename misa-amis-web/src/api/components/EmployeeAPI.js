@@ -1,7 +1,7 @@
 import BaseAPI from "@/api/base/BaseAPI.js";
 import BaseAPIConfig from "../base/BaseAPIConfig.js";
 
-class EmployeesAPI extends BaseAPI {
+class EmployeeAPI extends BaseAPI {
   constructor() {
     super();
     this.controller = "v1/Employees";
@@ -16,4 +16,4 @@ class EmployeesAPI extends BaseAPI {
   }
 }
 
-export default new EmployeesAPI();
+export default new EmployeeAPI();

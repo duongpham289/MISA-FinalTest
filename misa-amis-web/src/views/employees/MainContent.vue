@@ -20,7 +20,10 @@
         />
       </div>
       <div class="content-footer items-center">
-        <div class="record-display">Tổng số: &nbsp;<span class="text-semibold"> {{totalRecord}}</span>&nbsp; bản ghi</div>
+        <div class="record-display">
+          Tổng số: &nbsp;<span class="text-semibold"> {{ totalRecord }}</span
+          >&nbsp; bản ghi
+        </div>
         <div class="paginate items-center">
           <multiselect
             class="custom-select-paging w-200"
@@ -46,14 +49,23 @@
         </div>
       </div>
     </div>
-    <Modal ref="Modal" :departmentCbb="departmentCbb" :mode="mode" />
+    <Modal
+      ref="Modal"
+      :departmentCbb="departmentCbb"
+      :mode="mode"
+      @setPopup="setPopup"
+      @btnReloadOnClick="btnReloadOnClick"
+    />
+
+    <base-popup :info="popupInfo" @close="closePopup"></base-popup>
   </div>
 </template>
 
 <script>
 import Modal from "../employees/Modal.vue";
-import EmployeesAPI from "@/api/components/EmployeesAPI.js";
+import EmployeeAPI from "@/api/components/EmployeeAPI.js";
 import DepartmentAPI from "@/api/components/DepartmentAPI.js";
+import ErrorMessage from "@/js/resources/ErrorMsg";
 
 import ContentHeader from "./ContentHeader.vue";
 import ContentToolBar from "./ContentToolBar.vue";
@@ -112,6 +124,18 @@ export default {
 
       isHiddenPopupMessage: true,
       loading: true,
+
+      popupInfo: {
+        btnLeft: null,
+        btnRightFirst: null,
+        btnRightSec: null,
+        btnCenter: null,
+        isShowed: false,
+        icon: null,
+        message: "",
+        action: null,
+        cancel: null,
+      },
     };
   },
   methods: {
@@ -160,7 +184,7 @@ export default {
       var vm = this;
       vm.loading = true;
 
-      EmployeesAPI.paging(pageIndex, pageSize, employeeFilter)
+      EmployeeAPI.paging(pageIndex, pageSize, employeeFilter)
         .then((res) => {
           vm.employeesData = res.data.data;
           vm.pageIndex = pageIndex;
@@ -224,18 +248,92 @@ export default {
         this.employeesToDelete = [];
       }
     },
-    deleteSelectedRows(employeeId) {
+
+    deleteSelectedRows(employeeId, employeeCode) {
       if (employeeId) {
-        console.log(employeeId);
+        this.employeesToDelete.push({
+          id: employeeId,
+          code: employeeCode,
+        });
+        let message = `Bạn có chắc chắn muốn xóa Nhân viên < ${employeeCode} > không?`;
+
+        this.setPopup(
+          message,
+          "mi-warning",
+          "Không",
+          null,
+          "Có",
+          null,
+          this.deleteById,
+          null
+        );
+      } else if (this.employeesToDelete.length > 0) {
+        let message = `Bạn có chắc chắn muốn xóa các nhân viên này không?`;
+
+        this.setPopup(
+          message,
+          "mi-warning",
+          "Không",
+          null,
+          "Có",
+          null,
+          this.deleteByListId,
+          null
+        );
+      } else {
+        
+          this.employeesToDelete = [];
+        let msg = ErrorMessage["DeleteListEmpty"];
+        this.setPopup(msg, "mi-warning", null, null, null, "Đóng", null, null);
       }
-      console.log(this.employeesToDelete);
+    },
+
+    /**
+     * Xóa theo id
+     * CreatedBy: NHHoang (29/08/2021)
+     */
+    deleteById() {
+      EmployeeAPI.delete(this.employeesToDelete[0].id)
+        .then(() => {
+          // if (res.status != 204) {
+          //   this.toastList.push({
+          //     type: Resource.ToastType.Success,
+          //     message: Resource.ToastMessage.DeleteSuccess,
+          //   });
+          this.employeesToDelete = [];
+          this.btnReloadOnClick();
+          // }
+        })
+        .catch(() => {
+          // this.toastList.push({
+          //   type: Resource.ToastType.ERROR,
+          //   message: Resource.ToastMessage.ServerError,
+          // });
+        });
+    },
+    /**
+     * Xóa theo id
+     * CreatedBy: NHHoang (29/08/2021)
+     */
+    deleteByListId() {
+      var listId = [];
+      this.employeesToDelete.forEach((data) => {
+        listId.push(data.id);
+      });
+
+      EmployeeAPI.deleteList(listId)
+        .then(() => {
+          this.employeesToDelete = [];
+          this.btnReloadOnClick();
+        })
+        .catch(() => {});
     },
 
     /**
      * Hàm mở form thêm sửa
      * NVTOAN 14/06/2021
      */
-    openForm(employeeId,mode) {
+    openForm(employeeId, mode) {
       if (employeeId) {
         this.mode = mode;
         this.$refs.Modal.openForm(employeeId, mode);
@@ -243,6 +341,58 @@ export default {
         this.mode = mode;
         this.$refs.Modal.openForm("", mode);
       }
+    },
+    /**
+     * thiết lập popup
+     * @param msg: tin nhắn
+     * @param icon: tên icon
+     * @param btnLeft: tên của nút bấm bên trái -> Đóng form, với giá trị null : ko có.
+     * @param btnRightFrist: tên của nút bấm bên phải thứ 2 -> đóng form và thực hiện hành động cancel, với giá trị  null : ko có
+     * @param btnRightSec: tên của nút bấm bên phải thứ 2 -> đóng form và thực hiện hành đọng action, với giá trị  null : ko có
+     * @param center: tên của nút bấm ở giữa  -> Đóng form ~ thường là message cảnh báo, với giá trị null : ko có
+     * @param action: action sẽ thực hiện nếu bấm nút btnRightSec, với giá trị null : ko có
+     * @param cancel: thực hiện hành động nếu bấm nút btnRightFirst, với giá trị null : ko có
+     * CreatedBy: NHHoang (29/08/2021)
+     */
+    setPopup(
+      message,
+      icon,
+      btnLef = null,
+      btnRightFirst = null,
+      btnRightSec = null,
+      btnCenter = null,
+      action = null,
+      cancel = null
+    ) {
+      this.popupInfo = {
+        btnLeft: btnLef,
+        btnRightFirst,
+        btnRightSec,
+        btnCenter,
+        isShowed: true,
+        icon: icon,
+        message,
+        action,
+        cancel,
+      };
+    },
+
+    /**
+     * đóng popup
+     * CreatedBy: NHHoang (29/08/2021)
+     */
+    closePopup() {
+      this.popupInfo = {
+        btnLeft: null,
+        btnRightFirst: null,
+        btnRightSec: null,
+        btnCenter: null,
+        isShowed: false,
+        icon: null,
+        message: "",
+        action: null,
+        cancel: null,
+      };
     },
   },
   watch: {

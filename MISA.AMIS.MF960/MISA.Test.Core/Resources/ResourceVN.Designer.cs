@@ -88,7 +88,7 @@ namespace MISA.Test.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mã  nhân viên đã tồn tại!.
+        ///   Looks up a localized string similar to Mã nhân viên đã tồn tại trong hệ thống.
         /// </summary>
         public static string EmployeeCodeDuplicateValidateError_Msg {
             get {

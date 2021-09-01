@@ -127,7 +127,7 @@
     <value>Email không đúng định dạng!</value>
   </data>
   <data name="EmployeeCodeDuplicateValidateError_Msg" xml:space="preserve">
-    <value>Mã  nhân viên đã tồn tại!</value>
+    <value>Mã nhân viên đã tồn tại trong hệ thống</value>
   </data>
   <data name="EmployeeCodeValidateError_Msg" xml:space="preserve">
     <value>Mã nhân viên ko được phép để trống!</value>

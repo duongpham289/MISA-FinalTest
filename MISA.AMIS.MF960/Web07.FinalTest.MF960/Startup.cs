@@ -33,6 +33,15 @@ namespace Web07.FinalTest.MF960
         {
 
             services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Web07.FinalTest.MF960", Version = "v1" });
+            });
+
+            services.AddControllers().AddJsonOptions(jsonOptions =>
+            {
+                jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = null;
+            });
 
             services.AddCors(options =>
             {
@@ -45,15 +54,6 @@ namespace Web07.FinalTest.MF960
                                   });
             });
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Web07.FinalTest.MF960", Version = "v1" });
-            });
-
-            services.AddControllers().AddJsonOptions(jsonOptions =>
-            {
-                jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = null;
-            });
 
             //Services DI:
             services.AddScoped<IEmployeeService, EmployeeService>();
@@ -78,11 +78,11 @@ namespace Web07.FinalTest.MF960
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Web07.FinalTest.MF960 v1"));
             }
 
-            app.UseCors(MyAllowSpecificOrigins);
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthorization();
 

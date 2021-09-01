@@ -82,7 +82,7 @@ namespace MISA.Test.Core.Services
             }
 
             //3.Đơn vị ko được phép để trống
-            if (employee.DepartmentName == "" || employee.DepartmentName == null)
+            if (employee.DepartmentId == null && employee.DepartmentName == null)
             {
                 var errorObj = new
                 {
@@ -94,43 +94,6 @@ namespace MISA.Test.Core.Services
                 _serviceResult.IsValid = false;
                 _serviceResult.Data = errorObj;
                 return _serviceResult.IsValid;
-            }
-
-            //4.Đơn vị phải có trong Database
-            if (!_employeeRepository.IsDuplicated(employee.DepartmentName))
-            {
-                var errorObj = new
-                {
-                    userMsg = Resources.ResourceVN.DepartmentValidateError_Msg,
-                    errorCode = "misa-001",
-                    moreInfo = "https://openapi.misa.com.vn/errorcode/misa-001",
-                    traceId = ""
-                };
-                _serviceResult.IsValid = false;
-                _serviceResult.Data = errorObj;
-                return _serviceResult.IsValid;
-            }
-
-            //3. Email phải đúng định dạng
-            var emailFormat = @"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
-
-            if (employee.Email != null)
-            {
-                var isMatch = Regex.IsMatch(employee.Email, emailFormat, RegexOptions.IgnoreCase);
-
-                if (isMatch == false)
-                {
-                    var errorObj = new
-                    {
-                        userMsg = Resources.ResourceVN.EmailValidateError_Msg,
-                        errorCode = "misa-001",
-                        moreInfo = "https://openapi.misa.com.vn/errorcode/misa-001",
-                        traceId = ""
-                    };
-                    _serviceResult.IsValid = false;
-                    _serviceResult.Data = errorObj;
-                    return _serviceResult.IsValid;
-                }
             }
 
             return _serviceResult.IsValid;

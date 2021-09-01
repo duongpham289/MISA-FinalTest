@@ -256,6 +256,39 @@ namespace Web07.FinalTest.MF960.Controllers
                 return StatusCode(500, errorObj);
             }
         }
+
+
+        [HttpGet("checkDuplicate/{entityProp}")]
+        public virtual IActionResult CheckDuplicated(string entityProp)
+        {
+            try
+            {
+                var entities = _baseRepository.IsDuplicated(entityProp);
+
+                    return StatusCode(200, entities);
+                //if (!entities)
+                //{
+                //}
+                //else
+                //{
+                //    return NoContent();
+                //}
+
+            }
+            catch (Exception ex)
+            {
+                var errorObj = new
+                {
+                    devMsg = ex.Message,
+                    userMsg = MISA.Test.Core.Resources.ResourceVN.ExceptionError_Msg,
+                    errorCode = "misa-001",
+                    moreInfo = "https://openapi.misa.com.vn/errorcode/misa-001",
+                    traceId = ""
+
+                };
+                return StatusCode(500, errorObj);
+            }
+        }
         #endregion
     }
 }

@@ -39,10 +39,24 @@ export default class BaseAPI {
     return BaseAPIConfig.put(`${this.controller}/${id}`, body);
   }
   /**
-   * Hàm xóa bản ghi
+   * Hàm xóa 1 bản ghi
    * @param {*} id
    */
-  delete(listId) {
+  delete(id) {
+    return BaseAPIConfig.delete(`${this.controller}/${id}`);
+  }
+  /**
+   * Hàm xóa nhiều bản ghi
+   * @param {*} listId
+   */
+  deleteList(listId) {
     return BaseAPIConfig.post(`${this.controller}/delete`,listId);
+  }
+  /**
+   * Check trùng
+   * @param {*} entityCode
+   */
+  checkDuplicate(entityCode) {
+    return BaseAPIConfig.post(`${this.controller}/checkDuplicate/${entityCode}`);
   }
 }

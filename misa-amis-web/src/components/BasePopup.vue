@@ -15,7 +15,7 @@
           <div class="left" v-show="info.btnLeft !== null">
             <div
               class="misa-button misa-button-default text-semibold"
-              @click="handleCancel"
+              @click="$emit('close')"
             >
               {{ info.btnLeft }}
             </div>
@@ -31,7 +31,7 @@
           <div class="right-first" v-show="info.btnRightFirst !== null">
             <div
               class="misa-button misa-button-default text-semibold"
-              @click="$emit('close')"
+              @click="handleCancel"
             >
               {{ info.btnRightFirst }}
             </div>
@@ -73,11 +73,11 @@ export default {
 
   methods: {
     /**
-     * Khi ấn nút done dẽ thực hiện hành động đã được truyền vào
+     * Khi ấn nút done sẽ thực hiện hành động đã được truyền vào
      * CreatedBy: NHHoang (29/08/2021)
      */
     handleAction() {
-      if (this.info.action !== null) this.info.saveAndOut();
+      if (this.info.action !== null) this.info.action();
 
       this.$emit("close");
     },

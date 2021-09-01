@@ -61,7 +61,9 @@
               <div
                 class="table-function-dropdown"
                 :class="{ active: idDropdown == item[columns[0].id] }"
-                @click="dropdownFunction(item[columns[0].id])"
+                @click="
+                  dropdownFunction(item[columns[0].id], item[columns[0].name])
+                "
               >
                 <div class="mi mi-16 mi-arrow-up--blue"></div>
               </div>
@@ -72,7 +74,9 @@
     </table>
     <div class="table-funcs" ref="TableFunction">
       <div class="clone-btn" @click="cloneEmployee(idDropdown)">Nhân bản</div>
-      <div class="delete-btn" @click="deleteRow(idDropdown)">Xóa</div>
+      <div class="delete-btn" @click="deleteRow(idDropdown, codeDropdown)">
+        Xóa
+      </div>
     </div>
   </div>
 </template>
@@ -99,10 +103,10 @@ export default {
       checked: 0,
       // isCheckAll: false
       idDropdown: null,
+      codeDropdown: null,
     };
   },
   methods: {
-    
     /**
      * Xử lý hiển thị icon khi click checkbox
      * CreatedBy: PHDUONG(30/08/2021)
@@ -118,6 +122,9 @@ export default {
      */
     dbClickRow(employeeId) {
       this.$emit("dbClickRow", employeeId, 1);
+      this.$refs["TableFunction"].style.display = "none";
+      this.idDropdown = null;
+      this.codeDropdown = null;
     },
 
     /**
@@ -126,27 +133,32 @@ export default {
      */
     cloneEmployee(employeeId) {
       this.$emit("dbClickRow", employeeId, 2);
+      this.$refs["TableFunction"].style.display = "none";
+      this.idDropdown = null;
+      this.codeDropdown = null;
     },
     /**
      * Mở modal khi clone
      * CreatedBy: PHDUONG(31/08/2021)
      */
-    deleteRow(employeeId) {
-      this.$emit("deleteSelectedRows", employeeId);
+    deleteRow(employeeId, employeeCode) {
+      this.$refs["TableFunction"].style.display = "none";
+      this.$emit("deleteSelectedRows", employeeId, employeeCode);
     },
-
 
     /**
      * Hiển thị content khi nhấn dropdown
      * CreatedBy: PHDUONG(31/08/2021)
      */
-    dropdownFunction(id) {
+    dropdownFunction(id, code) {
       if (this.idDropdown == id) {
         this.$refs["TableFunction"].style.display = "none";
         this.idDropdown = null;
+        this.codeDropdown = null;
       } else {
         this.$refs["TableFunction"].style.display = "block";
         this.idDropdown = id;
+        this.codeDropdown = code;
         this.$refs["TableFunction"].style.right =
           this.$refs[id][0].getBoundingClientRect().right - 1750 + "px";
         if (this.$refs[id][0].getBoundingClientRect().top == 893) {

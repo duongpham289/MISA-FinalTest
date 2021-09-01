@@ -8,12 +8,15 @@
     </label>
     <div class="field-input">
       <input
+        ref="AutoFocus"
         class="input"
         :type="type"
         :max="maxDate"
+        :title="title"
         :placeholder="placeholder"
         :maxlength="maxLength"
         :value="attachValue"
+        :class="!isValidated ? 'invalid' : ''"
         @input="onChangeInput"
       />
     </div>
@@ -21,7 +24,7 @@
 </template>
 
 <script>
-// import FormatData from "@/utils/format/FormatData.js";
+import ErrorMessage from "@/js/resources/ErrorMsg";
 
 export default {
   name: "base-input",
@@ -73,6 +76,8 @@ export default {
     return {
       maxDate:
         this.type == "date" ? new Date().toISOString().split("T")[0] : null,
+      isValidated: true,
+      title: "",
     };
   },
 
@@ -83,13 +88,49 @@ export default {
   },
 
   methods: {
+    autoFocus() {
+      this.$nextTick(() => {
+        this.$refs.AutoFocus.focus()
+      });
+    },
     /**
      * Xử lý thay đổi dữ liệu
      * CreatedBy: PHDUONG(30/08/2021)
      */
     onChangeInput(event) {
       let tmp = event.target.value;
+      this.validateInput(tmp);
       this.$emit("handleInput", { id: this.id, value: tmp });
+    },
+    validateInput(tmp = null) {
+      let value = tmp;
+      if (value === null) value = this.value;
+
+      if (this.required) {
+        if (!value || value == "") {
+          this.isValidated = false;
+          this.title = ErrorMessage[this.id];
+        } else {
+          this.isValidated = true;
+          this.title = "";
+        }
+      }
+      // else {
+      //   if (value === null || value?.trim() === "") {
+      //     this.isValidated = true;
+      //     this.title = "";
+      //   } else if ((value !== null) | (value?.trim() !== "")) {
+      //     if (this.format === "email") {
+      //       if (!Validation.validateEmail(value)) {
+      //         this.isValidated = false;
+      //         this.title = ErrorMessage[this.id];
+      //       } else {
+      //         this.isValidated = true;
+      //         this.title = "";
+      //       }
+      //     }
+
+      return this.isValidated;
     },
   },
 };

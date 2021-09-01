@@ -34,6 +34,7 @@
                     placeholder="NV8888..."
                     :maxLength="20"
                     :value="employee.EmployeeCode"
+                    @handleInput="onChangeInput"
                     required
                   >
                   </base-input>
@@ -61,9 +62,10 @@
                   </label>
                   <multiselect
                     class="custom-select-form"
-                    ref="DepartmentId"
                     v-model="departmentItem"
                     @input="onChangeInput"
+                    :title="isInvalid ? 'Đơn vị không được để trống' : ''"
+                    :class="isInvalid ? 'invalid' : ''"
                     :options="departmentList"
                     :searchable="true"
                     :close-on-select="true"
@@ -329,14 +331,12 @@
         </div>
       </div>
     </div>
-    
-    <base-popup :info="popupInfo" @close="closePopup"></base-popup>
   </div>
 </template>
 
 <script>
 import EmployeeModel from "@/models/EmployeeModel.js";
-import EmployeesAPI from "@/api/components/EmployeesAPI.js";
+import EmployeeAPI from "@/api/components/EmployeeAPI.js";
 import ErrorMessage from "@/js/resources/ErrorMsg";
 // import ToastMsg from "@/js/resources/ToastMsg";
 
@@ -362,19 +362,10 @@ export default {
       isFormChanged: false,
       departmentList: this.departmentCbb,
       departmentItem: [],
+      departmentTitleInvalid: "",
+      isInvalid: false,
+      hasError: false,
       toastList: [],
-      
-      popupInfo: {
-        btnLeft: null,
-        btnRightFirst: null,
-        btnRightSec: null,
-        btnCenter: null,
-        isShowed: false,
-        icon: null,
-        message: "",
-        action: null,
-        cancel: null,
-      },
     };
   },
   methods: {
@@ -388,13 +379,14 @@ export default {
       vm.employee = EmployeeModel.initData();
       vm.departmentItem = [];
       vm.showForm = true;
+      vm.isInvalid = false;
 
       //Nếu là form sửa
       if (employeeId.length > 0) {
         //Xác định formType
         // vm.employeeId = employeeId;
 
-        EmployeesAPI.getById(employeeId)
+        EmployeeAPI.getById(employeeId)
           .then((res) => {
             vm.employee = res.data;
 
@@ -407,56 +399,64 @@ export default {
               res.data.IdentityDate,
               true
             );
+
+            vm.$refs.EmployeeCode.autoFocus();
           })
           .catch((err) => {
             console.log(err);
           });
       }
       if (mode != 1) {
-        EmployeesAPI.getNewCode()
+        EmployeeAPI.getNewCode()
           .then((response) => {
             vm.employee.EmployeeCode = response.data;
+
+            vm.$refs.EmployeeCode.autoFocus();
           })
           .catch((err) => {
             console.log(err);
           });
       }
+      // console.log(vm.$refs);
     },
 
-    saveData() {
+    async saveData() {
       let vm = this;
-      if (vm.isFormChanged && this.validateForm()) {
+
+      if (this.validateForm()) {
+        vm.hasError = false;
         if (vm.mode != 1) {
-          EmployeesAPI.create(vm.employee)
+          await EmployeeAPI.create(vm.employee)
             .then(() => {
-              vm.btnCancelOnClick();
               setTimeout(function () {
                 vm.reloadTable();
-              }, 3000);
-
-              // vm.$emit("responseHandler", 3, res);
+              }, 1000);
             })
-            .catch((err) => {
-              console.log(err);
-              // vm.$emit("responseHandler", 1, err);
-            });
-        } else {
-          EmployeesAPI.update(vm.employee.EmployeeId, vm.employee)
+            .catch(() => {});
+        } else if (vm.isFormChanged) {
+          await EmployeeAPI.update(vm.employee.EmployeeId, vm.employee)
             .then(() => {
-              vm.btnCancelOnClick();
               setTimeout(function () {
                 vm.reloadTable();
-              }, 3000);
-
-              // vm.$emit("responseHandler", 4, res);
+              }, 1000);
             })
             .catch(() => {
               // vm.$emit("responseHandler", 1, err);
             });
+        } else {
+          let msg = ErrorMessage["FormNotChanged"];
+          this.$emit(
+            "setPopup",
+            msg,
+            "mi-warning",
+            null,
+            null,
+            null,
+            "Đóng",
+            null,
+            null
+          );
         }
-      } else {
-        // vm.$emit("responseHandler", 1, "");
-        console.log("Đã sửa gì đâu :)))) ");
       }
     },
 
@@ -465,38 +465,28 @@ export default {
      * NVTOAN 08/07/2021
      */
     saveAndOut() {
-
       this.saveData();
 
-      //Nếu thêm thành công
-      // if (this.allInputValid) {
-      //   this.showForm = false;
-      // }
+      if (this.validateForm() && this.isFormChanged && !this.hasError) {
+        this.closeForm();
+      }
     },
     /**
      * Hàm cất và thêm dữ liệu
      * NVTOAN 08/07/2021
      */
 
-    saveAndAdd() {
-
-      this.saveData(); //nếu có lỗi thì sao
+    async saveAndAdd() {
+      var vm = this;
+      await vm.saveData(); //nếu có lỗi thì sao
 
       //Nếu thêm thành công
-      this.saveValidate = false;
-      this.employee = {};
+      vm.employee = EmployeeModel.initData();
 
       //Lấy lại mã nhân viên
 
-      EmployeesAPI.getNewCode()
-        .then((response) => {
-          this.employee.EmployeeCode = response.data;
-        })
-        .catch(() => {
-          this.allInputValid = false;
-          // this.errorMessage = Resource.Message.ServerError;
-          this.showErrorPopup = true;
-        });
+      let res = await EmployeeAPI.getNewCode();
+      vm.employee.EmployeeCode = res.data;
     },
 
     /**
@@ -518,7 +508,7 @@ export default {
      * Lưu dữ liệu được nhập vào employee
      * CreatedBy: PHDUONG(31/08/2021)
      */
-    onChangeInput({ value, id }) {
+    onChangeInput({ id, value }) {
       this.isFormChanged = true;
       if (
         this.departmentItem &&
@@ -548,16 +538,35 @@ export default {
      */
     validateForm() {
       let isValidated = true;
+      let vm = this;
 
-      Object.keys(this.$refs).forEach((el) => {
-        this.$refs[el].validate();
+      if (!vm.departmentItem) {
+        vm.isInvalid = true;
+        isValidated = false;
+        let msg = ErrorMessage.DepartmentId;
+        vm.$emit(
+          "setPopup",
+          msg,
+          "mi-error",
+          null,
+          null,
+          null,
+          "Đóng",
+          null,
+          null
+        );
+      }
+      Object.keys(vm.$refs).forEach((el) => {
+        vm.$refs[el].validateInput();
 
-        if (!this.$refs[el].isValidated) {
+        if (!vm.$refs[el].isValidated) {
           if (isValidated === true) {
-            let msg = ErrorMessage[this.$refs[el].id];
-            this.setPopup(
+            let msg = ErrorMessage[vm.$refs[el].id];
+
+            this.$emit(
+              "setPopup",
               msg,
-              "icon-error",
+              "mi-error",
               null,
               null,
               null,
@@ -566,75 +575,44 @@ export default {
               null
             );
           }
-
-          isValidated = this.$refs[el].isValidated;
+          isValidated = vm.$refs[el].isValidated;
         }
       });
-
+      if (EmployeeAPI.checkDuplicate(vm.employee.EmployeeCode)) {
+        vm.hasError = true;
+        let msg = ErrorMessage["EmployeeCodeDuplicate"];
+        vm.$emit(
+          "setPopup",
+          msg,
+          "mi-warning",
+          null,
+          null,
+          null,
+          "Đóng",
+          null,
+          null
+        );
+      }
       return isValidated;
     },
 
     /**
-     * Thiết lập popup
-     * CreatedBy: PHDUONG(31/08/2021)
-     */
-    setPopup(
-      message,
-      icon,
-      btnLef = null,
-      btnRightFirst = null,
-      btnRightSec = null,
-      btnCenter = null,
-      action = null,
-      cancel = null
-    ) {
-      this.popupInfo = {
-        btnLeft: btnLef,
-        btnRightFirst,
-        btnRightSec,
-        btnCenter,
-        isShowed: true,
-        icon: icon,
-        message,
-        action,
-        cancel,
-      };
-    },
-
-    /**
-     * đóng popup
-     * CreatedBy: NHHoang (29/08/2021)
-     */
-    closePopup() {
-      this.popupInfo = {
-        btnLeft: null,
-        btnRightFirst: null,
-        btnRightSec: null,
-        btnCenter: null,
-        isShowed: false,
-        icon: null,
-        message: "",
-        action: null,
-        cancel: null,
-      };
-    },
-
-     /**
      * Xử lý xem data có thay đổi không và hỏi người dùng muốn lưu data ko? = popup
      * CreatedBy: NHHoang (29/08/2021)
      */
     preCloseForm() {
-      if (this.isFormChanged) {
+      if (this.isValidated && this.isFormChanged) {
         let msg = "Dữ liệu đã bị thay đổi. Bạn có muốn cất không";
 
-        this.setPopup(
+        this.$emit(
+          "setPopup",
           msg,
           "mi-ques",
           "Hủy",
           "Không",
           "Có",
           null,
-          this.saveAndOut(),
+          this.saveAndOut,
           this.closeForm
         );
       } else {
@@ -651,6 +629,9 @@ export default {
           (item) => item.DepartmentId == this.employee.DepartmentId
         );
         this.departmentItem = index ? index : null;
+        if (this.departmentItem) {
+          this.isInvalid = false;
+        }
       },
     },
   },

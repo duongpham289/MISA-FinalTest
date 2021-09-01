@@ -12,3 +12,17 @@ D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Core\obj\Debug\net5.0\MISA.Tes
 D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Core\obj\Debug\net5.0\MISA.Test.Core.dll
 D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Core\obj\Debug\net5.0\ref\MISA.Test.Core.dll
 D:\Work\MISA.Test\Web07.FinalTest.MF960\MISA.Test.Core\obj\Debug\net5.0\MISA.Test.Core.pdb
+D:\Work\MISA-FinalTest\MISA.AMIS.MF960\MISA.Test.Core\bin\Debug\net5.0\MISA.Test.Core.deps.json
+D:\Work\MISA-FinalTest\MISA.AMIS.MF960\MISA.Test.Core\bin\Debug\net5.0\MISA.Test.Core.dll
+D:\Work\MISA-FinalTest\MISA.AMIS.MF960\MISA.Test.Core\bin\Debug\net5.0\ref\MISA.Test.Core.dll
+D:\Work\MISA-FinalTest\MISA.AMIS.MF960\MISA.Test.Core\bin\Debug\net5.0\MISA.Test.Core.pdb
+D:\Work\MISA-FinalTest\MISA.AMIS.MF960\MISA.Test.Core\obj\Debug\net5.0\MISA.Test.Core.csproj.AssemblyReference.cache
+D:\Work\MISA-FinalTest\MISA.AMIS.MF960\MISA.Test.Core\obj\Debug\net5.0\MISA.Test.Core.Resources.ResourceVN.resources
+D:\Work\MISA-FinalTest\MISA.AMIS.MF960\MISA.Test.Core\obj\Debug\net5.0\MISA.Test.Core.csproj.GenerateResource.cache
+D:\Work\MISA-FinalTest\MISA.AMIS.MF960\MISA.Test.Core\obj\Debug\net5.0\MISA.Test.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\Work\MISA-FinalTest\MISA.AMIS.MF960\MISA.Test.Core\obj\Debug\net5.0\MISA.Test.Core.AssemblyInfoInputs.cache
+D:\Work\MISA-FinalTest\MISA.AMIS.MF960\MISA.Test.Core\obj\Debug\net5.0\MISA.Test.Core.AssemblyInfo.cs
+D:\Work\MISA-FinalTest\MISA.AMIS.MF960\MISA.Test.Core\obj\Debug\net5.0\MISA.Test.Core.csproj.CoreCompileInputs.cache
+D:\Work\MISA-FinalTest\MISA.AMIS.MF960\MISA.Test.Core\obj\Debug\net5.0\MISA.Test.Core.dll
+D:\Work\MISA-FinalTest\MISA.AMIS.MF960\MISA.Test.Core\obj\Debug\net5.0\ref\MISA.Test.Core.dll
+D:\Work\MISA-FinalTest\MISA.AMIS.MF960\MISA.Test.Core\obj\Debug\net5.0\MISA.Test.Core.pdb

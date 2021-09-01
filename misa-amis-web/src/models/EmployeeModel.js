@@ -1,7 +1,7 @@
 class EmployeeModel {
     initData() {
         return  {
-            EmployeeId: "",
+            // EmployeeId: "",
             EmployeeCode: "",
             FullName: "",
             DateOfBirth: null,

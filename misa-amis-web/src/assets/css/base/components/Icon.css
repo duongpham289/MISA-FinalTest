@@ -38,6 +38,7 @@
     min-width: 32px;
     min-height: 32px;
 }
+
 .mi-48 {
     width: 48px;
     height: 48px;
@@ -173,4 +174,12 @@
 
 .mi-ques {
     background-position: -826px -456px;
+}
+
+.mi-error {
+    background-position: -24px -954px;
+}
+
+.mi-warning {
+    background-position: -592px -456px;
 }
