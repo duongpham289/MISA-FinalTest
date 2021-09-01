@@ -68,14 +68,49 @@ namespace Web07.FinalTest.MF960.Controllers
             }
 
         }
+        /// <summary>
+        /// Lấy Code cho nhân viên mới
+        /// </summary>
+        /// <returns></returns>
+        ///  CreatedBy: PHDUONG(27/08/2021)
+        [HttpGet("getAllCode")]
+        public virtual IActionResult GetAllCode()
+        {
+            try
+            {
+                var entityCode = _employeeRepository.GetAllEmployeeCode();
+
+                if (entityCode != null)
+                {
+                    return StatusCode(200, entityCode);
+
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorObj = new
+                {
+                    devMsg = ex.Message,
+                    userMsg = MISA.Test.Core.Resources.ResourceVN.ExceptionError_Msg,
+                    errorCode = "misa-001",
+                    moreInfo = "https://openapi.misa.com.vn/errorcode/misa-001",
+                    traceId = ""
+                };
+                return StatusCode(500, errorObj);
+            }
+        }
 
         /// <summary>
         /// Lấy Code cho nhân viên mới
         /// </summary>
         /// <returns></returns>
         ///  CreatedBy: PHDUONG(27/08/2021)
-        [HttpGet("getCode")]
-        public virtual IActionResult GetAllCode()
+        [HttpGet("getNewCode")]
+        public virtual IActionResult GetNewCode()
         {
             try
             {

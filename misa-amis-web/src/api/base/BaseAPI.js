@@ -22,7 +22,14 @@ export default class BaseAPI {
    * @returns 
    */
   getNewCode(){
-    return BaseAPIConfig.get(`${this.controller}/getCode`);
+    return BaseAPIConfig.get(`${this.controller}/getNewCode`);
+  }
+  /**
+   * Phương thức lấy tất code
+   * @returns 
+   */
+  getAllCode(){
+    return BaseAPIConfig.get(`${this.controller}/getAllCode`);
   }
   /**
    * Phương thức thêm mới dữ liệu
@@ -57,6 +64,6 @@ export default class BaseAPI {
    * @param {*} entityCode
    */
   checkDuplicate(entityCode) {
-    return BaseAPIConfig.post(`${this.controller}/checkDuplicate/${entityCode}`);
+    return BaseAPIConfig.get(`${this.controller}/checkDuplicate/${entityCode}`);
   }
 }

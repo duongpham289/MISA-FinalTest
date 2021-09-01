@@ -183,3 +183,15 @@
 .mi-warning {
     background-position: -592px -456px;
 }
+.mi-toast-success{
+    
+	background-position: -1602px -258px;
+}
+.mi-toast-warning{
+    
+	background-position: -817px -145px;
+}
+.mi-toast-error{
+    
+	background-position: -762px -146px;;
+}

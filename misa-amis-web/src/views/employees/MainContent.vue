@@ -53,10 +53,17 @@
       ref="Modal"
       :departmentCbb="departmentCbb"
       :mode="mode"
+      :toastList="toastList"
       @setPopup="setPopup"
       @btnReloadOnClick="btnReloadOnClick"
+      @errorHandler="errorHandler"
     />
-
+    <base-toast-message
+      v-for="(item, index) in toastList"
+      :toast="item"
+      :key="index"
+      :index="index"
+    ></base-toast-message>
     <base-popup :info="popupInfo" @close="closePopup"></base-popup>
   </div>
 </template>
@@ -66,6 +73,7 @@ import Modal from "../employees/Modal.vue";
 import EmployeeAPI from "@/api/components/EmployeeAPI.js";
 import DepartmentAPI from "@/api/components/DepartmentAPI.js";
 import ErrorMessage from "@/js/resources/ErrorMsg";
+import ToastMessage from "@/js/resources/ToastMsg";
 
 import ContentHeader from "./ContentHeader.vue";
 import ContentToolBar from "./ContentToolBar.vue";
@@ -93,10 +101,8 @@ export default {
       pageSize: 20,
       totalRecord: 0,
 
-      isShowToast: false,
-      toastMessageState: 0,
-      errorMsg: "",
       toastList: [],
+      timeoutRemoveToastList: null,
 
       departmentCbb: [],
 
@@ -194,20 +200,35 @@ export default {
           } else {
             vm.totalRecord = 0;
           }
+          if (res.status != 204) {
+            this.toastList.push({
+              type: ToastMessage.Type.Success,
+              message: ToastMessage.Message.LoadSuccess,
+            });
+          }
 
-          this.loading = false;
-          // if (res.data.data) {
-          //   this.setToast("success", "Tải dữ liệu thành công");
-          //   // vm.responseHandler(2, "");
-          // } else {
-          //   this.setToast("info", "Không có dữ liệu");
-          //   // vm.responseHandler(6, "");
-          // }
+          vm.loading = false;
         })
-        .catch(() => {
-          // var message = vm.responseHandler(err);
-          // this.setToast("fail", message);
+        .catch((err) => {
+          vm.errorHandler(err);
         });
+    },
+
+    errorHandler(err) {
+      if (err.response.status < 500 && err.response.status >= 400) {
+        let msg = err.response.data.userMsg;
+        this.toastList.push({
+          type: ToastMessage.Type.Error,
+          message: msg,
+        });
+      }
+
+      if (err.response.status >= 500) {
+        this.toastList.push({
+          type: ToastMessage.Type.Error,
+          message: ToastMessage.Message.ServerError,
+        });
+      }
     },
 
     /**
@@ -281,8 +302,7 @@ export default {
           null
         );
       } else {
-        
-          this.employeesToDelete = [];
+        this.employeesToDelete = [];
         let msg = ErrorMessage["DeleteListEmpty"];
         this.setPopup(msg, "mi-warning", null, null, null, "Đóng", null, null);
       }
@@ -294,21 +314,18 @@ export default {
      */
     deleteById() {
       EmployeeAPI.delete(this.employeesToDelete[0].id)
-        .then(() => {
-          // if (res.status != 204) {
-          //   this.toastList.push({
-          //     type: Resource.ToastType.Success,
-          //     message: Resource.ToastMessage.DeleteSuccess,
-          //   });
+        .then((res) => {
+          if (res.status != 204) {
+            this.toastList.push({
+              type: ToastMessage.Type.Success,
+              message: ToastMessage.Message.DeleteSuccess,
+            });
+          }
           this.employeesToDelete = [];
           this.btnReloadOnClick();
-          // }
         })
-        .catch(() => {
-          // this.toastList.push({
-          //   type: Resource.ToastType.ERROR,
-          //   message: Resource.ToastMessage.ServerError,
-          // });
+        .catch((err) => {
+          this.errorHandler(err);
         });
     },
     /**
@@ -322,11 +339,19 @@ export default {
       });
 
       EmployeeAPI.deleteList(listId)
-        .then(() => {
+        .then((res) => {
+          if (res.status != 204) {
+            this.toastList.push({
+              type: ToastMessage.Type.Success,
+              message: ToastMessage.Message.DeleteSuccess,
+            });
+          }
           this.employeesToDelete = [];
           this.btnReloadOnClick();
         })
-        .catch(() => {});
+        .catch((err) => {
+          this.errorHandler(err);
+        });
     },
 
     /**
@@ -407,6 +432,22 @@ export default {
       this.pageSize = this.value.substring(0, 2);
 
       this.getEmployeePagingData(1, this.pageSize, this.search.employeeFilter);
+    },
+    /**
+     * Xóa danh sách toastList sau 3 đối với phần tử cuối cùng.
+     * CreatedBy: NHHoang(01/09/2021)
+     */
+
+    toastList: {
+      deep: true,
+      immediate: true,
+      handler: function () {
+        clearTimeout(this.timeoutRemoveToastList);
+
+        this.timeoutRemoveToastList = setTimeout(() => {
+          if (this.toastList.length > 0) this.toastList = [];
+        }, 3000);
+      },
     },
   },
 };

@@ -21,6 +21,12 @@ namespace MISA.Test.Core.Interfaces.Repository
         /// <returns></returns>
         /// CreatedBy: PHDUONG(27/08/2021)
         Object GetPaging(int pageIndex, int pageSize, string employeeFilter, Guid? departmentId);
+        /// <summary>
+        /// Lấy tất cả employeeCode
+        /// </summary>
+        /// <returns></returns>
+        /// CreatedBy: PHDUONG(27/08/2021)
+        List<string> GetAllEmployeeCode();
 
         /// <summary>
         /// Lấy tất cả employeeCode

@@ -1,19 +1,19 @@
-var Resource = Resource || {};
+var Toast = Toast || {};
 
 // tin nhắn
-Resource.ToastMessage = {
+Toast.Message = {
   LoadSuccess: "Tải dữ liệu thành công",
   AddSuccess: "Thêm dữ liệu thành công",
-  EditSuccess: "Cập nhật dữ liệu thành công",
+  UpdateSuccess: "Cập nhật dữ liệu thành công",
   DeleteSuccess: "Xoá dữ liệu thành công",
   ServerError: "Có lỗi xảy ra, vui lòng liên hệ MISA",
 };
 
 //Các chế độ toast message
-Resource.ToastType = {
+Toast.Type = {
   Success: "success",
   Warning: "warning",
   Error: "error",
 };
 
-export default Resource;
+export default Toast;

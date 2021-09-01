@@ -53,6 +53,20 @@ namespace MISA.Test.Infrastructure.Repository
         }
 
 
+        /// <summary>
+        /// Lấy dữ liệu Mã entity
+        /// </summary>
+        /// <returns></returns>
+        /// CreatedBy: PHDUONG(27/08/2021)
+        public List<string> GetAllEmployeeCode()
+        {
+            using (_dbConnection = new MySqlConnection(_configuration.GetConnectionString("SqlConnection")))
+            {
+                var empCodes = _dbConnection.Query<string>($"Proc_GetAllEmployeeCode", commandType: CommandType.StoredProcedure);
+
+                return empCodes.AsList();
+            }
+        }
 
         /// <summary>
         /// Lấy dữ liệu Mã entity

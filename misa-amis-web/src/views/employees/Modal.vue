@@ -338,7 +338,7 @@
 import EmployeeModel from "@/models/EmployeeModel.js";
 import EmployeeAPI from "@/api/components/EmployeeAPI.js";
 import ErrorMessage from "@/js/resources/ErrorMsg";
-// import ToastMsg from "@/js/resources/ToastMsg";
+import ToastMessage from "@/js/resources/ToastMsg";
 
 export default {
   components: {},
@@ -351,6 +351,10 @@ export default {
       type: Number,
       required: true,
     },
+    toastList: {
+      type: Array,
+      required: true,
+    },
   },
   data() {
     return {
@@ -358,6 +362,8 @@ export default {
       employee: EmployeeModel.initData(),
       originData: {},
       employeeId: null,
+      empCode: null,
+      empCodeWhenUpdate: null,
       formType: null, // 0: thêm, 1 : sửa, 2 : nhân bản
       isFormChanged: false,
       departmentList: this.departmentCbb,
@@ -365,7 +371,7 @@ export default {
       departmentTitleInvalid: "",
       isInvalid: false,
       hasError: false,
-      toastList: [],
+      isValidated: true,
     };
   },
   methods: {
@@ -378,17 +384,20 @@ export default {
       //Gán lại giá trị của employee
       vm.employee = EmployeeModel.initData();
       vm.departmentItem = [];
-      vm.showForm = true;
       vm.isInvalid = false;
+      // vm.hasError= false;
+      // vm.isFormChanged= false;
+
+      vm.isValidated = true;
+      vm.showForm = true;
 
       //Nếu là form sửa
       if (employeeId.length > 0) {
-        //Xác định formType
-        // vm.employeeId = employeeId;
-
         EmployeeAPI.getById(employeeId)
           .then((res) => {
             vm.employee = res.data;
+            vm.empCode = vm.employee.EmployeeCode;
+            vm.empCodeWhenAdd = vm.employee.EmployeeCode;
 
             vm.employee.DateOfBirth = vm.$format.formatDate(
               res.data.DateOfBirth,
@@ -403,45 +412,58 @@ export default {
             vm.$refs.EmployeeCode.autoFocus();
           })
           .catch((err) => {
-            console.log(err);
+            this.$emit("errorHandler", err);
           });
       }
       if (mode != 1) {
         EmployeeAPI.getNewCode()
           .then((response) => {
             vm.employee.EmployeeCode = response.data;
-
+            vm.empCode = vm.employee.EmployeeCode;
             vm.$refs.EmployeeCode.autoFocus();
           })
           .catch((err) => {
-            console.log(err);
+            this.$emit("errorHandler", err);
           });
       }
-      // console.log(vm.$refs);
     },
 
-    async saveData() {
+    saveData() {
       let vm = this;
 
-      if (this.validateForm()) {
+      vm.validateForm();
+
+      if (vm.isValidated) {
         vm.hasError = false;
         if (vm.mode != 1) {
-          await EmployeeAPI.create(vm.employee)
+          EmployeeAPI.create(vm.employee)
             .then(() => {
+              vm.toastList.push({
+                type: ToastMessage.Type.Success,
+                message: ToastMessage.Message.AddSuccess,
+              });
               setTimeout(function () {
                 vm.reloadTable();
               }, 1000);
             })
-            .catch(() => {});
+            .catch((err) => {
+              this.$emit("errorHandler", err);
+            });
         } else if (vm.isFormChanged) {
-          await EmployeeAPI.update(vm.employee.EmployeeId, vm.employee)
+          console.log(vm.employee);
+
+          EmployeeAPI.update(vm.employee.EmployeeId, vm.employee)
             .then(() => {
+              vm.toastList.push({
+                type: ToastMessage.Type.Success,
+                message: ToastMessage.Message.UpdateSuccess,
+              });
               setTimeout(function () {
                 vm.reloadTable();
               }, 1000);
             })
-            .catch(() => {
-              // vm.$emit("responseHandler", 1, err);
+            .catch((err) => {
+              this.$emit("errorHandler", err);
             });
         } else {
           let msg = ErrorMessage["FormNotChanged"];
@@ -457,6 +479,33 @@ export default {
             null
           );
         }
+      } else {
+        EmployeeAPI.getAllCode()
+          .then((res) => {
+            var listCode = res.data;
+            listCode.splice(this.empCodeWhenAdd, 1);
+            console.log(listCode.includes(vm.employee.EmployeeCode));
+            if (listCode.includes(vm.employee.EmployeeCode)) {
+              vm.hasError = true;
+              vm.isValidated = false;
+              console.log(vm.isValidated);
+              let msg = ErrorMessage["EmployeeCodeDuplicate"];
+              vm.$emit(
+                "setPopup",
+                msg,
+                "mi-warning",
+                null,
+                null,
+                null,
+                "Đóng",
+                null,
+                null
+              );
+            }
+          })
+          .catch((err) => {
+            this.$emit("errorHandler", err);
+          });
       }
     },
 
@@ -467,7 +516,7 @@ export default {
     saveAndOut() {
       this.saveData();
 
-      if (this.validateForm() && this.isFormChanged && !this.hasError) {
+      if (this.isValidated && this.isFormChanged && !this.hasError) {
         this.closeForm();
       }
     },
@@ -527,7 +576,7 @@ export default {
       Object.keys(this.$refs).forEach(
         (el) => (this.$refs[el].isValidated = true)
       );
-
+      // this.$emit("mode");
       this.isFormChanged = false;
       this.showForm = false;
     },
@@ -537,30 +586,14 @@ export default {
      * CreatedBy: NHHoang (28/08/2021)
      */
     validateForm() {
-      let isValidated = true;
       let vm = this;
 
-      if (!vm.departmentItem) {
-        vm.isInvalid = true;
-        isValidated = false;
-        let msg = ErrorMessage.DepartmentId;
-        vm.$emit(
-          "setPopup",
-          msg,
-          "mi-error",
-          null,
-          null,
-          null,
-          "Đóng",
-          null,
-          null
-        );
-      }
+      vm.isValidated = true;
       Object.keys(vm.$refs).forEach((el) => {
         vm.$refs[el].validateInput();
 
         if (!vm.$refs[el].isValidated) {
-          if (isValidated === true) {
+          if (vm.isValidated === true) {
             let msg = ErrorMessage[vm.$refs[el].id];
 
             this.$emit(
@@ -575,16 +608,17 @@ export default {
               null
             );
           }
-          isValidated = vm.$refs[el].isValidated;
+          vm.isValidated = vm.$refs[el].isValidated;
         }
       });
-      if (EmployeeAPI.checkDuplicate(vm.employee.EmployeeCode)) {
-        vm.hasError = true;
-        let msg = ErrorMessage["EmployeeCodeDuplicate"];
+      if (!vm.departmentItem) {
+        vm.isInvalid = true;
+        vm.isValidated = false;
+        let msg = ErrorMessage.DepartmentId;
         vm.$emit(
           "setPopup",
           msg,
-          "mi-warning",
+          "mi-error",
           null,
           null,
           null,
@@ -593,7 +627,40 @@ export default {
           null
         );
       }
-      return isValidated;
+
+      if (this.empCode != vm.employee.EmployeeCode) {
+        var isDuplicated = false;
+        this.empCode = vm.employee.EmployeeCode;
+
+        if (this.mode != 1) {
+          EmployeeAPI.checkDuplicate(vm.employee.EmployeeCode)
+            .then((res) => {
+              isDuplicated = res.data;
+              if (isDuplicated) {
+                vm.hasError = true;
+                vm.isValidated = false;
+                let msg = ErrorMessage["EmployeeCodeDuplicate"];
+                vm.$emit(
+                  "setPopup",
+                  msg,
+                  "mi-warning",
+                  null,
+                  null,
+                  null,
+                  "Đóng",
+                  null,
+                  null
+                );
+              }
+            })
+            .catch((err) => {
+              this.$emit("errorHandler", err);
+            });
+        }
+        if (this.mode == 1) {
+          vm.isValidated = false;
+        }
+      }
     },
 
     /**

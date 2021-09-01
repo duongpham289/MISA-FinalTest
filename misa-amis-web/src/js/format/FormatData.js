@@ -7,7 +7,7 @@ export default class FormatData {
      */
     static formatDate(str, onModal) {
         let vm = this;
-        if (str == null || str.length === 0) return '';
+        if (str == null || str.length === 0) return null;
         var date = new Date(str);
         return onModal ?
             vm.dateNum(date.getFullYear()) + '-' + vm.dateNum(date.getMonth() + 1) + '-' + vm.dateNum(date.getDate()) :
