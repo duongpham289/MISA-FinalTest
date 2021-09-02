@@ -218,6 +218,9 @@ export default {
     checkedId: function () {
       this.$emit("checkBoxOnClick", this.checkedId);
     },
+    data: function () {
+      console.log(this.data);
+    },
   },
 };
 </script>

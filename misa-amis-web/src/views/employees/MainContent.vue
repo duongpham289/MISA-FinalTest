@@ -9,8 +9,9 @@
       <ContentToolBar
         @btnReloadOnClick="btnReloadOnClick"
         @deleteSelectedRows="deleteSelectedRows"
+        @filterDataTable="filterDataTable"
       />
-      <div class="table-view">
+      <div class="table-view" :style="employeesData.length <= 0 ? 'overflow:hidden':''">
         <base-table
           :columns="columns"
           :data="employeesData"
@@ -19,7 +20,19 @@
           @deleteSelectedRows="deleteSelectedRows"
         />
       </div>
-      <div class="content-footer items-center">
+      <div
+        v-if="employeesData.length <= 0"
+        class="no-content d-block flex-center w-100"
+      >
+        <div class="no-content-img">
+          <img
+            src="https://actappg1.misacdn.net/img/bg_report_nodata.76e50bd8.svg"
+          />
+        </div>
+
+        <label>Không có dữ liệu</label>
+      </div>
+      <div class="content-footer items-center" v-if="employeesData.length > 0">
         <div class="record-display">
           Tổng số: &nbsp;<span class="text-semibold"> {{ totalRecord }}</span
           >&nbsp; bản ghi
@@ -90,8 +103,7 @@ export default {
     this.getEmployeePagingData(
       this.pageIndex,
       this.pageSize,
-      this.search.employeeFilter,
-      this.search.departmentId
+      this.employeeFilter
     );
     this.getDropdownData();
   },
@@ -106,11 +118,7 @@ export default {
 
       departmentCbb: [],
 
-      search: {
-        departmentId: "",
-        positionId: "",
-        employeeFilter: "",
-      },
+      employeeFilter: "",
 
       employeesData: [],
       employeesToDelete: [],
@@ -178,7 +186,7 @@ export default {
       this.getEmployeePagingData(
         this.pageIndex,
         this.pageSize,
-        this.search.employeeFilter
+        this.employeeFilter
       );
     },
 
@@ -192,7 +200,7 @@ export default {
 
       EmployeeAPI.paging(pageIndex, pageSize, employeeFilter)
         .then((res) => {
-          vm.employeesData = res.data.data;
+          vm.employeesData = res.data.data ? res.data.data : [];
           vm.pageIndex = pageIndex;
 
           if (res.data) {
@@ -212,6 +220,18 @@ export default {
         .catch((err) => {
           vm.errorHandler(err);
         });
+    },
+
+    filterDataTable(value) {
+      clearTimeout(this.timeoutItem);
+      this.timeoutItem = setTimeout(() => {
+        this.employeeFilter = value;
+        this.getEmployeePagingData(
+          this.pageIndex,
+          this.pageSize,
+          this.employeeFilter
+        );
+      }, 500);
     },
 
     errorHandler(err) {
@@ -425,13 +445,13 @@ export default {
       this.getEmployeePagingData(
         this.pageIndex,
         this.pageSize,
-        this.search.employeeFilter
+        this.employeeFilter
       );
     },
     value: function () {
       this.pageSize = this.value.substring(0, 2);
 
-      this.getEmployeePagingData(1, this.pageSize, this.search.employeeFilter);
+      this.getEmployeePagingData(1, this.pageSize, this.employeeFilter);
     },
     /**
      * Xóa danh sách toastList sau 3 đối với phần tử cuối cùng.

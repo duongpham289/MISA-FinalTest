@@ -110,9 +110,10 @@
     background-color: #f3f8f8;
 }
 
-.table-content tr:last-child td{
+.table-content tr:last-child td {
     border-bottom: none;
 }
+
 .table-content th:nth-child(1) {
     min-width: 39px;
     width: 39px;
@@ -292,4 +293,13 @@
 .delete-btn:hover {
     background-color: #ebedf0 !important;
     color: #2ca01c !important;
+}
+
+.no-content {
+    height: 300px;
+    text-align: center;
+}
+
+.no-content-img {
+    padding: 100px 0 20px;
 }

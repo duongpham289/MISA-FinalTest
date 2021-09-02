@@ -5,19 +5,20 @@
         type="text"
         class="table-tool__search"
         placeholder="Tìm theo mã, tên nhân viên"
+        @input="filterDataTable"
       />
       <div class="search-icon">
         <div class="mi mi-24 mi-search"></div>
       </div>
     </div>
 
-    <div class="table-tool__icon"  @click="refreshData">
+    <div class="table-tool__icon" @click="refreshData">
       <div class="mi mi-24 mi-refresh"></div>
     </div>
     <div class="table-tool__icon" @click="exportData">
       <div class="mi mi-24 mi-excel__nav"></div>
     </div>
-    <div class="table-tool__icon"  @click="deleteSelectedRows">
+    <div class="table-tool__icon" @click="deleteSelectedRows">
       <div class="mi mi-14 mi-trashbin"></div>
     </div>
   </div>
@@ -35,6 +36,7 @@ export default {
       searchFocused: false,
       refreshFocused: false,
       exportFocused: false,
+      employeeFilter: "",
     };
   },
   methods: {
@@ -50,8 +52,8 @@ export default {
      * Hàm filter dữ liệu trên bảng
      * NVTOAN 09/07/2021
      */
-    filterDataTable(val) {
-      this.$emit("filterDataTable", val);
+    filterDataTable(event) {
+      this.$emit("filterDataTable", event.target.value);
     },
 
     /**
@@ -67,8 +69,8 @@ export default {
      * NVTOAN 15/07/2021
      */
     deleteSelectedRows() {
-      this.$emit('deleteSelectedRows');
-    }
+      this.$emit("deleteSelectedRows");
+    },
   },
 };
 </script>

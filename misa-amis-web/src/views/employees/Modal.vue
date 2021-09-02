@@ -130,49 +130,30 @@
                     <div class="label p-l--10">Giới tính</div>
                     <div class="p-l--10 p-t--5 p-b--6">
                       <label
+                        v-for="item in genderList"
+                        :key="item.value"
                         class="container-radio"
-                        for="1"
-                        @click="onChangeInput({ value: 1, id: 'Gender' })"
+                        :for="item.value"
+                        @click="
+                          onChangeInput({ value: item.value, id: 'Gender' })
+                        "
                       >
-                        <input type="radio" label="1" :value="1" />
+                        <input
+                          type="radio"
+                          :label="item.value"
+                          :value="item.value"
+                        />
                         <span class="radio">
-                          <span class="radio-border"></span>
+                          <span
+                            class="radio-border"
+                            :class="{ checked: employee.Gender === item.value }"
+                          ></span>
                           <span
                             class="radio-circle"
-                            v-show="employee.Gender === 1"
+                            v-show="employee.Gender === item.value"
                           ></span>
                         </span>
-                        <span class="label-radio">Nam</span>
-                      </label>
-                      <label
-                        class="container-radio"
-                        for="0"
-                        @click="onChangeInput({ value: 0, id: 'Gender' })"
-                      >
-                        <input label="0" type="radio" :value="0" />
-                        <span class="radio">
-                          <span class="radio-border"></span>
-                          <span
-                            class="radio-circle"
-                            v-show="employee.Gender === 0"
-                          ></span>
-                        </span>
-                        <span class="label-radio">Nữ</span>
-                      </label>
-                      <label
-                        class="container-radio"
-                        for="0"
-                        @click="onChangeInput({ value: 2, id: 'Gender' })"
-                      >
-                        <input label="0" type="radio" :value="2" />
-                        <span class="radio">
-                          <span class="radio-border"></span>
-                          <span
-                            class="radio-circle"
-                            v-show="employee.Gender === 2"
-                          ></span>
-                        </span>
-                        <span class="label-radio">Khác</span>
+                        <span class="label-radio">{{ item.name }}</span>
                       </label>
                     </div>
                   </div>
@@ -372,6 +353,11 @@ export default {
       isInvalid: false,
       hasError: false,
       isValidated: true,
+      genderList: [
+        { value: 1, name: "Nam" },
+        { value: 0, name: "Nữ" },
+        { value: 2, name: "Khác" },
+      ],
     };
   },
   methods: {
@@ -450,7 +436,6 @@ export default {
               this.$emit("errorHandler", err);
             });
         } else if (vm.isFormChanged) {
-          console.log(vm.employee);
 
           EmployeeAPI.update(vm.employee.EmployeeId, vm.employee)
             .then(() => {
@@ -484,11 +469,9 @@ export default {
           .then((res) => {
             var listCode = res.data;
             listCode.splice(this.empCodeWhenAdd, 1);
-            console.log(listCode.includes(vm.employee.EmployeeCode));
             if (listCode.includes(vm.employee.EmployeeCode)) {
               vm.hasError = true;
               vm.isValidated = false;
-              console.log(vm.isValidated);
               let msg = ErrorMessage["EmployeeCodeDuplicate"];
               vm.$emit(
                 "setPopup",

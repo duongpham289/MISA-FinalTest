@@ -7,7 +7,39 @@
       </span>
     </label>
     <div class="field-input">
+      <b-input-group v-if="type === 'date'">
+        <b-form-input
+          v-model="dateInput"
+          type="date"
+          ref="InputDate"
+          placeholder="DD/MM/YYYY"
+          @input="onChangeInput"
+          autocomplete="off"
+        ></b-form-input>
+        <b-input-group-append>
+          <b-form-datepicker
+            v-model="dateInput"
+            button-only
+            right
+            calendar-width="370px"
+            label-current-month="Tháng hiện tại"
+            label-next-month="Tháng sau"
+            label-next-year="Năm sau"
+            label-prev-month="Tháng trước"
+            label-prev-year="Năm trước"
+            selected-variant
+            :start-weekday="1"
+            @input="onChangeInput"
+            weekday-header-format ="narrow"
+            :max="new Date()"
+            :hide-header="true"
+            locale="vi"
+            label-help
+          ></b-form-datepicker>
+        </b-input-group-append>
+      </b-input-group>
       <input
+        v-else
         ref="AutoFocus"
         class="input"
         :type="type"
@@ -78,6 +110,7 @@ export default {
         this.type == "date" ? new Date().toISOString().split("T")[0] : null,
       isValidated: true,
       title: "",
+      dateInput: null,
     };
   },
 
@@ -86,22 +119,36 @@ export default {
       return this.value;
     },
   },
+  watch: {
+    value: function () {
+      if (this.type == "date") {
+        this.dateInput = this.value;
+      }
+    },
+  },
 
   methods: {
+
     autoFocus() {
       this.$nextTick(() => {
-        this.$refs.AutoFocus.focus()
+        this.$refs.AutoFocus.focus();
       });
     },
+    
     /**
      * Xử lý thay đổi dữ liệu
      * CreatedBy: PHDUONG(30/08/2021)
      */
     onChangeInput(event) {
-      let tmp = event.target.value;
-      this.validateInput(tmp);
-      this.$emit("handleInput", { id: this.id, value: tmp });
+      if (this.type == "date") {
+        this.$emit("handleInput", { id: this.id, value: this.dateInput });
+      } else {
+        let tmp = event.target.value;
+        this.validateInput(tmp);
+        this.$emit("handleInput", { id: this.id, value: tmp });
+      }
     },
+
     validateInput(tmp = null) {
       let value = tmp;
       if (value === null) value = this.value;

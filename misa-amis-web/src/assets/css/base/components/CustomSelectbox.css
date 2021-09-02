@@ -93,9 +93,10 @@
   color: #2ca01c !important;
 }
 
-.multiselect__input:focus .multiselect__tags{
+.multiselect--active .multiselect__tags {
   border: 1px solid var(--color-primary) !important;
 }
+
 .multiselect.invalid .multiselect__tags {
   border: 1px solid red !important;
 }

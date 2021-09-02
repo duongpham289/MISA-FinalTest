@@ -8,6 +8,7 @@ import Multiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.min.css";
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
+
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
@@ -36,7 +37,8 @@ Vue.component('multiselect', Multiselect)
 Vue.prototype.$enum = Enum;
 Vue.prototype.$format = Format;
 
-Vue.use(VueAxios, axios)
+Vue.use(VueAxios, axios);
+
 new Vue({
   router,
   render: h => h(App),

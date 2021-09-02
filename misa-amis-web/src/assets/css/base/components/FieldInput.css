@@ -25,11 +25,11 @@
   width: 100%;
   padding: 0 10px;
   outline: none;
-  border-radius: 2px ;
+  border-radius: 2px;
   border: 1px solid #babec5;
 }
 
-.input.invalid{
+.input.invalid {
   border-color: red;
 }
 
@@ -74,4 +74,119 @@
 /* Đánh dấu đỏ những trường bắt buộc */
 .required-input {
   color: var(--color-required);
+}
+
+/* bootstrap input date */
+.sr-only {
+  display: none;
+}
+
+.input-group {
+  height: 30px !important;
+  flex-wrap: unset !important;
+}
+
+.input-group .form-control {
+  border: 1px solid #babec5;
+  border-radius: 2px;
+  font-size: 13px !important;
+  text-transform: uppercase;
+}
+
+.input-group .form-control::placeholder {
+  font-size: 13px !important;
+  font-style: italic !important;
+}
+
+
+
+.input-group .form-control:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  border: 1px solid #babec5 !important;
+  border-right: none !important;
+}
+
+.input-group:focus {
+  border-color: var(--color-primary) !important;
+}
+
+/* Button */
+.btn-secondary {
+  color: #111 !important;
+  background-color: #fff !important;
+  border-color: #babec5 !important;
+  border-left: none !important;
+  border-radius: 2px !important;
+  height: 30px !important;
+}
+
+.btn-secondary:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.btn-sm {
+  color: #08bf1e !important;
+}
+
+.btn-sm:hover {
+  color: #08bf1e !important;
+  background-color: rgba(44, 160, 28, .2) !important;
+}
+.btn-sm:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.btn-outline-primary {
+  color: #08bf1e !important;
+}
+.btn-outline-primary:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.btn-primary {
+  color: #08bf1e !important;
+  background-color: rgba(44, 160, 28, .2) !important;
+}
+.rounded-circle:hover {
+  background-color: transparent !important;
+  border: 1px solid #08bf1e !important;
+}
+.b-form-datepicker .btn-secondary {
+  background: url('../../../img/Sprites.64af8f61.svg') no-repeat -122px -306px;
+  width: 30px;
+}
+
+.b-form-datepicker .btn-secondary:hover {
+  background-color: #e0e0e0 !important;
+}
+
+.btn-secondary .bi-calendar {
+  display: none !important;
+}
+
+.btn-secondary .bi-calendar-fill {
+  display: none !important;
+}
+
+/* Calendar */
+.b-calendar .b-calendar-grid {
+  border: none !important;
+}
+
+.b-calendar .b-calendar-grid:focus {
+  border: none !important;
+}
+
+.b-calendar .b-calendar-grid-caption {
+  font-family: notosans-bold;
+  text-transform: uppercase !important;
+}
+
+.dropdown-menu {
+  border-radius: 0 !important;
 }
