@@ -690,12 +690,6 @@ export default {
     },
   },
   watch: {
-    isSupplier: function () {
-      console.log(this.isSupplier);
-    },
-    isCustomer: function () {
-      console.log(this.isCustomer);
-    },
     employee: {
       immediate: true,
       deep: true,

@@ -292,12 +292,14 @@ export default {
      * CreatedBy: PHDUONG(31/08/2021)
      */
     deleteSelectedRows(employeeId, employeeCode) {
-      if (employeeId) {
-        this.employeesToDelete.push({
-          id: employeeId,
-          code: employeeCode,
-        });
-        let message = `Bạn có chắc chắn muốn xóa Nhân viên < ${employeeCode} > không?`;
+      if (employeeId || this.employeesToDelete.length == 1) {
+        if (employeeId) {
+          this.employeesToDelete.push({
+            id: employeeId,
+            code: employeeCode,
+          });
+        }
+        let message = `Bạn có chắc chắn muốn xóa Nhân viên < ${employeeCode ? employeeCode : this.employeesToDelete[0].code} > không?`;
 
         this.setPopup(
           message,
@@ -309,7 +311,7 @@ export default {
           this.deleteById,
           null
         );
-      } else if (this.employeesToDelete.length > 0) {
+      } else if (this.employeesToDelete.length > 1) {
         let message = `Bạn có chắc chắn muốn xóa các nhân viên này không?`;
 
         this.setPopup(
@@ -443,7 +445,6 @@ export default {
     },
   },
   watch: {
-
     /**
      * Xóa danh sách toastList sau 3 đối với phần tử cuối cùng
      * CreatedBy: PHDUONG(02/09/2021)
