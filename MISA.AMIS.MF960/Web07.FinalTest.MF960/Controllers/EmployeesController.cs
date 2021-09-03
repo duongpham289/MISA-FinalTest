@@ -41,14 +41,16 @@ namespace Web07.FinalTest.MF960.Controllers
         /// <returns>Dữ liệu phân trang</returns>
         /// CreatedBy:PHDUONG(27/08/2021)
         [HttpGet("paging")]
-        public IActionResult GetCustomersPaging([FromQuery] int pageIndex, [FromQuery] int pageSize, [FromQuery] string employeeFilter)
+        public IActionResult GetEmployeesPaging([FromQuery] int pageIndex, [FromQuery] int pageSize, [FromQuery] string employeeFilter)
         {
             try
             {
                 var serviceResult = _employeeRepository.GetPaging(pageIndex, pageSize, employeeFilter, true);
 
-                return StatusCode(200, serviceResult);
-
+                if (serviceResult.GetType().GetProperty("totalRecord").GetValue(serviceResult, null) > 0)
+                    return StatusCode(200, serviceResult);
+                else
+                    return NoContent();
             }
             catch (Exception ex)
             {

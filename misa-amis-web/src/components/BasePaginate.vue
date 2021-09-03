@@ -8,17 +8,17 @@
     <div class="paginate items-center">
       <multiselect
         class="custom-select-paging w-200"
-        @keyup.native="onKeyup($event, value)"
-        v-model="pagingValue"
+        :value="pagingValue"
+        @select="changePageSize"
         :options="pagingOptions"
         :searchable="false"
         :close-on-select="false"
         :show-labels="false"
-        :allowEmpty="false"
       ></multiselect>
       <b-pagination
         class="paginate-custom"
-        v-model="pageIndex"
+        :value="pageIndex"
+        @change="changePageIndex"
         :total-rows="totalRecord"
         :per-page="pageSize"
         prev-text="Trước"
@@ -34,31 +34,60 @@
 <script>
 export default {
   name: "base-paginate",
-
+  data() {
+    return {
+      pagingValue: "20 nhân viên/trang",
+      pagingOptions: [
+        "10 nhân viên/trang",
+        "20 nhân viên/trang",
+        "30 nhân viên/trang",
+      ],
+    };
+  },
   props: {
     employeesData: {
-      type: Object,
-      required: true,
-    },
-    pagingValue: {
-      type: String,
-      required: true,
-    },
-    pagingOptions: {
-      type: Object,
+      type: Array,
       required: true,
     },
     pageIndex: {
-      type: String,
+      type: Number,
       required: true,
     },
     totalRecord: {
-      type: String,
+      type: Number,
       required: true,
     },
     pageSize: {
+      type: Number,
+      required: true,
+    },
+    employeeFilter: {
       type: String,
       required: true,
+    },
+  },
+  methods: {
+    /**
+     * Bắt sự kiện thay đổi pageIndex
+     * CreatedBy: PHDUONG(31/08/2021)
+     */
+    changePageIndex(value) {
+      this.$emit("changePageIndex", value, this.pageSize, this.employeeFilter);
+    },
+
+    /**
+     * Bắt sự kiện thay đổi pageSize
+     * CreatedBy: PHDUONG(01/09/2021)
+     */
+    changePageSize(value) {
+      this.pagingValue = value;
+
+      this.$emit(
+        "changePageSize",
+        this.pageIndex,
+        value.substring(0, 2),
+        this.employeeFilter
+      );
     },
   },
 };

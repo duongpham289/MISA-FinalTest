@@ -36,11 +36,12 @@
 
       <base-paginate
         :employeesData="employeesData"
-        :pagingValue="pagingValue"
-        :pagingOptions="pagingOptions"
         :pageIndex="pageIndex"
         :totalRecord="totalRecord"
         :pageSize="pageSize"
+        :employeeFilter="employeeFilter"
+        @changePageIndex="getEmployeePagingData"
+        @changePageSize="getEmployeePagingData"
       />
     </div>
 
@@ -96,7 +97,7 @@ export default {
     );
     this.getDropdownData();
   },
-  
+
   data() {
     return {
       pageIndex: 1,
@@ -113,13 +114,6 @@ export default {
       employeesData: [],
       employeesToDelete: [],
       columns: columns,
-
-      pagingValue: "20 nhân viên/trang",
-      pagingOptions: [
-        "10 nhân viên/trang",
-        "20 nhân viên/trang",
-        "30 nhân viên/trang",
-      ],
 
       mode: 0,
       isLoading: false,
@@ -271,25 +265,6 @@ export default {
           message: err,
         });
       }
-    },
-
-    /**
-     * Bắt sự kiện sử dụng phím mũi tên cho dropdown
-     * CreatedBy: PHDUONG(01/09/2021)
-     */
-    onKeyup(event, value) {
-      let index = this.options.indexOf(value);
-      console.log(index);
-      if (event.key == "ArrowUp" && index != -1 && index > 0) {
-        index--;
-      } else if (
-        event.key == "ArrowDown" &&
-        index != -1 &&
-        index < this.options.length - 1
-      ) {
-        index++;
-      }
-      this.value = this.options[index];
     },
 
     /**
@@ -468,27 +443,6 @@ export default {
     },
   },
   watch: {
-    /**
-     * Bắt sự kiện thay đổi pageIndex
-     * CreatedBy: PHDUONG(31/08/2021)
-     */
-    pageIndex: function () {
-      this.getEmployeePagingData(
-        this.pageIndex,
-        this.pageSize,
-        this.employeeFilter
-      );
-    },
-
-    /**
-     * Bắt sự kiện thay đổi pageSize
-     * CreatedBy: PHDUONG(01/09/2021)
-     */
-    pagingValue: function () {
-      this.pageSize = this.pagingValue.substring(0, 2);
-
-      this.getEmployeePagingData(1, this.pageSize, this.employeeFilter);
-    },
 
     /**
      * Xóa danh sách toastList sau 3 đối với phần tử cuối cùng
@@ -502,7 +456,7 @@ export default {
 
         this.timeoutRemoveToastList = setTimeout(() => {
           if (this.toastList.length > 0) this.toastList = [];
-        }, 3000);
+        }, 1500);
       },
     },
   },

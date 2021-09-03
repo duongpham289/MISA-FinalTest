@@ -62,7 +62,7 @@ export default {
       this.isShowed = true;
       setTimeout(() => {
         this.isShowed = false;
-      }, 3000);
+      }, 1500);
     },
   },
 };
