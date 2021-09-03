@@ -228,6 +228,7 @@
     -ms-user-select: none;
     user-select: none;
     cursor: pointer;
+    transition: 0.1s;
 }
 
 .table-content .delete-box input {

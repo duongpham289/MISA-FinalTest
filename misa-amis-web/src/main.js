@@ -18,10 +18,10 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import Enum from "./js/enums/TypeEnum.js"
 import Format from "./js/format/FormatData.js"
 import BaseInput from "@/components/BaseInput";
-import BasePaginate from "@/components/BasePaginate";
+import BasePaginate from "@/components/table/BasePaginate";
 import BasePopup from "@/components/BasePopup";
 import BaseSpinner from "@/components/BaseSpinner";
-import BaseTable from "@/components/BaseTable";
+import BaseTable from "@/components/table/BaseTable";
 import BaseToastMessage from "@/components/BaseToastMsg";
 
 Vue.use(BootstrapVue)

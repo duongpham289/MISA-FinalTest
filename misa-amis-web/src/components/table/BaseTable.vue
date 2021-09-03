@@ -26,7 +26,7 @@
             <div
               class="delete-box"
               :class="
-                checkboxOnclick(item[columns[0].id]) ? 'border-active' : ''
+                checkboxOnclick(item[columns[0].id]) ? 'border-active rotate-90' : ''
               "
             >
               <input
@@ -41,7 +41,7 @@
               />
               <span class="checkmark"
                 ><div
-                  class="mi mi-16 mi-checkbox-active"
+                  class="mi mi-16 mi-checkbox-active  rotate-270"
                   v-if="checkboxOnclick(item[columns[0].id])"
                 ></div
               ></span>

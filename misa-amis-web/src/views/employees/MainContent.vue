@@ -79,7 +79,7 @@ import ContentHeader from "./ContentHeader.vue";
 import ContentToolBar from "./ContentToolBar.vue";
 
 import { columns } from "./EmployeeTableCols.js";
-import BasePaginate from "../../components/BasePaginate.vue";
+import BasePaginate from "../../components/table/BasePaginate.vue";
 
 export default {
   components: {

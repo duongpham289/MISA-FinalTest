@@ -3,20 +3,26 @@
     <div class="modal-custom">
       <div class="ms-modal-header items-center">
         <div class="ms-modal-header__title">Thông tin nhân viên</div>
-        <div class="modal-checkbox">
-          <div class="modal-checkbox__content">
+        <div class="modal-checkbox items-center">
+          <div
+            class="modal-checkbox__content"
+            :class="isCustomer ? 'border-active rotate-90' : ''"
+          >
             <input class="checkbox" type="checkbox" />
-            <span class="checkmark">
-              <div class="mi mi-16 mi-checkbox-active"></div
+            <span class="checkmark" @click="isCustomer = !isCustomer">
+              <div class="mi mi-16 mi-checkbox-active rotate-270" v-if="isCustomer"></div
             ></span>
           </div>
           <div class="modal-checkbox__title">Là khách hàng</div>
         </div>
         <div class="modal-checkbox items-center">
-          <div class="modal-checkbox__content">
+          <div
+            class="modal-checkbox__content"
+            :class="isSupplier ? 'border-active rotate-90' : ''"
+          >
             <input class="checkbox" type="checkbox" />
-            <span class="checkmark">
-              <div class="mi mi-16 mi-checkbox-active"></div
+            <span class="checkmark" @click="isSupplier = !isSupplier">
+              <div class="mi mi-16 mi-checkbox-active rotate-270" v-if="isSupplier"></div
             ></span>
           </div>
           <div class="modal-checkbox__title">Là nhà cung cấp</div>
@@ -353,6 +359,8 @@ export default {
       departmentItem: [],
       departmentTitleInvalid: "",
 
+      isCustomer: false,
+      isSupplier: false,
       isFormChanged: false,
 
       hasError: false,
@@ -682,6 +690,12 @@ export default {
     },
   },
   watch: {
+    isSupplier: function () {
+      console.log(this.isSupplier);
+    },
+    isCustomer: function () {
+      console.log(this.isCustomer);
+    },
     employee: {
       immediate: true,
       deep: true,

@@ -80,6 +80,7 @@
     -ms-user-select: none;
     user-select: none;
     cursor: pointer;
+    transition: .1s;
 }
 
 .modal-checkbox__content input {
