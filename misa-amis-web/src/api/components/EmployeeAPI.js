@@ -9,10 +9,17 @@ class EmployeeAPI extends BaseAPI {
 
   /**
    * Hàm lấy dữ liệu phân trang
-   * @param {*} payload
    */
-   paging(pageIndex, pageSize, entityFilter) {
+  paging(pageIndex, pageSize, entityFilter) {
     return BaseAPIConfig.get(`${this.controller}/paging?pageIndex=${pageIndex}&pageSize=${pageSize}&employeeFilter=${entityFilter}`);
+  }
+  /**
+   * Hàm export dữ liệu ra file excel
+   */
+  export (pageIndex, pageSize, entityFilter) {
+    return BaseAPIConfig.get(`${this.controller}/export?pageIndex=${pageIndex}&pageSize=${pageSize}&employeeFilter=${entityFilter}`, {
+      responseType: "blob",
+    });
   }
 }
 

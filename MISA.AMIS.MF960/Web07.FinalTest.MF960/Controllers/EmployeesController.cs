@@ -66,23 +66,13 @@ namespace Web07.FinalTest.MF960.Controllers
         }
 
         [HttpGet("export")]
-        public IActionResult ExportV2([FromQuery] int pageIndex, [FromQuery] int pageSize, [FromQuery] string employeeFilter)
+        public IActionResult Export([FromQuery] int pageIndex, [FromQuery] int pageSize, [FromQuery] string employeeFilter)
         {
-            // query data from database  
-            Task.Yield();
-            var stream = new MemoryStream();
-            var list = _employeeRepository.GetPaging(pageIndex, pageSize, employeeFilter, false);
 
-            using (var package = new ExcelPackage(stream))
-            {
-                var workSheet = package.Workbook.Worksheets.Add("Sheet1");
-                workSheet.Cells.LoadFromCollection(list, true);
-                package.Save();
-            }
-            stream.Position = 0;
-            string excelName = $"UserList-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+            var stream = _employeeService.ExportEmployee(pageIndex, pageSize, employeeFilter, false);
 
-            //return File(stream, "application/octet-stream", excelName);  
+            string excelName = $"DanhSachNhanVien.xlsx";
+
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
         }
 

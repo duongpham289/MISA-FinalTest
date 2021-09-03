@@ -17,6 +17,7 @@ namespace MISA.Test.Core.Entities
         /// CreatedBy:PHDUONG(27/08/2021)
         public Guid EmployeeId { get; set; }
 
+        [MISAPropExport(("Mã nhân viên"))]
         [MISARequired("Mã nhân viên")]
         /// <summary>
         /// Mã khách hàng
@@ -24,6 +25,7 @@ namespace MISA.Test.Core.Entities
         /// CreatedBy:PHDUONG(27/08/2021)
         public string EmployeeCode { get; set; }
 
+        [MISAPropExport(("Tên nhân viên"))]
         [MISARequired("Họ và tên")]
         /// <summary>
         /// Họ và tên
@@ -31,12 +33,14 @@ namespace MISA.Test.Core.Entities
         /// CreatedBy:PHDUONG(27/08/2021)
         public string FullName { get; set; }
 
+        [MISAPropExport("Giới tính")]
         /// <summary>
         /// Giới tính (0 - Nữ, 1 - Nam, 2 - Khác)
         /// </summary>
         /// CreatedBy:PHDUONG(27/08/2021)
         public int? Gender { get; set; }
 
+        [MISAPropExport("Ngày sinh")]
         /// <summary>
         /// Ngày sinh
         /// </summary>
@@ -84,12 +88,14 @@ namespace MISA.Test.Core.Entities
         /// CreatedBy:PHDUONG(27/08/2021)
         public string IdentityPlace { get; set; }
 
+        [MISAPropExport("Số tài khoản")]
         /// <summary>
         /// Tài khoản ngân hàng
         /// </summary>
         /// CreatedBy:PHDUONG(27/08/2021)
         public string BankAccount { get; set; }
 
+        [MISAPropExport("Tên ngân hàng")]
         /// <summary>
         /// Tên ngân hàng
         /// </summary>
@@ -109,12 +115,14 @@ namespace MISA.Test.Core.Entities
         /// CreatedBy:PHDUONG(27/08/2021)
         public Guid? DepartmentId { get; set; }
 
+        [MISAPropExport("Tên đơn vị")]
         /// <summary>
         /// Tên phòng ban
         /// </summary>
         /// CreatedBy:PHDUONG(27/08/2021)
         public string DepartmentName { get; set; }
 
+        [MISAPropExport("Chức danh")]
         /// <summary>
         /// Tên vị trí
         /// </summary>

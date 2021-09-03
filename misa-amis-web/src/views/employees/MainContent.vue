@@ -6,6 +6,7 @@
         @btnReloadOnClick="btnReloadOnClick"
         @deleteSelectedRows="deleteSelectedRows"
         @filterDataTable="filterDataTable"
+        @exportData="exportData"
       />
       <div
         class="table-view"
@@ -226,6 +227,29 @@ export default {
       }, 500);
     },
 
+    exportData() {
+      EmployeeAPI.export(this.pageIndex, this.pageSize, this.employeeFilter)
+        .then((res) => {
+          if (res) {
+            const blob = new Blob([res.data], {
+              type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            });
+
+            const downloadLink = document.createElement("a");
+            downloadLink.href = URL.createObjectURL(blob);
+            downloadLink.download = "Danh sách nhân viên";
+            downloadLink.click();
+            URL.revokeObjectURL(downloadLink.href);
+          }
+          this.toastList.push({
+            type: ToastMessage.Type.Success,
+            message: ToastMessage.Message.ExportSuccess,
+          });
+        })
+        .catch((err) => {
+          this.errorHandler(err);
+        });
+    },
     /**
      * Xử lý hiển thị lỗi khi gọi api
      * CreatedBy: PHDUONG(01/09/2021)
@@ -355,7 +379,7 @@ export default {
           this.errorHandler(err);
         });
     },
-    
+
     /**
      * Xóa theo list id
      * CreatedBy: PHDUONG(01/09/2021)
@@ -449,7 +473,6 @@ export default {
     },
   },
   watch: {
-    
     /**
      * Bắt sự kiện thay đổi pageIndex
      * CreatedBy: PHDUONG(31/08/2021)
@@ -463,7 +486,7 @@ export default {
     },
 
     /**
-     * Bắt sự kiện thay đổi pageSize 
+     * Bắt sự kiện thay đổi pageSize
      * CreatedBy: PHDUONG(01/09/2021)
      */
     pagingValue: function () {
