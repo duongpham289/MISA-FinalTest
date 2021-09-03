@@ -35,11 +35,7 @@
 </template>
 
 <script>
-// import Tooltip from "../components/Tooltip.vue";
 export default {
-  components: {
-    // Tooltip,
-  },
   props: {
     customData: {
       type: Array,
@@ -49,14 +45,14 @@ export default {
   data() {
     return {
       bigMenu: true,
-      currentHoverMenu: null,
     };
   },
   created() {},
   methods: {
+
     /**
      * Hàm mở rộng navbar
-     * NVTOAN 05/07/2021
+     * CreatedBy:PHDUONG(31/08/2021)
      */
     makeMenuBig() {
       this.bigMenu = true;
@@ -65,7 +61,7 @@ export default {
 
     /**
      * Hàm thu nhỏ navbar
-     * NVTOAN 05/07/2021
+     * CreatedBy:PHDUONG(31/08/2021)
      */
     makeMenuSmall() {
       this.bigMenu = false;

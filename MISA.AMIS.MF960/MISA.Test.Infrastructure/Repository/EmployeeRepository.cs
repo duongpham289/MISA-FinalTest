@@ -25,14 +25,12 @@ namespace MISA.Test.Infrastructure.Repository
         /// </summary>
         /// <returns>Danh sách nhân viên và dữ liệu phân trang</returns>
         /// CreatedBy: PHDUONG(27/08/2021)
-        public object GetPaging(int pageIndex, int pageSize, string employeeFilter, Guid? departmentId)
+        public dynamic GetPaging(int pageIndex, int pageSize, string employeeFilter, bool check)
         {
             using (_dbConnection = new MySqlConnection(_configuration.GetConnectionString("SqlConnection")))
             {
-
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@EmployeeFilter", employeeFilter != null ? employeeFilter : String.Empty);
-                parameters.Add("@DepartmentId", departmentId);
+                parameters.Add("@EmployeeFilter", employeeFilter ?? String.Empty);
                 parameters.Add("@PageIndex", pageIndex);
                 parameters.Add("@PageSize", pageSize);
                 parameters.Add("@TotalRecord", dbType: DbType.Int32, direction: ParameterDirection.Output);
@@ -48,7 +46,14 @@ namespace MISA.Test.Infrastructure.Repository
                     data
                 };
 
-                return pagingData;
+                if (check)
+                {
+                    return pagingData;
+                }
+                else
+                {
+                    return data.AsList();
+                }
             }
         }
 

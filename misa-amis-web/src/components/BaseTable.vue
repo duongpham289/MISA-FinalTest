@@ -100,13 +100,12 @@ export default {
   data() {
     return {
       checkedId: [],
-      checked: 0,
-      // isCheckAll: false
       idDropdown: null,
       codeDropdown: null,
     };
   },
   methods: {
+
     /**
      * Xử lý hiển thị icon khi click checkbox
      * CreatedBy: PHDUONG(30/08/2021)
@@ -137,9 +136,10 @@ export default {
       this.idDropdown = null;
       this.codeDropdown = null;
     },
+
     /**
-     * Mở modal khi clone
-     * CreatedBy: PHDUONG(31/08/2021)
+     * Mở popup khi chọn xóa
+     * CreatedBy: PHDUONG(01/09/2021)
      */
     deleteRow(employeeId, employeeCode) {
       this.$refs["TableFunction"].style.display = "none";
@@ -147,7 +147,7 @@ export default {
     },
 
     /**
-     * Hiển thị content khi nhấn dropdown
+     * Hiển thị các function khi nhấn dropdown trên table
      * CreatedBy: PHDUONG(31/08/2021)
      */
     dropdownFunction(id, code) {
@@ -171,31 +171,6 @@ export default {
       }
     },
 
-    // /**
-    //  * Chọn tất cả bản ghi
-    //  * CreatedBy: PHDUONG(19/08/2021)
-    //  */
-    // checkAll() {
-    //   var vm = this;
-    //   vm.checked++;
-    //   this.isCheckAll = !this.isCheckAll;
-    //   if (vm.checked == 1) {
-    //     $(".checkbox").prop("checked", true);
-    //     for (let index = 0; index <= vm.data.length - 1; index++) {
-    //       vm.checkedId.push({
-    //         id: vm.data[index].id,
-    //         code: vm.data[index].name,
-    //       });
-    //     }
-    //     vm.$emit("checkBoxOnClick", vm.checkedId);
-    //   } else {
-    //     $(".checkbox").prop("checked", false);
-    //     vm.checkedId = [];
-    //     vm.$emit("checkBoxOnClick", vm.checkedId);
-    //     vm.checked = 0;
-    //   }
-    // },
-
     /**
      * Format dữ liệu trước khi gắn dữ liệu vào bảng
      * CreatedBy: PHDUONG(30/08/2021)
@@ -217,9 +192,6 @@ export default {
   watch: {
     checkedId: function () {
       this.$emit("checkBoxOnClick", this.checkedId);
-    },
-    data: function () {
-      console.log(this.data);
     },
   },
 };

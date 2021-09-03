@@ -24,21 +24,6 @@ namespace MISA.Test.Core.Services
         }
         #endregion
 
-        #region Methods
-        /// <summary>
-        /// Lấy danh sách nhân viên phân trang từ DataBase
-        /// </summary>
-        /// <returns>Danh sách nhân viên và dữ liệu phân trang</returns>
-        /// CreatedBy: PHDUONG(27/08/2021)
-        public ServiceResult GetPaging(int pageIndex, int pageSize, string employeeFilter, Guid? departmentId)
-        {
-
-            _serviceResult.Data = _employeeRepository.GetPaging(pageIndex, pageSize, employeeFilter, departmentId);
-
-            return _serviceResult;
-        }
-        #endregion
-
 
         #region ValidateData
 

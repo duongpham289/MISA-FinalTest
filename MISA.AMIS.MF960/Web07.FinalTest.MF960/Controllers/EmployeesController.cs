@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using MISA.Test.Core.Entities;
 using MISA.Test.Core.Interfaces.Repository;
 using MISA.Test.Core.Interfaces.Services;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Web07.FinalTest.MF960.Controllers
@@ -38,20 +41,13 @@ namespace Web07.FinalTest.MF960.Controllers
         /// <returns>Dữ liệu phân trang</returns>
         /// CreatedBy:PHDUONG(27/08/2021)
         [HttpGet("paging")]
-        public IActionResult GetCustomersPaging([FromQuery] int pageIndex, [FromQuery] int pageSize, [FromQuery] string employeeFilter, [FromQuery] Guid? departmentId)
+        public IActionResult GetCustomersPaging([FromQuery] int pageIndex, [FromQuery] int pageSize, [FromQuery] string employeeFilter)
         {
             try
             {
-                var serviceResult = _employeeService.GetPaging(pageIndex, pageSize, employeeFilter, departmentId);
+                var serviceResult = _employeeRepository.GetPaging(pageIndex, pageSize, employeeFilter, true);
 
-                if ((int)serviceResult.Data.GetType().GetProperty("totalRecord").GetValue(serviceResult.Data) != 0)
-                {
-                    return StatusCode(200, serviceResult.Data);
-                }
-                else
-                {
-                    return NoContent();
-                }
+                return StatusCode(200, serviceResult);
 
             }
             catch (Exception ex)
@@ -68,6 +64,28 @@ namespace Web07.FinalTest.MF960.Controllers
             }
 
         }
+
+        [HttpGet("export")]
+        public IActionResult ExportV2([FromQuery] int pageIndex, [FromQuery] int pageSize, [FromQuery] string employeeFilter)
+        {
+            // query data from database  
+            Task.Yield();
+            var stream = new MemoryStream();
+            var list = _employeeRepository.GetPaging(pageIndex, pageSize, employeeFilter, false);
+
+            using (var package = new ExcelPackage(stream))
+            {
+                var workSheet = package.Workbook.Worksheets.Add("Sheet1");
+                workSheet.Cells.LoadFromCollection(list, true);
+                package.Save();
+            }
+            stream.Position = 0;
+            string excelName = $"UserList-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+
+            //return File(stream, "application/octet-stream", excelName);  
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+        }
+
         /// <summary>
         /// Lấy Code cho nhân viên mới
         /// </summary>

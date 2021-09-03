@@ -26,23 +26,11 @@
 
 
 <script>
-// import Tooltip from "../../components/Tooltip.vue";
 export default {
-  components: {
-    // Tooltip,
-  },
-  data() {
-    return {
-      searchFocused: false,
-      refreshFocused: false,
-      exportFocused: false,
-      employeeFilter: "",
-    };
-  },
   methods: {
     /**
      * Hàm refresh dữ liệu
-     * NVTOAN 05/07/2021
+     * CreatedBy:PHDUONG(31/08/2021)
      */
     refreshData() {
       this.$emit("btnReloadOnClick");
@@ -50,7 +38,7 @@ export default {
 
     /**
      * Hàm filter dữ liệu trên bảng
-     * NVTOAN 09/07/2021
+     * CreatedBy:PHDUONG(02/09/2021)
      */
     filterDataTable(event) {
       this.$emit("filterDataTable", event.target.value);
@@ -58,7 +46,7 @@ export default {
 
     /**
      * Hàm export dữ liệu sang excel
-     * NVTOAN 12/07/2021
+     * CreatedBy:PHDUONG(02/09/2021)
      */
     exportData() {
       this.$emit("exportData");
@@ -66,7 +54,7 @@ export default {
 
     /**
      * Hàm xóa bản ghi đã chọn
-     * NVTOAN 15/07/2021
+     * CreatedBy:PHDUONG(01/09/2021)
      */
     deleteSelectedRows() {
       this.$emit("deleteSelectedRows");

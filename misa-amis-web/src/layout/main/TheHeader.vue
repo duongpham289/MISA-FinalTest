@@ -47,7 +47,7 @@ export default {
   methods: {
     /**
      * Hàm gọi cha để thu nhỏ navbar
-     * NVTOAN 05/07/2021
+     * CeatedBy: PHDUONG(29/08/2021)
      */
     makeMenuSmall() {
       this.$emit("makeMenuSmall");
@@ -55,8 +55,8 @@ export default {
     },
 
     /**
-     * Hàm hiện icon khi navbar to
-     * NVTOAN 05/07/2021
+     * Hàm phóng to navbar
+     * CeatedBy: PHDUONG(29/08/2021)
      */
     makeMenuBig() {
       this.bigMenu = true;

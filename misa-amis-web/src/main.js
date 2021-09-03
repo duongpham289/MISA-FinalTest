@@ -6,7 +6,10 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Multiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.min.css";
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import {
+  BootstrapVue,
+  IconsPlugin
+} from 'bootstrap-vue'
 
 
 import 'bootstrap/dist/css/bootstrap.css'
@@ -15,10 +18,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import Enum from "./js/enums/TypeEnum.js"
 import Format from "./js/format/FormatData.js"
 import BaseInput from "@/components/BaseInput";
-import {
-  BaseTable,
-  // BasePagination
-} from "@/components/table";
+import BaseTable from "@/components/BaseTable";
 import BasePopup from "@/components/BasePopup";
 import BaseToastMessage from "@/components/BaseToastMsg";
 

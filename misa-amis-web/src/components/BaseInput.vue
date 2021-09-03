@@ -30,7 +30,7 @@
             selected-variant
             :start-weekday="1"
             @input="onChangeInput"
-            weekday-header-format ="narrow"
+            weekday-header-format="narrow"
             :max="new Date()"
             :hide-header="true"
             locale="vi"
@@ -43,11 +43,10 @@
         ref="AutoFocus"
         class="input"
         :type="type"
-        :max="maxDate"
         :title="title"
         :placeholder="placeholder"
         :maxlength="maxLength"
-        :value="attachValue"
+        :value="value"
         :class="!isValidated ? 'invalid' : ''"
         @input="onChangeInput"
       />
@@ -63,14 +62,6 @@ export default {
 
   // #region props
   props: {
-    errorMsg: {
-      type: Boolean,
-      default: false,
-    },
-    readonly: {
-      type: Number,
-      default: 0,
-    },
     id: {
       type: String,
       required: true,
@@ -82,10 +73,6 @@ export default {
     type: {
       type: String,
       default: "text",
-    },
-    format: {
-      type: String,
-      required: false,
     },
     label: {
       type: String,
@@ -106,19 +93,12 @@ export default {
 
   data() {
     return {
-      maxDate:
-        this.type == "date" ? new Date().toISOString().split("T")[0] : null,
       isValidated: true,
       title: "",
       dateInput: null,
     };
   },
 
-  computed: {
-    attachValue: function () {
-      return this.value;
-    },
-  },
   watch: {
     value: function () {
       if (this.type == "date") {
@@ -128,15 +108,18 @@ export default {
   },
 
   methods: {
-
+    /**
+     * Focus vào ô input
+     * CreatedBy: PHDUONG(01/09/2021)
+     */
     autoFocus() {
       this.$nextTick(() => {
         this.$refs.AutoFocus.focus();
       });
     },
-    
+
     /**
-     * Xử lý thay đổi dữ liệu
+     * Xử lý thay đổi dữ liệu khi nhập
      * CreatedBy: PHDUONG(30/08/2021)
      */
     onChangeInput(event) {
@@ -149,8 +132,13 @@ export default {
       }
     },
 
+    /**
+     * Xử lý validate dữ liệu
+     * CreatedBy: PHDUONG(01/09/2021)
+     */
     validateInput(tmp = null) {
       let value = tmp;
+      
       if (value === null) value = this.value;
 
       if (this.required) {
@@ -162,20 +150,6 @@ export default {
           this.title = "";
         }
       }
-      // else {
-      //   if (value === null || value?.trim() === "") {
-      //     this.isValidated = true;
-      //     this.title = "";
-      //   } else if ((value !== null) | (value?.trim() !== "")) {
-      //     if (this.format === "email") {
-      //       if (!Validation.validateEmail(value)) {
-      //         this.isValidated = false;
-      //         this.title = ErrorMessage[this.id];
-      //       } else {
-      //         this.isValidated = true;
-      //         this.title = "";
-      //       }
-      //     }
 
       return this.isValidated;
     },

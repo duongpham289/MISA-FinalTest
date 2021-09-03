@@ -33,3 +33,6 @@ D:\Work\MISA-FinalTest\MISA.AMIS.MF960\Web07.FinalTest.MF960\obj\Debug\net5.0\MI
 D:\Work\MISA-FinalTest\MISA.AMIS.MF960\Web07.FinalTest.MF960\obj\Debug\net5.0\ref\MISA.AMIS.MF960.dll
 D:\Work\MISA-FinalTest\MISA.AMIS.MF960\Web07.FinalTest.MF960\obj\Debug\net5.0\MISA.AMIS.MF960.pdb
 D:\Work\MISA-FinalTest\MISA.AMIS.MF960\Web07.FinalTest.MF960\obj\Debug\net5.0\MISA.AMIS.MF960.genruntimeconfig.cache
+D:\Work\MISA-FinalTest\MISA.AMIS.MF960\Web07.FinalTest.MF960\bin\Debug\net5.0\EPPlus.dll
+D:\Work\MISA-FinalTest\MISA.AMIS.MF960\Web07.FinalTest.MF960\bin\Debug\net5.0\Microsoft.IO.RecyclableMemoryStream.dll
+D:\Work\MISA-FinalTest\MISA.AMIS.MF960\Web07.FinalTest.MF960\bin\Debug\net5.0\System.Xml.XPath.XmlDocument.dll

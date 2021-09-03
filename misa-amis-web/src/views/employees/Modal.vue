@@ -6,14 +6,18 @@
         <div class="modal-checkbox">
           <div class="modal-checkbox__content">
             <input class="checkbox" type="checkbox" />
-            <span class="checkmark"> </span>
+            <span class="checkmark">
+              <div class="mi mi-16 mi-checkbox-active"></div
+            ></span>
           </div>
           <div class="modal-checkbox__title">Là khách hàng</div>
         </div>
         <div class="modal-checkbox items-center">
           <div class="modal-checkbox__content">
             <input class="checkbox" type="checkbox" />
-            <span class="checkmark"> </span>
+            <span class="checkmark">
+              <div class="mi mi-16 mi-checkbox-active"></div
+            ></span>
           </div>
           <div class="modal-checkbox__title">Là nhà cung cấp</div>
           <div class="modal__button-close" @click="preCloseForm">
@@ -64,8 +68,8 @@
                     class="custom-select-form"
                     v-model="departmentItem"
                     @input="onChangeInput"
-                    :title="isInvalid ? 'Đơn vị không được để trống' : ''"
-                    :class="isInvalid ? 'invalid' : ''"
+                    :title="isValidated ? '' : 'Đơn vị không được để trống'"
+                    :class="isValidated ? '' : 'invalid'"
                     :options="departmentList"
                     :searchable="true"
                     :close-on-select="true"
@@ -340,19 +344,20 @@ export default {
   data() {
     return {
       showForm: false,
+
       employee: EmployeeModel.initData(),
-      originData: {},
-      employeeId: null,
       empCode: null,
       empCodeWhenUpdate: null,
-      formType: null, // 0: thêm, 1 : sửa, 2 : nhân bản
-      isFormChanged: false,
+
       departmentList: this.departmentCbb,
       departmentItem: [],
       departmentTitleInvalid: "",
-      isInvalid: false,
+
+      isFormChanged: false,
+
       hasError: false,
       isValidated: true,
+
       genderList: [
         { value: 1, name: "Nam" },
         { value: 0, name: "Nữ" },
@@ -363,16 +368,14 @@ export default {
   methods: {
     /**
      * Hàm mở form
-     * PHDUONG 30/08/2021
+     * CreatedBy: PHDUONG (30/08/2021)
      */
     openForm(employeeId, mode) {
       var vm = this;
+
       //Gán lại giá trị của employee
       vm.employee = EmployeeModel.initData();
       vm.departmentItem = [];
-      vm.isInvalid = false;
-      // vm.hasError= false;
-      // vm.isFormChanged= false;
 
       vm.isValidated = true;
       vm.showForm = true;
@@ -382,8 +385,9 @@ export default {
         EmployeeAPI.getById(employeeId)
           .then((res) => {
             vm.employee = res.data;
+
             vm.empCode = vm.employee.EmployeeCode;
-            vm.empCodeWhenAdd = vm.employee.EmployeeCode;
+            vm.empCodeWhenUpdate = vm.employee.EmployeeCode;
 
             vm.employee.DateOfBirth = vm.$format.formatDate(
               res.data.DateOfBirth,
@@ -414,6 +418,10 @@ export default {
       }
     },
 
+    /**
+     * Hàm lưu dữ liệu
+     * CreatedBy: PHDUONG (30/08/2021)
+     */
     saveData() {
       let vm = this;
 
@@ -436,7 +444,6 @@ export default {
               this.$emit("errorHandler", err);
             });
         } else if (vm.isFormChanged) {
-
           EmployeeAPI.update(vm.employee.EmployeeId, vm.employee)
             .then(() => {
               vm.toastList.push({
@@ -468,7 +475,7 @@ export default {
         EmployeeAPI.getAllCode()
           .then((res) => {
             var listCode = res.data;
-            listCode.splice(this.empCodeWhenAdd, 1);
+            listCode.splice(this.empCodeWhenUpdate, 1);
             if (listCode.includes(vm.employee.EmployeeCode)) {
               vm.hasError = true;
               vm.isValidated = false;
@@ -494,7 +501,7 @@ export default {
 
     /**
      * Hàm thêm và thoát form
-     * NVTOAN 08/07/2021
+     * CreatedBy: PHDUONG (01/09/2021)
      */
     saveAndOut() {
       this.saveData();
@@ -505,25 +512,30 @@ export default {
     },
     /**
      * Hàm cất và thêm dữ liệu
-     * NVTOAN 08/07/2021
+     * CreatedBy: PHDUONG (01/09/2021)
      */
 
     async saveAndAdd() {
       var vm = this;
-      await vm.saveData(); //nếu có lỗi thì sao
+      try {
+        await vm.saveData();
 
-      //Nếu thêm thành công
-      vm.employee = EmployeeModel.initData();
+        //Nếu thêm thành công
+        vm.employee = EmployeeModel.initData();
 
-      //Lấy lại mã nhân viên
+        //Lấy mã nhân viên mới
+        let res = await EmployeeAPI.getNewCode();
 
-      let res = await EmployeeAPI.getNewCode();
-      vm.employee.EmployeeCode = res.data;
+        vm.employee.EmployeeCode = res.data;
+      } catch (err) {
+        this.closeForm();
+        this.$emit("errorHandler", err);
+      }
     },
 
     /**
      * Reload lại bảng
-     * Autthor: PHDUONG(2/8/2021)
+     * CreatedBy: PHDUONG (01/09/2021)
      */
     reloadTable() {
       this.$emit("btnReloadOnClick");
@@ -531,6 +543,7 @@ export default {
 
     /**
      * Hiển thị tên đơn vị khi chọn
+     * CreatedBy: PHDUONG (01/09/2021)
      */
     displayName({ DepartmentName }) {
       return `${DepartmentName}`;
@@ -553,20 +566,19 @@ export default {
 
     /**
      * Hàm đóng form
-     * NVTOAN 07/06/2021
+     * CreatedBy: PHDUONG (01/09/2021)
      */
     closeForm() {
       Object.keys(this.$refs).forEach(
         (el) => (this.$refs[el].isValidated = true)
       );
-      // this.$emit("mode");
       this.isFormChanged = false;
       this.showForm = false;
     },
 
     /**
-     * validate form
-     * CreatedBy: NHHoang (28/08/2021)
+     * Validate form
+     * CreatedBy: PHDUONG (01/09/2021)
      */
     validateForm() {
       let vm = this;
@@ -595,7 +607,6 @@ export default {
         }
       });
       if (!vm.departmentItem) {
-        vm.isInvalid = true;
         vm.isValidated = false;
         let msg = ErrorMessage.DepartmentId;
         vm.$emit(
@@ -648,7 +659,7 @@ export default {
 
     /**
      * Xử lý xem data có thay đổi không và hỏi người dùng muốn lưu data ko? = popup
-     * CreatedBy: NHHoang (29/08/2021)
+     * CreatedBy: PHDUONG (01/09/2021)
      */
     preCloseForm() {
       if (this.isValidated && this.isFormChanged) {
@@ -680,7 +691,7 @@ export default {
         );
         this.departmentItem = index ? index : null;
         if (this.departmentItem) {
-          this.isInvalid = false;
+          this.isValidated = true;
         }
       },
     },

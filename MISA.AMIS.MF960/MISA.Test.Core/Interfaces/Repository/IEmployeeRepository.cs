@@ -17,10 +17,10 @@ namespace MISA.Test.Core.Interfaces.Repository
         /// <param name="pageIndex">Trang hiện tại</param>
         /// <param name="pageSize">Số bản ghi/trang</param>
         /// <param name="employeeFilter">Dữ liệu lọc phân trang</param>
-        /// <param name="departmentId">Mã định danh Phòng ban</param>
         /// <returns></returns>
         /// CreatedBy: PHDUONG(27/08/2021)
-        Object GetPaging(int pageIndex, int pageSize, string employeeFilter, Guid? departmentId);
+        dynamic GetPaging(int pageIndex, int pageSize, string employeeFilter, bool check);
+
         /// <summary>
         /// Lấy tất cả employeeCode
         /// </summary>

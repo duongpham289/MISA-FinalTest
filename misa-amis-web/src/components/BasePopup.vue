@@ -63,28 +63,20 @@ export default {
 
   emits: ["close"],
 
-  watch: {},
-
-  data() {
-    return {
-      className: "pop-up pop-up--hidden",
-    };
-  },
-
   methods: {
     /**
-     * Khi ấn nút done sẽ thực hiện hành động đã được truyền vào
-     * CreatedBy: NHHoang (29/08/2021)
+     * Thực hiện hành động khi ấn done
+     * CreatedBy: PHDUONG (01/09/2021)
      */
     handleAction() {
       if (this.info.action !== null) this.info.action();
-
       this.$emit("close");
     },
 
-    /*
-      Khi ấn nút cancel sẽ không thực hành động đẫ được truyền vào
-    */
+    /**
+     * Thực hiện hành động khi ấn cancel
+     * CreatedBy: PHDUONG (01/09/2021)
+     */
     handleCancel() {
       if (this.info.cancel !== null) this.info.cancel();
       this.$emit("close");

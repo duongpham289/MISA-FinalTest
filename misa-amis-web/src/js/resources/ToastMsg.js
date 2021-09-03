@@ -1,6 +1,6 @@
 var Toast = Toast || {};
 
-// tin nhắn
+// Thông báo
 Toast.Message = {
   LoadSuccess: "Tải dữ liệu thành công",
   AddSuccess: "Thêm dữ liệu thành công",

@@ -53,6 +53,11 @@ export default {
   },
 
   methods: {
+
+    /**
+     * Hiện ToastMessage
+     * CreatedBy: PHDUONG (01/09/2021)
+     */
     showToast() {
       this.isShowed = true;
       setTimeout(() => {

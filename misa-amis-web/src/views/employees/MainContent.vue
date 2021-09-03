@@ -1,17 +1,16 @@
 <template>
   <div class="content">
-    <!-- Phần Header của Content -->
-
     <ContentHeader @openForm="openForm" />
-
-    <!-- Phần bảng dữ liệu chính của Content -->
     <div class="content-table__container">
       <ContentToolBar
         @btnReloadOnClick="btnReloadOnClick"
         @deleteSelectedRows="deleteSelectedRows"
         @filterDataTable="filterDataTable"
       />
-      <div class="table-view" :style="employeesData.length <= 0 ? 'overflow:hidden':''">
+      <div
+        class="table-view"
+        :style="employeesData.length <= 0 ? 'overflow:hidden' : ''"
+      >
         <base-table
           :columns="columns"
           :data="employeesData"
@@ -41,7 +40,7 @@
           <multiselect
             class="custom-select-paging w-200"
             @keyup.native="onKeyup($event, value)"
-            v-model="value"
+            v-model="pagingValue"
             :options="options"
             :searchable="false"
             :close-on-select="false"
@@ -124,20 +123,14 @@ export default {
       employeesToDelete: [],
       columns: columns,
 
-      value: "20 nhân viên/trang",
+      pagingValue: "20 nhân viên/trang",
       options: [
         "10 nhân viên/trang",
         "20 nhân viên/trang",
         "30 nhân viên/trang",
       ],
 
-      isHiddenDialogDetail: true,
-
-      department: "1",
       mode: 0,
-
-      isHiddenPopupMessage: true,
-      loading: true,
 
       popupInfo: {
         btnLeft: null,
@@ -171,8 +164,7 @@ export default {
           });
         })
         .catch((err) => {
-          console.log(err);
-          // vm.responseHandler(1, err);
+          vm.errorHandler(err);
         });
     },
 
@@ -181,7 +173,6 @@ export default {
      * CreatedBy: PHDUONG(30/07/2021)
      */
     btnReloadOnClick() {
-      // this.employeesToDelete = [];
       this.employeesData = [];
       this.getEmployeePagingData(
         this.pageIndex,
@@ -192,11 +183,10 @@ export default {
 
     /**
      * Lấy dữ liệu nhân viên từ Api
-     * CreatedBy: PHDUONG(08/08/2021)
+     * CreatedBy: PHDUONG(29/08/2021)
      */
     getEmployeePagingData(pageIndex, pageSize, employeeFilter) {
       var vm = this;
-      vm.loading = true;
 
       EmployeeAPI.paging(pageIndex, pageSize, employeeFilter)
         .then((res) => {
@@ -214,14 +204,16 @@ export default {
               message: ToastMessage.Message.LoadSuccess,
             });
           }
-
-          vm.loading = false;
         })
         .catch((err) => {
           vm.errorHandler(err);
         });
     },
 
+    /**
+     * Lấy dữ liệu employee qua filter
+     * CreatedBy: PHDUONG(01/09/2021)
+     */
     filterDataTable(value) {
       clearTimeout(this.timeoutItem);
       this.timeoutItem = setTimeout(() => {
@@ -234,6 +226,10 @@ export default {
       }, 500);
     },
 
+    /**
+     * Xử lý hiển thị lỗi khi gọi api
+     * CreatedBy: PHDUONG(01/09/2021)
+     */
     errorHandler(err) {
       if (err.response.status < 500 && err.response.status >= 400) {
         let msg = err.response.data.userMsg;
@@ -249,11 +245,18 @@ export default {
           message: ToastMessage.Message.ServerError,
         });
       }
+
+      if (err) {
+        this.toastList.push({
+          type: ToastMessage.Type.Error,
+          message: err,
+        });
+      }
     },
 
     /**
      * Bắt sự kiện sử dụng phím mũi tên cho dropdown
-     * CreatedBy: duylv 29/08/2021
+     * CreatedBy: PHDUONG(01/09/2021)
      */
     onKeyup(event, value) {
       let index = this.options.indexOf(value);
@@ -272,7 +275,7 @@ export default {
 
     /**
      * Hiển thị button delete và checkbox
-     * CreatedBy: PHDUONG(29/07/2021)
+     * CreatedBy: PHDUONG(31/08/2021)
      */
     checkBoxOnClick(checkedId) {
       if (checkedId.length > 0) {
@@ -290,6 +293,10 @@ export default {
       }
     },
 
+    /**
+     * Mở popup khi chọn xóa nhân viên
+     * CreatedBy: PHDUONG(31/08/2021)
+     */
     deleteSelectedRows(employeeId, employeeCode) {
       if (employeeId) {
         this.employeesToDelete.push({
@@ -330,7 +337,7 @@ export default {
 
     /**
      * Xóa theo id
-     * CreatedBy: NHHoang (29/08/2021)
+     * CreatedBy: PHDUONG(01/09/2021)
      */
     deleteById() {
       EmployeeAPI.delete(this.employeesToDelete[0].id)
@@ -348,9 +355,10 @@ export default {
           this.errorHandler(err);
         });
     },
+    
     /**
-     * Xóa theo id
-     * CreatedBy: NHHoang (29/08/2021)
+     * Xóa theo list id
+     * CreatedBy: PHDUONG(01/09/2021)
      */
     deleteByListId() {
       var listId = [];
@@ -376,7 +384,7 @@ export default {
 
     /**
      * Hàm mở form thêm sửa
-     * NVTOAN 14/06/2021
+     * CreatedBy: PHDUONG(30/09/2021)
      */
     openForm(employeeId, mode) {
       if (employeeId) {
@@ -388,7 +396,7 @@ export default {
       }
     },
     /**
-     * thiết lập popup
+     * Thiết lập popup
      * @param msg: tin nhắn
      * @param icon: tên icon
      * @param btnLeft: tên của nút bấm bên trái -> Đóng form, với giá trị null : ko có.
@@ -397,12 +405,12 @@ export default {
      * @param center: tên của nút bấm ở giữa  -> Đóng form ~ thường là message cảnh báo, với giá trị null : ko có
      * @param action: action sẽ thực hiện nếu bấm nút btnRightSec, với giá trị null : ko có
      * @param cancel: thực hiện hành động nếu bấm nút btnRightFirst, với giá trị null : ko có
-     * CreatedBy: NHHoang (29/08/2021)
+     * CreatedBy: PHDUONG(02/09/2021)
      */
     setPopup(
       message,
       icon,
-      btnLef = null,
+      btnLeft = null,
       btnRightFirst = null,
       btnRightSec = null,
       btnCenter = null,
@@ -410,7 +418,7 @@ export default {
       cancel = null
     ) {
       this.popupInfo = {
-        btnLeft: btnLef,
+        btnLeft: btnLeft,
         btnRightFirst,
         btnRightSec,
         btnCenter,
@@ -423,8 +431,8 @@ export default {
     },
 
     /**
-     * đóng popup
-     * CreatedBy: NHHoang (29/08/2021)
+     * Đóng popup
+     * CreatedBy: PHDUONG(02/09/2021)
      */
     closePopup() {
       this.popupInfo = {
@@ -441,6 +449,11 @@ export default {
     },
   },
   watch: {
+    
+    /**
+     * Bắt sự kiện thay đổi pageIndex
+     * CreatedBy: PHDUONG(31/08/2021)
+     */
     pageIndex: function () {
       this.getEmployeePagingData(
         this.pageIndex,
@@ -448,16 +461,21 @@ export default {
         this.employeeFilter
       );
     },
-    value: function () {
-      this.pageSize = this.value.substring(0, 2);
+
+    /**
+     * Bắt sự kiện thay đổi pageSize 
+     * CreatedBy: PHDUONG(01/09/2021)
+     */
+    pagingValue: function () {
+      this.pageSize = this.pagingValue.substring(0, 2);
 
       this.getEmployeePagingData(1, this.pageSize, this.employeeFilter);
     },
-    /**
-     * Xóa danh sách toastList sau 3 đối với phần tử cuối cùng.
-     * CreatedBy: NHHoang(01/09/2021)
-     */
 
+    /**
+     * Xóa danh sách toastList sau 3 đối với phần tử cuối cùng
+     * CreatedBy: PHDUONG(02/09/2021)
+     */
     toastList: {
       deep: true,
       immediate: true,
