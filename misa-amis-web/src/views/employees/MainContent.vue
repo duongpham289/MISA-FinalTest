@@ -1,6 +1,7 @@
 <template>
   <div class="content">
     <ContentHeader @openForm="openForm" />
+
     <div class="content-table__container">
       <ContentToolBar
         @btnReloadOnClick="btnReloadOnClick"
@@ -8,6 +9,7 @@
         @filterDataTable="filterDataTable"
         @exportData="exportData"
       />
+
       <div
         class="table-view"
         :style="employeesData.length <= 0 ? 'overflow:hidden' : ''"
@@ -20,48 +22,30 @@
           @deleteSelectedRows="deleteSelectedRows"
         />
       </div>
+
       <div
         v-if="employeesData.length <= 0"
         class="no-content d-block flex-center w-100"
       >
         <div class="no-content-img">
-          <img
-            src="https://actappg1.misacdn.net/img/bg_report_nodata.76e50bd8.svg"
-          />
+          <img src="../../assets/img/no_conent.svg" />
         </div>
 
         <label>Không có dữ liệu</label>
       </div>
-      <div class="content-footer items-center" v-if="employeesData.length > 0">
-        <div class="record-display">
-          Tổng số: &nbsp;<span class="text-semibold"> {{ totalRecord }}</span
-          >&nbsp; bản ghi
-        </div>
-        <div class="paginate items-center">
-          <multiselect
-            class="custom-select-paging w-200"
-            @keyup.native="onKeyup($event, value)"
-            v-model="pagingValue"
-            :options="options"
-            :searchable="false"
-            :close-on-select="false"
-            :show-labels="false"
-            :allowEmpty="false"
-          ></multiselect>
-          <b-pagination
-            class="paginate-custom"
-            v-model="pageIndex"
-            :total-rows="totalRecord"
-            :per-page="pageSize"
-            prev-text="Trước"
-            next-text="Sau"
-            limit="4"
-            first-number
-            last-number
-          ></b-pagination>
-        </div>
-      </div>
+
+      <base-paginate
+        :employeesData="employeesData"
+        :pagingValue="pagingValue"
+        :pagingOptions="pagingOptions"
+        :pageIndex="pageIndex"
+        :totalRecord="totalRecord"
+        :pageSize="pageSize"
+      />
     </div>
+
+    <base-spinner :isLoading="isLoading" />
+
     <Modal
       ref="Modal"
       :departmentCbb="departmentCbb"
@@ -71,12 +55,14 @@
       @btnReloadOnClick="btnReloadOnClick"
       @errorHandler="errorHandler"
     />
+
     <base-toast-message
       v-for="(item, index) in toastList"
       :toast="item"
       :key="index"
       :index="index"
     ></base-toast-message>
+
     <base-popup :info="popupInfo" @close="closePopup"></base-popup>
   </div>
 </template>
@@ -92,13 +78,16 @@ import ContentHeader from "./ContentHeader.vue";
 import ContentToolBar from "./ContentToolBar.vue";
 
 import { columns } from "./EmployeeTableCols.js";
+import BasePaginate from "../../components/BasePaginate.vue";
 
 export default {
   components: {
     Modal,
     ContentHeader,
     ContentToolBar,
+    BasePaginate,
   },
+
   created() {
     this.getEmployeePagingData(
       this.pageIndex,
@@ -107,6 +96,7 @@ export default {
     );
     this.getDropdownData();
   },
+  
   data() {
     return {
       pageIndex: 1,
@@ -125,13 +115,14 @@ export default {
       columns: columns,
 
       pagingValue: "20 nhân viên/trang",
-      options: [
+      pagingOptions: [
         "10 nhân viên/trang",
         "20 nhân viên/trang",
         "30 nhân viên/trang",
       ],
 
       mode: 0,
+      isLoading: false,
 
       popupInfo: {
         btnLeft: null,
@@ -189,9 +180,13 @@ export default {
     getEmployeePagingData(pageIndex, pageSize, employeeFilter) {
       var vm = this;
 
+      vm.isLoading = true;
+
       EmployeeAPI.paging(pageIndex, pageSize, employeeFilter)
         .then((res) => {
           vm.employeesData = res.data.data ? res.data.data : [];
+
+          vm.isLoading = false;
           vm.pageIndex = pageIndex;
 
           if (res.data) {

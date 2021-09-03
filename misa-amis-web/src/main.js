@@ -18,8 +18,10 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import Enum from "./js/enums/TypeEnum.js"
 import Format from "./js/format/FormatData.js"
 import BaseInput from "@/components/BaseInput";
-import BaseTable from "@/components/BaseTable";
+import BasePaginate from "@/components/BasePaginate";
 import BasePopup from "@/components/BasePopup";
+import BaseSpinner from "@/components/BaseSpinner";
+import BaseTable from "@/components/BaseTable";
 import BaseToastMessage from "@/components/BaseToastMsg";
 
 Vue.use(BootstrapVue)
@@ -28,8 +30,10 @@ Vue.use(IconsPlugin)
 Vue.config.productionTip = false
 
 Vue.component(BaseInput.name, BaseInput);
-Vue.component(BaseTable.name, BaseTable);
+Vue.component(BasePaginate.name, BasePaginate);
 Vue.component(BasePopup.name, BasePopup);
+Vue.component(BaseSpinner.name, BaseSpinner);
+Vue.component(BaseTable.name, BaseTable);
 Vue.component(BaseToastMessage.name, BaseToastMessage);
 
 Vue.component('multiselect', Multiselect)
