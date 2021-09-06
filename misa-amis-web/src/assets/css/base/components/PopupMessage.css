@@ -8,6 +8,7 @@
 	transform: translate(-50%, -50%);
 	background-color: var(--color-white);
 	z-index: 999;
+	border-radius: 3px;
   }
   
   .pop-up .pop-up__content {

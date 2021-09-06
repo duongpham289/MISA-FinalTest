@@ -4,10 +4,10 @@
       <thead class="table-header">
         <tr>
           <th>
-            <div class="delete-box">
+            <!-- <div class="delete-box">
               <input class="checkbox" type="checkbox" />
               <span class="checkmark"></span>
-            </div>
+            </div> -->
           </th>
           <th v-for="col in columns" :key="col.name" :class="col.className">
             {{ col.label }}

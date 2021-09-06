@@ -2,6 +2,7 @@
   <div class="table-tool items-center">
     <div class="input-search">
       <input
+        autofocus
         type="text"
         class="table-tool__search"
         placeholder="Tìm theo mã, tên nhân viên"

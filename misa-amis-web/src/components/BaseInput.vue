@@ -10,11 +10,11 @@
       <b-input-group v-if="type === 'date'">
         <b-form-input
           v-model="dateInput"
-          type="date"
+          type="text"
           ref="InputDate"
           placeholder="DD/MM/YYYY"
           @input="onChangeInput"
-          autocomplete="off"
+          autocomplete="on"
         ></b-form-input>
         <b-input-group-append>
           <b-form-datepicker

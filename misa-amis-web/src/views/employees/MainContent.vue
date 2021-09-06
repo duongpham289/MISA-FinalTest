@@ -244,7 +244,7 @@ export default {
      * CreatedBy: PHDUONG(01/09/2021)
      */
     errorHandler(err) {
-      if (err.response.status < 500 && err.response.status >= 400) {
+      if (err.response && err.response.status < 500 && err.response.status >= 400) {
         let msg = err.response.data.userMsg;
         this.toastList.push({
           type: ToastMessage.Type.Error,
@@ -252,7 +252,7 @@ export default {
         });
       }
 
-      if (err.response.status >= 500) {
+      if (err.response && err.response.status >= 500) {
         this.toastList.push({
           type: ToastMessage.Type.Error,
           message: ToastMessage.Message.ServerError,
@@ -299,7 +299,9 @@ export default {
             code: employeeCode,
           });
         }
-        let message = `Bạn có chắc chắn muốn xóa Nhân viên < ${employeeCode ? employeeCode : this.employeesToDelete[0].code} > không?`;
+        let message = `Bạn có chắc chắn muốn xóa Nhân viên < ${
+          employeeCode ? employeeCode : this.employeesToDelete[0].code
+        } > không?`;
 
         this.setPopup(
           message,
@@ -336,16 +338,37 @@ export default {
      * CreatedBy: PHDUONG(01/09/2021)
      */
     deleteById() {
-      EmployeeAPI.delete(this.employeesToDelete[0].id)
+      EmployeeAPI.getById(this.employeesToDelete[0].id)
         .then((res) => {
           if (res.status != 204) {
-            this.toastList.push({
-              type: ToastMessage.Type.Success,
-              message: ToastMessage.Message.DeleteSuccess,
-            });
+            EmployeeAPI.delete(this.employeesToDelete[0].id)
+              .then((res) => {
+                if (res.status != 204) {
+                  this.toastList.push({
+                    type: ToastMessage.Type.Success,
+                    message: ToastMessage.Message.DeleteSuccess,
+                  });
+                }
+                this.employeesToDelete = [];
+                this.btnReloadOnClick();
+              })
+              .catch((err) => {
+                this.errorHandler(err);
+              });
+          } else if(res.status == 204) {
+            let msg =
+              "Dữ liệu này không còn tồn tại trên hệ thống, vui lòng load lại trang !";
+            this.setPopup(
+              msg,
+              "mi-warning",
+              null,
+              null,
+              null,
+              "Đóng",
+              null,
+              null
+            );
           }
-          this.employeesToDelete = [];
-          this.btnReloadOnClick();
         })
         .catch((err) => {
           this.errorHandler(err);
@@ -457,7 +480,7 @@ export default {
 
         this.timeoutRemoveToastList = setTimeout(() => {
           if (this.toastList.length > 0) this.toastList = [];
-        }, 1500);
+        }, 2000);
       },
     },
   },

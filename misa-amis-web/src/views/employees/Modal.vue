@@ -10,7 +10,10 @@
           >
             <input class="checkbox" type="checkbox" />
             <span class="checkmark" @click="isCustomer = !isCustomer">
-              <div class="mi mi-16 mi-checkbox-active rotate-270" v-if="isCustomer"></div
+              <div
+                class="mi mi-16 mi-checkbox-active rotate-270"
+                v-if="isCustomer"
+              ></div
             ></span>
           </div>
           <div class="modal-checkbox__title">Là khách hàng</div>
@@ -22,7 +25,10 @@
           >
             <input class="checkbox" type="checkbox" />
             <span class="checkmark" @click="isSupplier = !isSupplier">
-              <div class="mi mi-16 mi-checkbox-active rotate-270" v-if="isSupplier"></div
+              <div
+                class="mi mi-16 mi-checkbox-active rotate-270"
+                v-if="isSupplier"
+              ></div
             ></span>
           </div>
           <div class="modal-checkbox__title">Là nhà cung cấp</div>
@@ -74,8 +80,10 @@
                     class="custom-select-form"
                     v-model="departmentItem"
                     @input="onChangeInput"
-                    :title="isValidated ? '' : 'Đơn vị không được để trống'"
-                    :class="isValidated ? '' : 'invalid'"
+                    :title="
+                      departmentInvalid ? 'Đơn vị không được để trống' : ''
+                    "
+                    :class="departmentInvalid ? 'invalid' : ''"
                     :options="departmentList"
                     :searchable="true"
                     :close-on-select="true"
@@ -305,16 +313,16 @@
             <div
               class="misa-button misa-button-default text-semibold"
               tabindex="0"
-              @click="saveAndOut"
-              @keyup.enter="saveAndOut"
+              @click="saveData(0)"
+              @keyup.enter="saveData(0)"
             >
               Cất
             </div>
             <div
               class="misa-button misa-button-primary text-semibold"
               tabindex="0"
-              @click="saveAndAdd"
-              @keyup.enter="saveAndAdd"
+              @click="saveData(1)"
+              @keyup.enter="saveData(1)"
             >
               Cất và thêm
             </div>
@@ -364,7 +372,7 @@ export default {
       isFormChanged: false,
 
       hasError: false,
-      isValidated: true,
+      departmentInvalid: false,
 
       genderList: [
         { value: 1, name: "Nam" },
@@ -385,7 +393,7 @@ export default {
       vm.employee = EmployeeModel.initData();
       vm.departmentItem = [];
 
-      vm.isValidated = true;
+      vm.departmentInvalid = false;
       vm.showForm = true;
 
       //Nếu là form sửa
@@ -410,7 +418,7 @@ export default {
             vm.$refs.EmployeeCode.autoFocus();
           })
           .catch((err) => {
-            this.$emit("errorHandler", err);
+            vm.$emit("errorHandler", err);
           });
       }
       if (mode != 1) {
@@ -421,7 +429,7 @@ export default {
             vm.$refs.EmployeeCode.autoFocus();
           })
           .catch((err) => {
-            this.$emit("errorHandler", err);
+            vm.$emit("errorHandler", err);
           });
       }
     },
@@ -430,13 +438,13 @@ export default {
      * Hàm lưu dữ liệu
      * CreatedBy: PHDUONG (30/08/2021)
      */
-    saveData() {
+    async saveData(saveMode) {
       let vm = this;
 
-      vm.validateForm();
+      var isCodeValid = await vm.checkDuplicate();
+      var isInputValid = vm.validateForm();
 
-      if (vm.isValidated) {
-        vm.hasError = false;
+      if (isCodeValid && isInputValid && !vm.departmentInvalid) {
         if (vm.mode != 1) {
           EmployeeAPI.create(vm.employee)
             .then(() => {
@@ -444,30 +452,40 @@ export default {
                 type: ToastMessage.Type.Success,
                 message: ToastMessage.Message.AddSuccess,
               });
+
+              if (saveMode == 0) {
+                vm.closeForm();
+              } else vm.openForm("", 0);
+
               setTimeout(function () {
                 vm.reloadTable();
               }, 1000);
             })
             .catch((err) => {
-              this.$emit("errorHandler", err);
+              vm.$emit("errorHandler", err);
             });
         } else if (vm.isFormChanged) {
           EmployeeAPI.update(vm.employee.EmployeeId, vm.employee)
             .then(() => {
+              if (saveMode == 0) {
+                vm.closeForm();
+              } else vm.openForm("", 0);
+
               vm.toastList.push({
                 type: ToastMessage.Type.Success,
                 message: ToastMessage.Message.UpdateSuccess,
               });
+
               setTimeout(function () {
                 vm.reloadTable();
               }, 1000);
             })
             .catch((err) => {
-              this.$emit("errorHandler", err);
+              vm.$emit("errorHandler", err);
             });
         } else {
           let msg = ErrorMessage["FormNotChanged"];
-          this.$emit(
+          vm.$emit(
             "setPopup",
             msg,
             "mi-warning",
@@ -479,65 +497,6 @@ export default {
             null
           );
         }
-      } else {
-        EmployeeAPI.getAllCode()
-          .then((res) => {
-            var listCode = res.data;
-            listCode.splice(this.empCodeWhenUpdate, 1);
-            if (listCode.includes(vm.employee.EmployeeCode)) {
-              vm.hasError = true;
-              vm.isValidated = false;
-              let msg = ErrorMessage["EmployeeCodeDuplicate"];
-              vm.$emit(
-                "setPopup",
-                msg,
-                "mi-warning",
-                null,
-                null,
-                null,
-                "Đóng",
-                null,
-                null
-              );
-            }
-          })
-          .catch((err) => {
-            this.$emit("errorHandler", err);
-          });
-      }
-    },
-
-    /**
-     * Hàm thêm và thoát form
-     * CreatedBy: PHDUONG (01/09/2021)
-     */
-    saveAndOut() {
-      this.saveData();
-
-      if (this.isValidated && this.isFormChanged && !this.hasError) {
-        this.closeForm();
-      }
-    },
-    /**
-     * Hàm cất và thêm dữ liệu
-     * CreatedBy: PHDUONG (01/09/2021)
-     */
-
-    async saveAndAdd() {
-      var vm = this;
-      try {
-        await vm.saveData();
-
-        //Nếu thêm thành công
-        vm.employee = EmployeeModel.initData();
-
-        //Lấy mã nhân viên mới
-        let res = await EmployeeAPI.getNewCode();
-
-        vm.employee.EmployeeCode = res.data;
-      } catch (err) {
-        this.closeForm();
-        this.$emit("errorHandler", err);
       }
     },
 
@@ -585,18 +544,57 @@ export default {
     },
 
     /**
+     * Check DuplicateCode
+     * CreatedBy: PHDUONG(06/09/2021)
+     */
+    async checkDuplicate() {
+      let vm = this;
+
+      var isCodeValid = true;
+      var res = null;
+      var listCode = [];
+
+
+      if (vm.mode != 1) {
+        res = await EmployeeAPI.checkDuplicate(vm.employee.EmployeeCode);
+      } else {
+        res = await EmployeeAPI.getAllCode();
+        listCode = res.data;
+        listCode.splice(listCode.indexOf(vm.empCodeWhenUpdate), 1);
+      }
+
+      if (res.data == true || listCode.includes(vm.employee.EmployeeCode)) {
+         isCodeValid = false;
+          let msg = ErrorMessage["EmployeeCodeDuplicate"];
+          vm.$emit(
+            "setPopup",
+            msg,
+            "mi-warning",
+            null,
+            null,
+            null,
+            "Đóng",
+            null,
+            null
+          );
+      }
+      return isCodeValid;
+    },
+
+    /**
      * Validate form
      * CreatedBy: PHDUONG (01/09/2021)
      */
     validateForm() {
       let vm = this;
 
-      vm.isValidated = true;
+      var isInputValid = true;
+
       Object.keys(vm.$refs).forEach((el) => {
         vm.$refs[el].validateInput();
 
         if (!vm.$refs[el].isValidated) {
-          if (vm.isValidated === true) {
+          if (isInputValid === true) {
             let msg = ErrorMessage[vm.$refs[el].id];
 
             this.$emit(
@@ -611,11 +609,12 @@ export default {
               null
             );
           }
-          vm.isValidated = vm.$refs[el].isValidated;
+          isInputValid = vm.$refs[el].isValidated;
         }
       });
+
       if (!vm.departmentItem) {
-        vm.isValidated = false;
+        vm.departmentInvalid = true;
         let msg = ErrorMessage.DepartmentId;
         vm.$emit(
           "setPopup",
@@ -630,39 +629,7 @@ export default {
         );
       }
 
-      if (this.empCode != vm.employee.EmployeeCode) {
-        var isDuplicated = false;
-        this.empCode = vm.employee.EmployeeCode;
-
-        if (this.mode != 1) {
-          EmployeeAPI.checkDuplicate(vm.employee.EmployeeCode)
-            .then((res) => {
-              isDuplicated = res.data;
-              if (isDuplicated) {
-                vm.hasError = true;
-                vm.isValidated = false;
-                let msg = ErrorMessage["EmployeeCodeDuplicate"];
-                vm.$emit(
-                  "setPopup",
-                  msg,
-                  "mi-warning",
-                  null,
-                  null,
-                  null,
-                  "Đóng",
-                  null,
-                  null
-                );
-              }
-            })
-            .catch((err) => {
-              this.$emit("errorHandler", err);
-            });
-        }
-        if (this.mode == 1) {
-          vm.isValidated = false;
-        }
-      }
+      return isInputValid;
     },
 
     /**
@@ -670,7 +637,7 @@ export default {
      * CreatedBy: PHDUONG (01/09/2021)
      */
     preCloseForm() {
-      if (this.isValidated && this.isFormChanged) {
+      if (this.isFormChanged) {
         let msg = "Dữ liệu đã bị thay đổi. Bạn có muốn cất không";
 
         this.$emit(
@@ -681,7 +648,7 @@ export default {
           "Không",
           "Có",
           null,
-          this.saveAndOut,
+          this.saveData,
           this.closeForm
         );
       } else {
@@ -699,7 +666,7 @@ export default {
         );
         this.departmentItem = index ? index : null;
         if (this.departmentItem) {
-          this.isValidated = true;
+          this.departmentInvalid = false;
         }
       },
     },

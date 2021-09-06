@@ -32,13 +32,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 ::-webkit-scrollbar{
-    width: 5px;
+    width: 8px;
     height: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
     background-color: #cdd3d6;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 body {
