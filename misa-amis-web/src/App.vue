@@ -8,7 +8,7 @@
 <script>
 import Menu from "./layout/TheMenu.vue";
 import Main from './layout/TheMain.vue'
-import { MenuData } from "./js/resources/MenuData";
+import { MenuData } from "./js/resources/menuData";
 
 export default {
   name: "App",
@@ -46,7 +46,7 @@ export default {
 </script>
 
 <style>
-@import url("./assets/css/base/Style.css");
+@import url("./assets/css/base/style.css");
 
 .menu-small {
     --menu-width: 52px;

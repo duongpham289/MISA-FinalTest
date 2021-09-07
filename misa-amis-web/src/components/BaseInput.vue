@@ -10,11 +10,9 @@
       <b-input-group v-if="type === 'date'">
         <b-form-input
           v-model="dateInput"
-          type="text"
+          type="date"
           ref="InputDate"
-          placeholder="DD/MM/YYYY"
           @input="onChangeInput"
-          autocomplete="on"
         ></b-form-input>
         <b-input-group-append>
           <b-form-datepicker
@@ -55,7 +53,7 @@
 </template>
 
 <script>
-import ErrorMessage from "@/js/resources/ErrorMsg";
+import Resources from "@/js/resources/resources";
 
 export default {
   name: "base-input",
@@ -124,6 +122,9 @@ export default {
      */
     onChangeInput(event) {
       if (this.type == "date") {
+        if (new Date(this.dateInput) > new Date()) {
+          this.dateInput = this.$format.formatDate(new Date(), true);
+        }
         this.$emit("handleInput", { id: this.id, value: this.dateInput });
       } else {
         let tmp = event.target.value;
@@ -138,13 +139,13 @@ export default {
      */
     validateInput(tmp = null) {
       let value = tmp;
-      
+
       if (value === null) value = this.value;
 
       if (this.required) {
         if (!value || value == "") {
           this.isValidated = false;
-          this.title = ErrorMessage[this.id];
+          this.title = Resources.ErrorMessage[this.id];
         } else {
           this.isValidated = true;
           this.title = "";

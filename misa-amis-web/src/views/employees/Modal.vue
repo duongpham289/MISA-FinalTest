@@ -124,7 +124,7 @@
                   <base-input
                     label="Chức danh"
                     id="PositionName"
-                    placeholder=""
+                    placeholder="Kế toán..."
                     :maxLength="100"
                     :value="employee.PositionName"
                     @handleInput="onChangeInput"
@@ -330,14 +330,15 @@
         </div>
       </div>
     </div>
+    <base-spinner :isLoading="isLoading" />
   </div>
 </template>
 
 <script>
 import EmployeeModel from "@/models/EmployeeModel.js";
-import EmployeeAPI from "@/api/components/EmployeeAPI.js";
-import ErrorMessage from "@/js/resources/ErrorMsg";
-import ToastMessage from "@/js/resources/ToastMsg";
+import EmployeeAPI from "@/api/components/employeeAPI.js";
+
+import Resources from "@/js/resources/resources";
 
 export default {
   components: {},
@@ -358,6 +359,7 @@ export default {
   data() {
     return {
       showForm: false,
+      isLoading: false,
 
       employee: EmployeeModel.initData(),
       empCode: null,
@@ -398,20 +400,22 @@ export default {
 
       //Nếu là form sửa
       if (employeeId.length > 0) {
+        vm.isLoading = true;
         EmployeeAPI.getById(employeeId)
           .then((res) => {
+            vm.isLoading = false;
             vm.employee = res.data;
 
             vm.empCode = vm.employee.EmployeeCode;
             vm.empCodeWhenUpdate = vm.employee.EmployeeCode;
 
             vm.employee.DateOfBirth = vm.$format.formatDate(
-              res.data.DateOfBirth,
+              vm.employee.DateOfBirth,
               true
             );
 
             vm.employee.IdentityDate = vm.$format.formatDate(
-              res.data.IdentityDate,
+              vm.employee.IdentityDate,
               true
             );
 
@@ -422,8 +426,10 @@ export default {
           });
       }
       if (mode != 1) {
+        vm.isLoading = true;
         EmployeeAPI.getNewCode()
           .then((response) => {
+            vm.isLoading = false;
             vm.employee.EmployeeCode = response.data;
             vm.empCode = vm.employee.EmployeeCode;
             vm.$refs.EmployeeCode.autoFocus();
@@ -446,11 +452,15 @@ export default {
 
       if (isCodeValid && isInputValid && !vm.departmentInvalid) {
         if (vm.mode != 1) {
+          vm.isLoading = true;
+
           EmployeeAPI.create(vm.employee)
             .then(() => {
+              vm.isLoading = false;
+
               vm.toastList.push({
-                type: ToastMessage.Type.Success,
-                message: ToastMessage.Message.AddSuccess,
+                type: Resources.ToastType["Success"],
+                message: Resources.ToastMessage["AddSuccess"],
               });
 
               if (saveMode == 0) {
@@ -465,15 +475,18 @@ export default {
               vm.$emit("errorHandler", err);
             });
         } else if (vm.isFormChanged) {
+          vm.isLoading = true;
           EmployeeAPI.update(vm.employee.EmployeeId, vm.employee)
             .then(() => {
+              vm.isLoading = false;
+
               if (saveMode == 0) {
                 vm.closeForm();
               } else vm.openForm("", 0);
 
               vm.toastList.push({
-                type: ToastMessage.Type.Success,
-                message: ToastMessage.Message.UpdateSuccess,
+                type: Resources.ToastType["Success"],
+                message: Resources.ToastMessage["UpdateSuccess"],
               });
 
               setTimeout(function () {
@@ -484,7 +497,7 @@ export default {
               vm.$emit("errorHandler", err);
             });
         } else {
-          let msg = ErrorMessage["FormNotChanged"];
+          let msg = Resources.PopupMessage["FormNotChanged"];
           vm.$emit(
             "setPopup",
             msg,
@@ -492,7 +505,7 @@ export default {
             null,
             null,
             null,
-            "Đóng",
+            Resources.PoupButton.ButtonClose,
             null,
             null
           );
@@ -536,11 +549,15 @@ export default {
      * CreatedBy: PHDUONG (01/09/2021)
      */
     closeForm() {
-      Object.keys(this.$refs).forEach(
-        (el) => (this.$refs[el].isValidated = true)
-      );
-      this.isFormChanged = false;
-      this.showForm = false;
+      try {
+        Object.keys(this.$refs).forEach(
+          (el) => (this.$refs[el].isValidated = true)
+        );
+        this.isFormChanged = false;
+        this.showForm = false;
+      } catch (error) {
+        this.$emit("errorHandler", error);
+      }
     },
 
     /**
@@ -548,24 +565,27 @@ export default {
      * CreatedBy: PHDUONG(06/09/2021)
      */
     async checkDuplicate() {
-      let vm = this;
+      try {
+        let vm = this;
 
-      var isCodeValid = true;
-      var res = null;
-      var listCode = [];
+        var isCodeValid = true;
+        var res = null;
+        var listCode = [];
 
+        if (vm.mode != 1) {
+          res = await EmployeeAPI.checkDuplicate(vm.employee.EmployeeCode);
+        } else {
+          res = await EmployeeAPI.getAllCode();
+          listCode = res.data;
+          listCode.splice(listCode.indexOf(vm.empCodeWhenUpdate), 1);
+        }
 
-      if (vm.mode != 1) {
-        res = await EmployeeAPI.checkDuplicate(vm.employee.EmployeeCode);
-      } else {
-        res = await EmployeeAPI.getAllCode();
-        listCode = res.data;
-        listCode.splice(listCode.indexOf(vm.empCodeWhenUpdate), 1);
-      }
-
-      if (res.data == true || listCode.includes(vm.employee.EmployeeCode)) {
-         isCodeValid = false;
-          let msg = ErrorMessage["EmployeeCodeDuplicate"];
+        if (res.data == true || listCode.includes(vm.employee.EmployeeCode)) {
+          isCodeValid = false;
+          let msg = Resources.PopupMessage.EmployeeCodeDuplicate.replace(
+            "EmployeeCode",
+            `${vm.employee.EmployeeCode}`
+          );
           vm.$emit(
             "setPopup",
             msg,
@@ -573,12 +593,15 @@ export default {
             null,
             null,
             null,
-            "Đóng",
+            Resources.PoupButton.ButtonClose,
             null,
             null
           );
+        }
+        return isCodeValid;
+      } catch (error) {
+        this.$emit("errorHandler", error);
       }
-      return isCodeValid;
     },
 
     /**
@@ -586,50 +609,54 @@ export default {
      * CreatedBy: PHDUONG (01/09/2021)
      */
     validateForm() {
-      let vm = this;
+      try {
+        let vm = this;
 
-      var isInputValid = true;
+        var isInputValid = true;
 
-      Object.keys(vm.$refs).forEach((el) => {
-        vm.$refs[el].validateInput();
+        Object.keys(vm.$refs).forEach((el) => {
+          vm.$refs[el].validateInput();
 
-        if (!vm.$refs[el].isValidated) {
-          if (isInputValid === true) {
-            let msg = ErrorMessage[vm.$refs[el].id];
+          if (!vm.$refs[el].isValidated) {
+            if (isInputValid === true) {
+              let msg = Resources.PopupMessage[vm.$refs[el].id];
 
-            this.$emit(
-              "setPopup",
-              msg,
-              "mi-error",
-              null,
-              null,
-              null,
-              "Đóng",
-              null,
-              null
-            );
+              this.$emit(
+                "setPopup",
+                msg,
+                "mi-error",
+                null,
+                null,
+                null,
+                Resources.PoupButton.ButtonClose,
+                null,
+                null
+              );
+            }
+            isInputValid = vm.$refs[el].isValidated;
           }
-          isInputValid = vm.$refs[el].isValidated;
+        });
+
+        if (!vm.departmentItem) {
+          vm.departmentInvalid = true;
+          let msg = Resources.PopupMessage.DepartmentId;
+          vm.$emit(
+            "setPopup",
+            msg,
+            "mi-error",
+            null,
+            null,
+            null,
+            Resources.PoupButton.ButtonClose,
+            null,
+            null
+          );
         }
-      });
 
-      if (!vm.departmentItem) {
-        vm.departmentInvalid = true;
-        let msg = ErrorMessage.DepartmentId;
-        vm.$emit(
-          "setPopup",
-          msg,
-          "mi-error",
-          null,
-          null,
-          null,
-          "Đóng",
-          null,
-          null
-        );
+        return isInputValid;
+      } catch (error) {
+        this.$emit("errorHandler", error);
       }
-
-      return isInputValid;
     },
 
     /**
@@ -638,15 +665,15 @@ export default {
      */
     preCloseForm() {
       if (this.isFormChanged) {
-        let msg = "Dữ liệu đã bị thay đổi. Bạn có muốn cất không";
+        let msg = Resources.PopupMessage.CloseOnFormChanged;
 
         this.$emit(
           "setPopup",
           msg,
           "mi-ques",
-          "Hủy",
-          "Không",
-          "Có",
+          Resources.PoupButton.ButtonCancel,
+          Resources.PoupButton.ButtonDecline,
+          Resources.PoupButton.ButtonYes,
           null,
           this.saveData,
           this.closeForm

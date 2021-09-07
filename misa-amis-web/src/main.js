@@ -15,8 +15,9 @@ import {
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-import Enum from "./js/enums/TypeEnum.js"
-import Format from "./js/format/FormatData.js"
+import Enum from "./js/enums/typeEnum.js"
+import Format from "./js/format/formatData.js"
+
 import BaseInput from "@/components/BaseInput";
 import BasePaginate from "@/components/table/BasePaginate";
 import BasePopup from "@/components/BasePopup";

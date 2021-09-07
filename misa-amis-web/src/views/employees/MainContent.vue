@@ -69,17 +69,16 @@
 </template>
 
 <script>
-import Modal from "../employees/Modal.vue";
-import EmployeeAPI from "@/api/components/EmployeeAPI.js";
-import DepartmentAPI from "@/api/components/DepartmentAPI.js";
-import ErrorMessage from "@/js/resources/ErrorMsg";
-import ToastMessage from "@/js/resources/ToastMsg";
+import EmployeeAPI from "@/api/components/employeeAPI.js";
+import DepartmentAPI from "@/api/components/departmentAPI.js";
 
 import ContentHeader from "./ContentHeader.vue";
 import ContentToolBar from "./ContentToolBar.vue";
-
-import { columns } from "./EmployeeTableCols.js";
+import Modal from "../employees/Modal.vue";
 import BasePaginate from "../../components/table/BasePaginate.vue";
+
+import Resources from "@/js/resources/resources";
+import { columns } from "./employeeTableCols.js";
 
 export default {
   components: {
@@ -183,15 +182,13 @@ export default {
           vm.isLoading = false;
           vm.pageIndex = pageIndex;
 
-          if (res.data) {
-            vm.totalRecord = res.data.totalRecord;
-          } else {
-            vm.totalRecord = 0;
-          }
-          if (res.status != 204) {
+          if (res.data) vm.totalRecord = res.data.totalRecord;
+          else vm.totalRecord = 0;
+
+          if (res.status === Resources.StatusCode["OK"]) {
             this.toastList.push({
-              type: ToastMessage.Type.Success,
-              message: ToastMessage.Message.LoadSuccess,
+              type: Resources.ToastType["Success"],
+              message: Resources.ToastMessage["LoadSuccess"],
             });
           }
         })
@@ -216,9 +213,15 @@ export default {
       }, 500);
     },
 
+    /**
+     * Xuất dữ liệu ra file excel
+     * CreatedBy: PHDUONG(03/09/2021)
+     */
     exportData() {
+      this.isLoading = true;
       EmployeeAPI.export(this.pageIndex, this.pageSize, this.employeeFilter)
         .then((res) => {
+          this.isLoading = false;
           if (res) {
             const blob = new Blob([res.data], {
               type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -231,38 +234,69 @@ export default {
             URL.revokeObjectURL(downloadLink.href);
           }
           this.toastList.push({
-            type: ToastMessage.Type.Success,
-            message: ToastMessage.Message.ExportSuccess,
+            type: Resources.ToastType["Success"],
+            message: Resources.ToastMessage["ExportSuccess"],
           });
         })
         .catch((err) => {
           this.errorHandler(err);
         });
     },
+
     /**
      * Xử lý hiển thị lỗi khi gọi api
      * CreatedBy: PHDUONG(01/09/2021)
      */
     errorHandler(err) {
-      if (err.response && err.response.status < 500 && err.response.status >= 400) {
-        let msg = err.response.data.userMsg;
-        this.toastList.push({
-          type: ToastMessage.Type.Error,
-          message: msg,
-        });
-      }
+      this.isLoading = false;
+      try {
+        if (err.response) {
+          switch (err.response.status) {
+            case Resources.StatusCode["BadRequest"]:
+              this.toastList.push({
+                type: Resources.ToastType["Error"],
+                message: err.response.data.userMsg
+                  ? err.response.data.userMsg
+                  : Resources.ToastMessage["BadRequest"],
+              });
+              break;
+            case Resources.StatusCode.Unauthorized:
+              this.toastList.push({
+                type: Resources.ToastType["Error"],
+                message: Resources.ToastMessage["Unauthorized"],
+              });
+              break;
+            case Resources.StatusCode.NotFound:
+              this.toastList.push({
+                type: Resources.ToastType["Error"],
+                message: Resources.ToastMessage["NotFound"],
+              });
+              break;
+            case Resources.StatusCode.MethodNotAllowed:
+              this.toastList.push({
+                type: Resources.ToastType["Error"],
+                message: Resources.ToastMessage["MethodNotAllowed"],
+              });
+              break;
+            case Resources.StatusCode.ServerError:
+              this.toastList.push({
+                type: Resources.ToastType["Error"],
+                message: Resources.ToastMessage["ServerError"],
+              });
+              break;
 
-      if (err.response && err.response.status >= 500) {
+            default:
+              this.toastList.push({
+                type: Resources.ToastType["Error"],
+                message: err.response.data,
+              });
+              break;
+          }
+        }
+      } catch (error) {
         this.toastList.push({
-          type: ToastMessage.Type.Error,
-          message: ToastMessage.Message.ServerError,
-        });
-      }
-
-      if (err) {
-        this.toastList.push({
-          type: ToastMessage.Type.Error,
-          message: err,
+          type: Resources.ToastType["Error"],
+          message: error,
         });
       }
     },
@@ -299,37 +333,48 @@ export default {
             code: employeeCode,
           });
         }
-        let message = `Bạn có chắc chắn muốn xóa Nhân viên < ${
-          employeeCode ? employeeCode : this.employeesToDelete[0].code
-        } > không?`;
+
+        let message = Resources.PopupMessage["DeleteOne"].replace(
+          "EmployeeCode",
+          `${employeeCode ? employeeCode : this.employeesToDelete[0].code}`
+        );
 
         this.setPopup(
           message,
           "mi-warning",
-          "Không",
+          Resources.PoupButton.ButtonDecline,
           null,
-          "Có",
+          Resources.PoupButton.ButtonYes,
           null,
           this.deleteById,
           null
         );
       } else if (this.employeesToDelete.length > 1) {
-        let message = `Bạn có chắc chắn muốn xóa các nhân viên này không?`;
+        let message = Resources.PopupMessage["DeleteMany"];
 
         this.setPopup(
           message,
           "mi-warning",
-          "Không",
+          Resources.PoupButton.ButtonDecline,
           null,
-          "Có",
+          Resources.PoupButton.ButtonYes,
           null,
           this.deleteByListId,
           null
         );
       } else {
         this.employeesToDelete = [];
-        let msg = ErrorMessage["DeleteListEmpty"];
-        this.setPopup(msg, "mi-warning", null, null, null, "Đóng", null, null);
+        let msg = Resources.PopupMessage["DeleteListEmpty"];
+        this.setPopup(
+          msg,
+          "mi-warning",
+          null,
+          null,
+          null,
+          Resources.PoupButton.ButtonClose,
+          null,
+          null
+        );
       }
     },
 
@@ -341,12 +386,14 @@ export default {
       EmployeeAPI.getById(this.employeesToDelete[0].id)
         .then((res) => {
           if (res.status != 204) {
+            this.isLoading = true;
             EmployeeAPI.delete(this.employeesToDelete[0].id)
               .then((res) => {
+                this.isLoading = false;
                 if (res.status != 204) {
                   this.toastList.push({
-                    type: ToastMessage.Type.Success,
-                    message: ToastMessage.Message.DeleteSuccess,
+                    type: Resources.ToastType["Success"],
+                    message: Resources.ToastMessage["DeleteSuccess"],
                   });
                 }
                 this.employeesToDelete = [];
@@ -355,16 +402,15 @@ export default {
               .catch((err) => {
                 this.errorHandler(err);
               });
-          } else if(res.status == 204) {
-            let msg =
-              "Dữ liệu này không còn tồn tại trên hệ thống, vui lòng load lại trang !";
+          } else if (res.status == 204) {
+            let msg = Resources.PopupMessage["UnIdentifyData"];
             this.setPopup(
               msg,
               "mi-warning",
               null,
               null,
               null,
-              "Đóng",
+              Resources.PoupButton.ButtonClose,
               null,
               null
             );
@@ -385,12 +431,14 @@ export default {
         listId.push(data.id);
       });
 
+      this.isLoading = true;
       EmployeeAPI.deleteList(listId)
         .then((res) => {
+          this.isLoading = false;
           if (res.status != 204) {
             this.toastList.push({
-              type: ToastMessage.Type.Success,
-              message: ToastMessage.Message.DeleteSuccess,
+              type: Resources.ToastType["Success"],
+              message: Resources.ToastMessage["DeleteSuccess"],
             });
           }
           this.employeesToDelete = [];

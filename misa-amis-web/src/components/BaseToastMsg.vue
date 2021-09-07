@@ -3,9 +3,9 @@
     <div
       class="toast-custom"
       :class="{
-        'toast-success': toast.type == ToastMessage.Type.Success,
-        'toast-warning': toast.type == ToastMessage.Type.Warning,
-        'toast-error': toast.type == ToastMessage.Type.Error,
+        'toast-success': toast.type == Resources.ToastType.Success,
+        'toast-warning': toast.type == Resources.ToastType.Warning,
+        'toast-error': toast.type == Resources.ToastType.Error,
       }"
       :style="{ top: `${10 + ((index * 48 + 5 * index) % 540)}px` }"
       v-show="isShowed"
@@ -14,9 +14,9 @@
         <div
           class="mi mi-24"
           :class="{
-            'mi-toast-success': toast.type == ToastMessage.Type.Success,
-            'mi-toast-warning': toast.type == ToastMessage.Type.Warning,
-            'mi-toast-error': toast.type == ToastMessage.Type.Error,
+            'mi-toast-success': toast.type == Resources.ToastType.Success,
+            'mi-toast-warning': toast.type == Resources.ToastType.Warning,
+            'mi-toast-error': toast.type == Resources.ToastType.Error,
           }"
         ></div>
       </div>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import ToastMessage from "@/js/resources/ToastMsg";
+import Resources from "@/js/resources/resources";
 export default {
   name: "base-toast-message",
 
@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       isShowed: false,
-      ToastMessage: ToastMessage,
+      Resources: Resources,
     };
   },
 
@@ -62,7 +62,7 @@ export default {
       this.isShowed = true;
       setTimeout(() => {
         this.isShowed = false;
-      }, 1500);
+      }, 2000);
     },
   },
 };

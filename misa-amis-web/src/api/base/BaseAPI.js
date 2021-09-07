@@ -1,4 +1,4 @@
-import BaseAPIConfig from "../base/BaseAPIConfig.js";
+import BaseAPIConfig from "./baseAPIConfig.js";
 
 export default class BaseAPI {
   constructor() {
