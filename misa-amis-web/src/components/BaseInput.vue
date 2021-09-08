@@ -99,7 +99,7 @@ export default {
 
   watch: {
     value: function () {
-      if (this.type == this.$enum.Date) {
+      if (this.type == this.$enum.DATE) {
         this.dateInput = this.value;
       }
     },
@@ -121,7 +121,7 @@ export default {
      * CreatedBy: PHDUONG(30/08/2021)
      */
     onChangeInput(event) {
-      if (this.type == this.$enum.Date) {
+      if (this.type == this.$enum.DATE) {
         if (new Date(this.dateInput) > new Date()) {
           this.dateInput = this.$format.formatDate(new Date(), this.$enum.OnModal);
         }

@@ -226,6 +226,7 @@ namespace Web07.FinalTest.MF960.Controllers
         /// </summary>
         /// <param name="listId"></param>
         /// <returns></returns>
+        /// CreatedBy: PHDUONG(07/08/2021)
         [HttpPost("delete")]
         public virtual IActionResult DeleteList(List<Guid> listId)
         {
@@ -257,7 +258,12 @@ namespace Web07.FinalTest.MF960.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Check Trùng Mã Code
+        /// </summary>
+        /// <param name="entityProp"></param>
+        /// <returns></returns>
+        /// CreatedBy: PHDUONG(07/08/2021)
         [HttpGet("checkDuplicate/{entityProp}")]
         public virtual IActionResult CheckDuplicated(string entityProp)
         {
@@ -265,14 +271,7 @@ namespace Web07.FinalTest.MF960.Controllers
             {
                 var entities = _baseRepository.IsDuplicated(entityProp);
 
-                    return StatusCode(200, entities);
-                //if (!entities)
-                //{
-                //}
-                //else
-                //{
-                //    return NoContent();
-                //}
+                return StatusCode(200, entities);
 
             }
             catch (Exception ex)

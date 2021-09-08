@@ -67,6 +67,11 @@ namespace Web07.FinalTest.MF960.Controllers
 
         }
 
+        /// <summary>
+        /// Xuất Dữ liệu dạng Excel
+        /// </summary>
+        /// <returns></returns>
+        /// CreatedBy:PHDUONG(03/09/2021)
         [HttpGet("export")]
         public IActionResult Export([FromQuery] int pageIndex, [FromQuery] int pageSize, [FromQuery] string employeeFilter)
         {
@@ -79,7 +84,7 @@ namespace Web07.FinalTest.MF960.Controllers
         }
 
         /// <summary>
-        /// Lấy Code cho nhân viên mới
+        /// Lấy tất cả Code
         /// </summary>
         /// <returns></returns>
         ///  CreatedBy: PHDUONG(27/08/2021)

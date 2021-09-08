@@ -95,10 +95,10 @@
                       slot="beforeList"
                       class="custom-seclect-header d-flex items-center"
                     >
-                      <div class="de-code w-20 d-flex flex-center">
+                      <div class="de-code w-20 d-flex flex-center m-l--5">
                         Mã đơn vị
                       </div>
-                      <div class="de-name w-40 d-flex flex-center">
+                      <div class="de-name w-40 d-flex pl-20">
                         Tên đơn vị
                       </div>
                     </span>
@@ -107,10 +107,10 @@
                       <span>{{ props.option.DepartmentName }}</span>
                     </template>
                     <template slot="option" slot-scope="props">
-                      <span class="w-20 d-flex flex-center">{{
+                      <span class="w-20 d-flex flex-center m-l--5">{{
                         props.option.DepartmentCode
                       }}</span>
-                      <span class="w-40 d-flex flex-center">{{
+                      <span class="w-40 d-flex pl-20">{{
                         props.option.DepartmentName
                       }}</span>
                     </template>
@@ -430,6 +430,10 @@ export default {
      */
     async saveData(saveMode) {
       let vm = this;
+
+      if (!saveMode) {
+        saveMode = vm.$enum.Add;
+      }
 
       var isCodeValid = await vm.checkDuplicate();
       var isInputValid = vm.validateForm();

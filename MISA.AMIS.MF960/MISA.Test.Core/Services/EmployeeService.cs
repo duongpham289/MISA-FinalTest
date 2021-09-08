@@ -27,13 +27,25 @@ namespace MISA.Test.Core.Services
         {
             _employeeRepository = employeeRepository;
         }
+        #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// Xuất dữ liệu dưới dạng Excel
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="employeeFilter"></param>
+        /// <param name="check">Biến check export hay paging (true - paging, false - export)</param>
+        /// <returns></returns>
+        /// CreatedBy: PHDUONG(03/09/2021)
         public dynamic ExportEmployee(int pageIndex, int pageSize, string employeeFilter, bool check)
         {
             var stream = new MemoryStream();
             var employees = _employeeRepository.GetPaging(pageIndex, pageSize, employeeFilter, check);
 
-            var genderList = new List<string> { "Nữ", "Nam", "Khác" ,string.Empty};
+            var genderList = new List<string> { "Nữ", "Nam", "Khác", string.Empty };
 
             var properties = typeof(Employee).GetProperties();
             using (var package = new ExcelPackage(stream))
@@ -47,7 +59,7 @@ namespace MISA.Test.Core.Services
                 workSheet.Cells[3, 1].Value = "STT";
                 workSheet.Cells[3, 1].Style.Font.Bold = true;
                 workSheet.Cells[3, 1].Style.Fill.SetBackground(Color.LightGray);
-                workSheet.Cells[3, 1].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin,Color.Black);
+                workSheet.Cells[3, 1].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin, Color.Black);
 
 
                 var column = 2;
@@ -78,7 +90,7 @@ namespace MISA.Test.Core.Services
                         column++;
                     }
                 }
-                
+
                 // Chỉnh bản ghi vào hàng, cell
                 for (int i = 0; i < employees.Count; i++)
                 {
@@ -103,7 +115,7 @@ namespace MISA.Test.Core.Services
                             else if ((propMISAExport[0] as MISAPropExport).Name == "Giới tính")
                             {
                                 var genderName = employees[i].GetType().GetProperty(prop.Name).GetValue(employees[i], null);
-                                workSheet.Cells[i + 4, col].Value = genderList[genderName  != null ? (int)genderName : 3];
+                                workSheet.Cells[i + 4, col].Value = genderList[genderName != null ? (int)genderName : 3];
                             }
                             else
                             {
@@ -135,7 +147,6 @@ namespace MISA.Test.Core.Services
             return stream;
         }
         #endregion
-
 
         #region ValidateData
 

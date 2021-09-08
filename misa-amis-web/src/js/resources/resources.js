@@ -9,7 +9,7 @@ Resource.PopupMessage = {
   DepartmentId: "Đơn vị không được để trống.",
   FullName: "Tên không được để trống.",
   FormNotChanged: "Không thể cất vì chưa thực hiện thay đổi.",
-  DeleteListEmpty: "Không có dữ liệu để xóa.",
+  DeleteListEmpty: "Vui lòng chọn nhân viên bạn muốn xóa.",
   UnIdentifyData: "Dữ liệu này không còn tồn tại trên hệ thống, vui lòng load lại trang.",
   CloseOnFormChanged: "Dữ liệu đã bị thay đổi. Bạn có muốn cất không?"
 };
@@ -17,7 +17,7 @@ Resource.PopupMessage = {
 //Các Button Popup
 Resource.PoupButton = {
   ButtonCancel: "Hủy",
-  ButtonCecline: "Không",
+  ButtonDecline: "Không",
   ButtonYes: "Có",
   ButtonAgree: "Đồng ý",
   ButtonClose: "Đóng",
