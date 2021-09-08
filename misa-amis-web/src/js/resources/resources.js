@@ -1,5 +1,6 @@
 var Resource = Resource || {};
 
+// Thông báo của Popup
 Resource.PopupMessage = {
   DeleteMany: `Bạn có thực sự muốn xóa các nhân viên này không?`,
   DeleteOne: `Bạn có thực sự muốn xóa Nhân viên <EmployeeCode> không?`,
@@ -22,6 +23,7 @@ Resource.PoupButton = {
   ButtonClose: "Đóng",
 };
 
+// Mã trả về
 Resource.StatusCode = {
   OK: 200,
   Created: 201,
@@ -33,6 +35,7 @@ Resource.StatusCode = {
   ServerError: 500,
 };
 
+// Lỗi
 Resource.ErrorMessage = {
   BadRequest: "Có lỗi cú pháp trong yêu cầu và yêu cầu bị từ chối",
   Unauthorized: "Không có quyền truy cập",
@@ -50,13 +53,18 @@ Resource.ToastMessage = {
   ServerError: "Có lỗi xảy ra, vui lòng liên hệ MISA",
 };
 
-//Các chế độ toast message
+// Các chế độ toast message
 Resource.ToastType = {
   Success: "success",
   Warning: "warning",
   Error: "error",
 };
 
-
+// Dữ liệu giới tính 
+Resource.GenderList = [
+  { value: 1, name: "Nam" },
+  { value: 0, name: "Nữ" },
+  { value: 2, name: "Khác" },
+];
 
 export default Resource;

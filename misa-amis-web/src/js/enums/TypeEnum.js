@@ -1,8 +1,24 @@
 export default {
+    //input type
     DATE: "date",
     TEXT: "text",
     NUMBER: "number",
-    DEPARTMENT: "department",
+
+    //format type
     GENDER: "gender",
-    PAGINATE: "paginate"
+    
+    //form type
+    Add: 0,
+    Update: 1,
+    Clone: 2,
+
+    //format date type
+    OnModal: true,
+    OnTable: false,
+
+    //filter
+    EmptyFilter: "",
+
+    //toast
+    NotShowToast: true,
 }

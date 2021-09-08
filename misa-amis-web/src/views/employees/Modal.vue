@@ -47,7 +47,6 @@
                     ref="EmployeeCode"
                     label="Mã"
                     id="EmployeeCode"
-                    placeholder="NV8888..."
                     :maxLength="20"
                     :value="employee.EmployeeCode"
                     @handleInput="onChangeInput"
@@ -61,7 +60,6 @@
                     label="Tên"
                     id="FullName"
                     :maxLength="100"
-                    placeholder="Nguyễn Văn A..."
                     :value="employee.FullName"
                     @handleInput="onChangeInput"
                     required
@@ -124,7 +122,6 @@
                   <base-input
                     label="Chức danh"
                     id="PositionName"
-                    placeholder="Kế toán..."
                     :maxLength="100"
                     :value="employee.PositionName"
                     @handleInput="onChangeInput"
@@ -183,7 +180,6 @@
                     label="Số CMND"
                     id="IdentityNumber"
                     type="text"
-                    placeholder="0123456789..."
                     :maxLength="25"
                     :value="employee.IdentityNumber"
                     @handleInput="onChangeInput"
@@ -206,7 +202,6 @@
                     id="IdentityPlace"
                     type="text"
                     :maxLength="255"
-                    placeholder="Hà Nội..."
                     :value="employee.IdentityPlace"
                     @handleInput="onChangeInput"
                   />
@@ -222,7 +217,6 @@
                   id="Address"
                   type="text"
                   :maxLength="255"
-                  placeholder="Hà Nội..."
                   :value="employee.Address"
                   @handleInput="onChangeInput"
                 />
@@ -234,7 +228,6 @@
                 <base-input
                   label="ĐT di động"
                   id="MobilePhoneNumber"
-                  placeholder="0123456789..."
                   :maxLength="50"
                   :value="employee.MobilePhoneNumber"
                   @handleInput="onChangeInput"
@@ -244,7 +237,6 @@
                 <base-input
                   label="ĐT cố định"
                   id="TelephoneNumber"
-                  placeholder="0123456789..."
                   :maxLength="50"
                   :value="employee.TelephoneNumber"
                   @handleInput="onChangeInput"
@@ -256,7 +248,6 @@
                   id="Email"
                   type="email"
                   :maxLength="50"
-                  placeholder="example@gmail.com..."
                   :value="employee.Email"
                   @handleInput="onChangeInput"
                 />
@@ -269,7 +260,6 @@
                   label="Tài khoản ngân hàng"
                   id="BankAccount"
                   type="number"
-                  placeholder="0123456789..."
                   :maxLength="25"
                   :value="employee.BankAccount"
                   @handleInput="onChangeInput"
@@ -281,7 +271,6 @@
                   id="BankName"
                   type="text"
                   :maxLength="100"
-                  placeholder="ACB..."
                   :value="employee.BankName"
                   @handleInput="onChangeInput"
                 />
@@ -292,7 +281,6 @@
                   id="BankBranch"
                   type="text"
                   :maxLength="100"
-                  placeholder="Cầu Giấy..."
                   :value="employee.BankBranch"
                   @handleInput="onChangeInput"
                 />
@@ -376,11 +364,7 @@ export default {
       hasError: false,
       departmentInvalid: false,
 
-      genderList: [
-        { value: 1, name: "Nam" },
-        { value: 0, name: "Nữ" },
-        { value: 2, name: "Khác" },
-      ],
+      genderList: Resources.GenderList,
     };
   },
   methods: {
@@ -411,12 +395,12 @@ export default {
 
             vm.employee.DateOfBirth = vm.$format.formatDate(
               vm.employee.DateOfBirth,
-              true
+              this.$enum.OnModal
             );
 
             vm.employee.IdentityDate = vm.$format.formatDate(
               vm.employee.IdentityDate,
-              true
+              this.$enum.OnModal
             );
 
             vm.$refs.EmployeeCode.autoFocus();
@@ -425,7 +409,7 @@ export default {
             vm.$emit("errorHandler", err);
           });
       }
-      if (mode != 1) {
+      if (mode != this.$enum.Update) {
         vm.isLoading = true;
         EmployeeAPI.getNewCode()
           .then((response) => {
@@ -451,7 +435,7 @@ export default {
       var isInputValid = vm.validateForm();
 
       if (isCodeValid && isInputValid && !vm.departmentInvalid) {
-        if (vm.mode != 1) {
+        if (vm.mode != this.$enum.Update) {
           vm.isLoading = true;
 
           EmployeeAPI.create(vm.employee)
@@ -463,9 +447,9 @@ export default {
                 message: Resources.ToastMessage["AddSuccess"],
               });
 
-              if (saveMode == 0) {
+              if (saveMode == this.$enum.Add) {
                 vm.closeForm();
-              } else vm.openForm("", 0);
+              } else vm.openForm("", this.$enum.Add);
 
               setTimeout(function () {
                 vm.reloadTable();
@@ -480,9 +464,9 @@ export default {
             .then(() => {
               vm.isLoading = false;
 
-              if (saveMode == 0) {
+              if (saveMode == this.$enum.Add) {
                 vm.closeForm();
-              } else vm.openForm("", 0);
+              } else vm.openForm("", this.$enum.Add);
 
               vm.toastList.push({
                 type: Resources.ToastType["Success"],
@@ -518,7 +502,11 @@ export default {
      * CreatedBy: PHDUONG (01/09/2021)
      */
     reloadTable() {
-      this.$emit("btnReloadOnClick");
+      this.$emit(
+        "btnReloadOnClick",
+        this.$enum.EmptyFilter,
+        this.$enum.NotShowToast
+      );
     },
 
     /**
@@ -572,7 +560,7 @@ export default {
         var res = null;
         var listCode = [];
 
-        if (vm.mode != 1) {
+        if (vm.mode != this.$enum.Update) {
           res = await EmployeeAPI.checkDuplicate(vm.employee.EmployeeCode);
         } else {
           res = await EmployeeAPI.getAllCode();

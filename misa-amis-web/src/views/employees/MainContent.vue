@@ -157,12 +157,13 @@ export default {
      * Reload bảng dữ liệu sau khi xóa
      * CreatedBy: PHDUONG(30/07/2021)
      */
-    btnReloadOnClick() {
+    btnReloadOnClick(empFilter, notShowToast) {
       this.employeesData = [];
       this.getEmployeePagingData(
         this.pageIndex,
         this.pageSize,
-        this.employeeFilter
+        empFilter === "" ? this.employeeFilter = empFilter : this.employeeFilter,
+        notShowToast
       );
     },
 
@@ -170,7 +171,7 @@ export default {
      * Lấy dữ liệu nhân viên từ Api
      * CreatedBy: PHDUONG(29/08/2021)
      */
-    getEmployeePagingData(pageIndex, pageSize, employeeFilter) {
+    getEmployeePagingData(pageIndex, pageSize, employeeFilter, notShowToast) {
       var vm = this;
 
       vm.isLoading = true;
@@ -185,7 +186,7 @@ export default {
           if (res.data) vm.totalRecord = res.data.totalRecord;
           else vm.totalRecord = 0;
 
-          if (res.status === Resources.StatusCode["OK"]) {
+          if (!notShowToast && res.status === Resources.StatusCode["OK"]) {
             this.toastList.push({
               type: Resources.ToastType["Success"],
               message: Resources.ToastMessage["LoadSuccess"],
@@ -397,7 +398,10 @@ export default {
                   });
                 }
                 this.employeesToDelete = [];
-                this.btnReloadOnClick();
+                this.btnReloadOnClick(
+                  this.$enum.EmptyFilter,
+                  this.$enum.NotShowToast
+                );
               })
               .catch((err) => {
                 this.errorHandler(err);
@@ -442,7 +446,10 @@ export default {
             });
           }
           this.employeesToDelete = [];
-          this.btnReloadOnClick();
+          this.btnReloadOnClick(
+            this.$enum.EmptyFilter,
+            this.$enum.NotShowToast
+          );
         })
         .catch((err) => {
           this.errorHandler(err);

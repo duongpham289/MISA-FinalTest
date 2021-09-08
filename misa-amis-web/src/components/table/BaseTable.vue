@@ -4,10 +4,6 @@
       <thead class="table-header">
         <tr>
           <th>
-            <!-- <div class="delete-box">
-              <input class="checkbox" type="checkbox" />
-              <span class="checkmark"></span>
-            </div> -->
           </th>
           <th v-for="col in columns" :key="col.name" :class="col.className">
             {{ col.label }}
@@ -120,7 +116,7 @@ export default {
      * CreatedBy: PHDUONG(30/08/2021)
      */
     dbClickRow(employeeId) {
-      this.$emit("dbClickRow", employeeId, 1);
+      this.$emit("dbClickRow", employeeId, this.$enum.Update);
       this.$refs["TableFunction"].style.display = "none";
       this.idDropdown = null;
       this.codeDropdown = null;
@@ -131,7 +127,7 @@ export default {
      * CreatedBy: PHDUONG(31/08/2021)
      */
     cloneEmployee(employeeId) {
-      this.$emit("dbClickRow", employeeId, 2);
+      this.$emit("dbClickRow", employeeId, this.$enum.Clone);
       this.$refs["TableFunction"].style.display = "none";
       this.idDropdown = null;
       this.codeDropdown = null;
@@ -179,7 +175,7 @@ export default {
       let tmp = item;
 
       if (col.format === this.$enum.DATE) {
-        tmp = this.$format.formatDate(tmp, false);
+        tmp = this.$format.formatDate(tmp, this.$enum.OnTable);
       }
       if (col.format === this.$enum.GENDER) {
         tmp = this.$format.formatGender(tmp);

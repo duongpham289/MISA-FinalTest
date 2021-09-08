@@ -22,7 +22,7 @@ export default {
      * CreatedBy:PHDUONG(31/08/2021)
      */
     openForm() {
-      this.$emit("openForm", null, 0);
+      this.$emit("openForm", null, this.$enum.Add);
     },
   },
 };
