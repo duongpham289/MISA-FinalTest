@@ -13,26 +13,20 @@ namespace MISA.Test.Core.Entities
         /// <summary>
         /// Khóa chính
         /// </summary>
-        /// CreatedBY: PHDUONG(27/08/2021)
-        public Guid DepartmentId { get; set; }
-
-        /// <summary>
-        /// Mã phòng ban
-        /// </summary>
-        /// CreatedBY: PHDUONG(27/08/2021)
-        public string DepartmentCode { get; set; }
+        /// CreatedBY: PHDUONG(30/09/2021)
+        public int DepartmentId { get; set; }
 
         /// <summary>
         /// Tên phòng ban
         /// </summary>
-        /// CreatedBY: PHDUONG(27/08/2021)
+        /// CreatedBY: PHDUONG(30/09/2021)
         public string DepartmentName { get; set; }
 
         /// <summary>
-        /// Mô tả
+        /// Danh sách Projects
         /// </summary>
-        /// CreatedBY: PHDUONG(27/08/2021)
-        public string Description { get; set; }
+        /// CreatedBY: PHDUONG(30/09/2021)
+        public List<Project> ListProjects { get; set; } = new List<Project>();
 
         #endregion
     }

@@ -15,16 +15,16 @@ namespace Web07.FinalTest.MF960.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class EmployeesController : BaseEntityController<Employee>
+    public class EmployeesController : BaseEntityController<User>
     {
         #region DECLARE
 
-        IEmployeeService _employeeService;
-        IEmployeeRepository _employeeRepository;
+        IUserService _employeeService;
+        IUserRepository _employeeRepository;
         #endregion
 
         #region Constructor
-        public EmployeesController(IEmployeeService employeeService, IEmployeeRepository employeeRepository) : base(employeeService, employeeRepository)
+        public EmployeesController(IUserService employeeService, IUserRepository employeeRepository) : base(employeeService, employeeRepository)
         {
             _employeeService = employeeService;
             _employeeRepository = employeeRepository;
@@ -65,22 +65,6 @@ namespace Web07.FinalTest.MF960.Controllers
                 return StatusCode(500, errorObj);
             }
 
-        }
-
-        /// <summary>
-        /// Xuất Dữ liệu dạng Excel
-        /// </summary>
-        /// <returns></returns>
-        /// CreatedBy:PHDUONG(03/09/2021)
-        [HttpGet("export")]
-        public IActionResult Export([FromQuery] int pageIndex, [FromQuery] int pageSize, [FromQuery] string employeeFilter)
-        {
-
-            var stream = _employeeService.ExportEmployee(pageIndex, pageSize, employeeFilter, false);
-
-            string excelName = $"DanhSachNhanVien.xlsx";
-
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
         }
 
         /// <summary>

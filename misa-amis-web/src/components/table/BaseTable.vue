@@ -131,7 +131,6 @@ export default {
       this.$refs["TableFunction"].style.display = "none";
       this.idDropdown = null;
       this.codeDropdown = null;
-    },
 
     /**
      * Mở popup khi chọn xóa
