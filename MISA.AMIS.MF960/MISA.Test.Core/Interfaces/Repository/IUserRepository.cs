@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MISA.Test.Core.Interfaces.Repository
 {
-    public interface IEmployeeRepository : IBaseRepository<Employee>
+    public interface IUserRepository : IBaseRepository<User>
     {
         #region Methods
 

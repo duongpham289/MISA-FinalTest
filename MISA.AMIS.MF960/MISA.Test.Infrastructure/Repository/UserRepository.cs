@@ -9,10 +9,10 @@ using System.Data;
 
 namespace MISA.Test.Infrastructure.Repository
 {
-    public class EmployeeRepository : BaseRepository<Employee>, IEmployeeRepository
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
         #region Constructor
-        public EmployeeRepository(IConfiguration configuration) : base(configuration)
+        public UserRepository(IConfiguration configuration) : base(configuration)
         {
 
         }
@@ -35,7 +35,7 @@ namespace MISA.Test.Infrastructure.Repository
                 parameters.Add("@PageSize", pageSize);
                 parameters.Add("@TotalRecord", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                var data = _dbConnection.Query<Employee>($"Proc_GetEmployeeFilterPaging", param: parameters, commandType: CommandType.StoredProcedure);
+                var data = _dbConnection.Query<User>($"Proc_GetEmployeeFilterPaging", param: parameters, commandType: CommandType.StoredProcedure);
 
                 var totalRecord = parameters.Get<Int32>("@TotalRecord");
 
