@@ -6,13 +6,15 @@ using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Text;
 
 namespace MISA.Test.Infrastructure.Repository
 {
-    public class UserRepository : BaseRepository<User>, IUserRepository
+    public class TaskRepository : BaseRepository<Task>, ITaskRepository
     {
         #region Constructor
-        public UserRepository(IConfiguration configuration) : base(configuration)
+        public TaskRepository(IConfiguration configuration) : base(configuration)
         {
 
         }
@@ -25,17 +27,16 @@ namespace MISA.Test.Infrastructure.Repository
         /// </summary>
         /// <returns>Danh sách nhân viên và dữ liệu phân trang</returns>
         /// CreatedBy: PHDUONG(27/08/2021)
-        public List<User> GetUserByName(string userName)
+        public List<Task> GetTasksByProjectId(int ProjectId)
         {
             using (_dbConnection = new MySqlConnection(_configuration.GetConnectionString("SqlConnection")))
             {
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@UserName", userName ?? String.Empty);
+                DynamicParameters parameters = new();
+                parameters.Add("@ProjectId", ProjectId);
 
-                var data = _dbConnection.Query<User>($"Proc_GetUserByName", param: parameters, commandType: CommandType.StoredProcedure);
+                var data = _dbConnection.Query<Task>($"Proc_GetTasksByProjectId", param: parameters, commandType: CommandType.StoredProcedure);
 
-                return data.AsList();
-
+                return data.ToList();
             }
         }
         #endregion

@@ -19,13 +19,13 @@ namespace MISA.Test.Core.Services
     {
         #region DECLARE
 
-        IUserRepository _employeeRepository;
+        IUserRepository _userRepository;
         #endregion
 
         #region Constructor
-        public UserService(IUserRepository employeeRepository, IBaseRepository<User> baseRepository) : base(baseRepository)
+        public UserService(IUserRepository userRepository, IBaseRepository<User> baseRepository) : base(baseRepository)
         {
-            _employeeRepository = employeeRepository;
+            _userRepository = userRepository;
         }
         #endregion
 
@@ -37,11 +37,11 @@ namespace MISA.Test.Core.Services
         /// <param name="customer">Dữ liệu cần validate</param>
         /// <returns></returns>
         /// CreatedBy: PHDUONG(27/08/2021)
-        protected override bool ValidateCustom(User employee)
+        protected override bool ValidateCustom(User user)
         {
             //Kiểm tra thông tin của nhân viên đã hợp lệ chưa
             //1.Mã nhân viên ko được phép để trống
-            if (employee.EmployeeCode == "" || employee.EmployeeCode == null)
+            if (user.EmployeeCode == "" || user.EmployeeCode == null)
             {
                 var errorObj = new
                 {
@@ -56,7 +56,7 @@ namespace MISA.Test.Core.Services
             }
 
             //2. Mã nhân viên không được phép trùng
-            if (employee.UserId == Guid.Empty && _employeeRepository.IsDuplicated(employee.EmployeeCode))
+            if (user.UserId == Guid.Empty && _userRepository.IsDuplicated(user.EmployeeCode))
             {
                 var errorObj = new
                 {
@@ -71,7 +71,7 @@ namespace MISA.Test.Core.Services
             }
 
             /*//3.Đơn vị ko được phép để trống
-            if (employee.DepartmentId == null && employee.DepartmentName == null)
+            if (user.DepartmentId == null && user.DepartmentName == null)
             {
                 var errorObj = new
                 {

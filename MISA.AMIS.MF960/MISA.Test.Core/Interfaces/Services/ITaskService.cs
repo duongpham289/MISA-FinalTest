@@ -2,7 +2,7 @@
 
 namespace MISA.Test.Core.Interfaces.Services
 {
-    public interface IProjectService : IBaseService<Project>
+    public interface ITaskService : IBaseService<Task>
     {
 
     }

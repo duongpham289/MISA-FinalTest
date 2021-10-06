@@ -3,51 +3,54 @@ using Microsoft.AspNetCore.Mvc;
 using MISA.Test.Core.Entities;
 using MISA.Test.Core.Interfaces.Repository;
 using MISA.Test.Core.Interfaces.Services;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Web07.FinalTest.MF960.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class DepartmentsController : BaseEntityController<Department>
+    public class UsersController : BaseEntityController<User>
     {
         #region DECLARE
-        IDepartmentService _departmentService;
+
+        IUserService _userService;
+        IUserRepository _userRepository;
         #endregion
 
         #region Constructor
-        public DepartmentsController(IDepartmentService departmentService, IDepartmentRepository departmentRepository) : base(departmentService, departmentRepository)
+        public UsersController(IUserService userService, IUserRepository userRepository) : base(userService, userRepository)
         {
-            _departmentService = departmentService;
+            _userService = userService;
+            _userRepository = userRepository;
         }
+
         #endregion
 
-        #region Methods
-        /// <summary>
-        /// Lấy toàn bộ dữ liệu
-        /// </summary>
-        /// <returns>Danh sách Thực thể dạng Json</returns>
-        /// CreatedBy: PHDUONG(07/08/2021)
-        [HttpGet("{userId}")]
-        public override IActionResult GetById(Guid userId)
-        {
 
+        #region Methods
+
+        /// <summary>
+        /// Lấy thông tin phân trang nhân viên
+        /// </summary>
+        /// <returns>Dữ liệu phân trang</returns>
+        /// CreatedBy:PHDUONG(27/08/2021)
+        [HttpGet("getUserByName")]
+        public IActionResult GetUsersPaging([FromQuery] string userName)
+        {
             try
             {
-                var entities = _departmentService.GetDepartmentsWithProjects(userId);
+                var serviceResult = _userRepository.GetUserByName(userName);
 
-                if (entities.IsValid)
-                {
-                    return StatusCode(200, entities.Data);
-                }
+                if (serviceResult.Count() > 0)
+                    return StatusCode(200, serviceResult);
                 else
-                {
                     return NoContent();
-                }
-
             }
             catch (Exception ex)
             {
@@ -58,7 +61,6 @@ namespace Web07.FinalTest.MF960.Controllers
                     errorCode = "misa-001",
                     moreInfo = "https://openapi.misa.com.vn/errorcode/misa-001",
                     traceId = ""
-
                 };
                 return StatusCode(500, errorObj);
             }

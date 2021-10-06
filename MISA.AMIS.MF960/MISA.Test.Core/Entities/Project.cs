@@ -40,6 +40,12 @@ namespace MISA.Test.Core.Entities
         /// CreatedBY: PHDUONG(30/09/2021)
         public int DepartmentId { get; set; }
 
+        /// <summary>
+        /// Tên phòng ban
+        /// </summary>
+        /// CreatedBY: PHDUONG(30/09/2021)
+        public string DepartmentName { get; set; }
+
         #endregion
     }
 }

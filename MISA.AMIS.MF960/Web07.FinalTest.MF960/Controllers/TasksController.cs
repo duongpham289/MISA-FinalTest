@@ -6,47 +6,47 @@ using MISA.Test.Core.Interfaces.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Web07.FinalTest.MF960.Controllers;
 
-namespace Web07.FinalTest.MF960.Controllers
+namespace MISA.AMIS.MF960.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class DepartmentsController : BaseEntityController<Department>
+    public class TasksController : BaseEntityController<Task>
     {
         #region DECLARE
-        IDepartmentService _departmentService;
+        ITaskRepository _taskRepository;
         #endregion
 
         #region Constructor
-        public DepartmentsController(IDepartmentService departmentService, IDepartmentRepository departmentRepository) : base(departmentService, departmentRepository)
+        public TasksController(ITaskService taskService, ITaskRepository taskRepository) : base(taskService, taskRepository)
         {
-            _departmentService = departmentService;
+            _taskRepository = taskRepository;
         }
         #endregion
 
         #region Methods
         /// <summary>
-        /// Lấy toàn bộ dữ liệu
+        /// Lấy tất cả Công việc theo ProjectId
         /// </summary>
         /// <returns>Danh sách Thực thể dạng Json</returns>
         /// CreatedBy: PHDUONG(07/08/2021)
-        [HttpGet("{userId}")]
-        public override IActionResult GetById(Guid userId)
+        [HttpGet("getByProjectId/{ProjectId}")]
+        public IActionResult GetTasksByProjectId(int ProjectId)
         {
 
             try
             {
-                var entities = _departmentService.GetDepartmentsWithProjects(userId);
+                var entities = _taskRepository.GetTasksByProjectId(ProjectId);
 
-                if (entities.IsValid)
-                {
-                    return StatusCode(200, entities.Data);
-                }
-                else
-                {
-                    return NoContent();
-                }
+                //if (entities)
+                //{
+                    return StatusCode(200, entities);
+                //}
+                //else
+                //{
+                //    return NoContent();
+                //}
 
             }
             catch (Exception ex)

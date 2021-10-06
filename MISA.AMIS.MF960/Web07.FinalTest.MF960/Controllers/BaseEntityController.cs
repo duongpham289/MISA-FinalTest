@@ -26,6 +26,10 @@ namespace Web07.FinalTest.MF960.Controllers
             _baseRepository = baseRepository;
             _className = typeof(MISAEntity).Name;
         }
+
+        public BaseEntityController(ITaskService taskService, ITaskRepository taskRepository)
+        {
+        }
         #endregion
 
         #region Methods

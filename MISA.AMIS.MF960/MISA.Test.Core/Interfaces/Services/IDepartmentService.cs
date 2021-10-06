@@ -14,9 +14,10 @@ namespace MISA.Test.Core.Interfaces.Services
         /// <summary>
         /// Thêm mới dữ liệu
         /// </summary>
+        /// <param name="userId">Dữ liệu truyền vào</param>
         /// <returns></returns>
         /// CreatedBy: PHDUONG(27/08/2021)
-        ServiceResult GetDepartmentsWithProjects();
+        ServiceResult GetDepartmentsWithProjects(Guid userId);
 
         #endregion
     }

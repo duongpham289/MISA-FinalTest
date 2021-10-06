@@ -14,26 +14,10 @@ namespace MISA.Test.Core.Interfaces.Repository
         /// <summary>
         /// Lấy danh sách nhân viên phân trang
         /// </summary>
-        /// <param name="pageIndex">Trang hiện tại</param>
-        /// <param name="pageSize">Số bản ghi/trang</param>
-        /// <param name="employeeFilter">Dữ liệu lọc phân trang</param>
+        /// <param name="userFilter">Dữ liệu lọc phân trang</param>
         /// <returns></returns>
         /// CreatedBy: PHDUONG(27/08/2021)
-        dynamic GetPaging(int pageIndex, int pageSize, string employeeFilter, bool check);
-
-        /// <summary>
-        /// Lấy tất cả employeeCode
-        /// </summary>
-        /// <returns></returns>
-        /// CreatedBy: PHDUONG(27/08/2021)
-        List<string> GetAllEmployeeCode();
-
-        /// <summary>
-        /// Lấy tất cả employeeCode
-        /// </summary>
-        /// <returns></returns>
-        /// CreatedBy: PHDUONG(27/08/2021)
-        string GetNewEmployeeCode();
+        List<User> GetUserByName( string userFilter);
 
         #endregion
     }

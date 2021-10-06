@@ -23,6 +23,12 @@ namespace MISA.Test.Core.Entities
         public string DepartmentName { get; set; }
 
         /// <summary>
+        /// Biến check phòng ban cóp thuộc người dùng hiện đang đăng nhập ko
+        /// </summary>
+        /// CreatedBY: PHDUONG(30/09/2021)
+        public Boolean IsBelongToCurrentUser { get; set; }
+
+        /// <summary>
         /// Danh sách Projects
         /// </summary>
         /// CreatedBY: PHDUONG(30/09/2021)

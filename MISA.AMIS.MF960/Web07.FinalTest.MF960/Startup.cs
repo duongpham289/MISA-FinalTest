@@ -59,11 +59,13 @@ namespace Web07.FinalTest.MF960
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<ITaskService, TaskService>();
 
             //Repository DI:
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<ITaskRepository, TaskRepository>();
 
             //Base DI:
             services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));

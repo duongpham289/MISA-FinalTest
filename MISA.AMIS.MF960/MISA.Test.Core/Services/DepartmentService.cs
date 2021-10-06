@@ -32,22 +32,48 @@ namespace MISA.Test.Core.Services
         /// <param name="entity">Dữ liệu truyền vào</param>
         /// <returns></returns>
         /// CreatedBy: PHDUONG(16/08/2021)
-        public ServiceResult GetDepartmentsWithProjects()
+        public ServiceResult GetDepartmentsWithProjects(Guid userId)
         {
 
-            var departments = _departmentRepository.GetAll();
-            var projects = _projectRepository.GetAll();
+            var departments = _departmentRepository.GetByUserId(userId);
+            var allProjects = _projectRepository.GetAll();
+            var projectsAssigned = _projectRepository.GetByUserId(userId);
+
+
+            var temp = new List<Department>();
 
             foreach (var department in departments)
             {
-                foreach (var project in projects)
+                foreach (var project in allProjects)
                 {
                     if (project.DepartmentId == department.DepartmentId)
                     {
+                        department.IsBelongToCurrentUser = true;
                         department.ListProjects.Add(project);
                     }
+
+                }
+                foreach (var project in projectsAssigned)
+                {
+                    if (project.DepartmentId != department.DepartmentId)
+                    {
+                        var additionDepartment = new Department
+                        {
+                            DepartmentId = project.DepartmentId,
+                            DepartmentName = project.DepartmentName,
+                            IsBelongToCurrentUser = false
+                        };
+
+                        additionDepartment.ListProjects.Add(project);
+
+                        temp.Add(additionDepartment);
+                    }
+
+
                 }
             }
+
+            departments.AddRange(temp);
 
             _serviceResult.Data = departments;
             return _serviceResult;

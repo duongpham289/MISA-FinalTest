@@ -11,14 +11,14 @@ using Web07.FinalTest.MF960.Controllers;
 
 namespace MISA.AMIS.MF960.Controllers
 {
-   [Route("api/v1/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class ProjectsController : BaseEntityController<Project>
     {
         #region Constructor
-        public ProjectsController(IProjectService departmentService, IProjectRepository departmentRepository) : base(departmentService, departmentRepository)
+        public ProjectsController(IProjectService projectService, IProjectRepository projectRepository) : base(projectService, projectRepository)
         {
-            
+
         }
         #endregion
     }
