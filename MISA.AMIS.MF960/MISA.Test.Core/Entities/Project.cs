@@ -14,7 +14,7 @@ namespace MISA.Test.Core.Entities
         /// Khóa chính
         /// </summary>
         /// CreatedBY: PHDUONG(30/09/2021)
-        public int ProjectId { get; set; }
+        public Guid ProjectId { get; set; }
 
         /// <summary>
         /// Tên dự án
@@ -35,10 +35,16 @@ namespace MISA.Test.Core.Entities
         public string IconColor { get; set; }
         
         /// <summary>
+        /// Mô tả
+        /// </summary>
+        /// CreatedBY: PHDUONG(30/09/2021)
+        public string Description { get; set; }
+        
+        /// <summary>
         /// Khóa ngoại
         /// </summary>
         /// CreatedBY: PHDUONG(30/09/2021)
-        public int DepartmentId { get; set; }
+        public Guid DepartmentId { get; set; }
 
         /// <summary>
         /// Tên phòng ban

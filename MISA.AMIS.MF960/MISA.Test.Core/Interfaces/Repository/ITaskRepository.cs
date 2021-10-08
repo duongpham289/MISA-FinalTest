@@ -1,4 +1,5 @@
 ﻿using MISA.Test.Core.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace MISA.Test.Core.Interfaces.Repository
@@ -11,6 +12,6 @@ namespace MISA.Test.Core.Interfaces.Repository
         /// <param name="ProjectId">Biến ProjectId</param>
         /// <returns></returns>
         /// CreatedBy: PHDUONG(27/08/2021)
-        List<Task> GetTasksByProjectId(int ProjectId);
+        List<Task> GetTasksByProjectId(Guid ProjectId);
     }
 }

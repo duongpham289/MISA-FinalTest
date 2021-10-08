@@ -20,17 +20,4 @@ namespace MISA.Test.Core.MISAAttribute
 
         }
     }
-
-    /// <summary>
-    /// Thuộc tính xuất file excel
-    /// </summary>
-    /// CreatedBy: PHDUONG (03/09/2021)
-    public class MISAPropExport : Attribute
-    {
-        public readonly string Name;
-        public MISAPropExport(string name)
-        {
-            this.Name = name;
-        }
-    }
 }

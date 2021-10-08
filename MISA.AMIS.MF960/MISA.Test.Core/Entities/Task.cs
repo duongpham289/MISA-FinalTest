@@ -10,7 +10,7 @@ namespace MISA.Test.Core.Entities
         /// Khóa chính
         /// </summary>
         /// CreatedBY: PHDUONG(30/09/2021)
-        public int TaskId { get; set; }
+        public Guid TaskId { get; set; }
 
         /// <summary>
         /// Tên công việc
@@ -31,10 +31,28 @@ namespace MISA.Test.Core.Entities
         public DateTime? EndDate { get; set; }
 
         /// <summary>
+        /// Id người thực hiện
+        /// </summary>
+        /// CreatedBY: PHDUONG(30/09/2021)
+        public Guid AssigneeId { get; set; }
+
+        /// <summary>
         /// Người thực hiện
         /// </summary>
         /// CreatedBY: PHDUONG(30/09/2021)
         public string AssigneeName { get; set; }
+
+        /// <summary>
+        /// Email người thực hiện
+        /// </summary>
+        /// CreatedBY: PHDUONG(30/09/2021)
+        public string AssigneeEmail { get; set; }
+
+        /// <summary>
+        /// Id dự án
+        /// </summary>
+        /// CreatedBY: PHDUONG(30/09/2021)
+        public Guid ProjectId { get; set; }
 
         #endregion
     }

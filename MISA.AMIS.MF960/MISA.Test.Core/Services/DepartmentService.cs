@@ -39,11 +39,11 @@ namespace MISA.Test.Core.Services
             var allProjects = _projectRepository.GetAll();
             var projectsAssigned = _projectRepository.GetByUserId(userId);
 
-
-            var temp = new List<Department>();
+            var departmentIdList = new List<Guid>();
 
             foreach (var department in departments)
             {
+                departmentIdList.Add(department.DepartmentId);
                 foreach (var project in allProjects)
                 {
                     if (project.DepartmentId == department.DepartmentId)
@@ -51,26 +51,33 @@ namespace MISA.Test.Core.Services
                         department.IsBelongToCurrentUser = true;
                         department.ListProjects.Add(project);
                     }
-
-                }
-                foreach (var project in projectsAssigned)
-                {
-                    if (project.DepartmentId != department.DepartmentId)
+                    else if (department.UserId == userId)
                     {
-                        var additionDepartment = new Department
-                        {
-                            DepartmentId = project.DepartmentId,
-                            DepartmentName = project.DepartmentName,
-                            IsBelongToCurrentUser = false
-                        };
-
-                        additionDepartment.ListProjects.Add(project);
-
-                        temp.Add(additionDepartment);
+                        department.IsBelongToCurrentUser = true;
                     }
 
-
                 }
+            }
+
+            var temp = new List<Department>();
+
+            foreach (var project in projectsAssigned)
+            {
+                if (!departmentIdList.Contains(project.DepartmentId))
+                {
+                    var additionDepartment = new Department
+                    {
+                        DepartmentId = project.DepartmentId,
+                        DepartmentName = project.DepartmentName,
+                        IsBelongToCurrentUser = false,
+                    };
+
+                    additionDepartment.ListProjects.Add(project);
+
+                    temp.Add(additionDepartment);
+                }
+
+
             }
 
             departments.AddRange(temp);

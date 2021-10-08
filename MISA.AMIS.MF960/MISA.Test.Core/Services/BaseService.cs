@@ -37,15 +37,15 @@ namespace MISA.Test.Core.Services
         public ServiceResult Add(MISAEntity entity)
         {
 
-            if (!ValidateData(entity))
-            {
-                _serviceResult.IsValid = ValidateData(entity);
-                return _serviceResult;
-            }
-            else if (!ValidateCustom(entity))
-            {
-                return _serviceResult;
-            }
+            //if (!ValidateData(entity))
+            //{
+            //    _serviceResult.IsValid = ValidateData(entity);
+            //    return _serviceResult;
+            //}
+            //else if (!ValidateCustom(entity))
+            //{
+            //    return _serviceResult;
+            //}
 
             _serviceResult.Data = _baseRepository.Add(entity);
 
@@ -61,15 +61,15 @@ namespace MISA.Test.Core.Services
         /// CreatedBy: PHDUONG(16/08/2021)
         public ServiceResult Update(MISAEntity entity, Guid entityId)
         {
-            if (!ValidateData(entity))
-            {
-                _serviceResult.IsValid = ValidateData(entity);
-                return _serviceResult;
-            }
-            else if (!ValidateCustom(entity))
-            {
-                return _serviceResult;
-            }
+            //if (!ValidateData(entity))
+            //{
+            //    _serviceResult.IsValid = ValidateData(entity);
+            //    return _serviceResult;
+            //}
+            //else if (!ValidateCustom(entity))
+            //{
+            //    return _serviceResult;
+            //}
 
             _serviceResult.Data = _baseRepository.Update(entity, entityId);
 

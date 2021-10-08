@@ -16,16 +16,93 @@ namespace Web07.FinalTest.MF960.Controllers
     {
         #region DECLARE
         IDepartmentService _departmentService;
+        IDepartmentRepository _departmentRepository;
         #endregion
 
         #region Constructor
         public DepartmentsController(IDepartmentService departmentService, IDepartmentRepository departmentRepository) : base(departmentService, departmentRepository)
         {
             _departmentService = departmentService;
+            _departmentRepository = departmentRepository;
         }
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Thêm mới 1 bản ghi vào cơ sở dữ liệu
+        /// </summary>
+        /// <returns></returns>
+        /// CreatedBy: PHDUONG(07/08/2021)
+        [HttpPost]
+        public override IActionResult Insert(Department department)
+        {
+            try
+            {
+                var serviceReSult = _departmentRepository.AddDepartment(department);
+
+                if (serviceReSult != Guid.Empty)
+                {
+                    return StatusCode(201, serviceReSult);
+
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                var errorObj = new
+                {
+                    devMsg = ex.Message,
+                    userMsg = MISA.Test.Core.Resources.ResourceVN.ExceptionError_Msg,
+                    errorCode = "misa-001",
+                    moreInfo = "https://openapi.misa.com.vn/errorcode/misa-001",
+                    traceId = ""
+                };
+                return StatusCode(500, errorObj);
+            }
+        }
+        
+        /// <summary>
+        /// Thêm mới 1 bản ghi vào cơ sở dữ liệu
+        /// </summary>
+        /// <returns></returns>
+        /// CreatedBy: PHDUONG(07/08/2021)
+        [HttpPost("addDepartmentUser")]
+        public IActionResult InsertDepartmentUser(DepartmentUser departmentUser)
+        {
+            try
+            {
+                var serviceReSult = _departmentRepository.AddDepartmentUser(departmentUser);
+
+                if (serviceReSult > 0)
+                {
+                    return StatusCode(201, serviceReSult);
+
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                var errorObj = new
+                {
+                    devMsg = ex.Message,
+                    userMsg = MISA.Test.Core.Resources.ResourceVN.ExceptionError_Msg,
+                    errorCode = "misa-001",
+                    moreInfo = "https://openapi.misa.com.vn/errorcode/misa-001",
+                    traceId = ""
+                };
+                return StatusCode(500, errorObj);
+            }
+        }
+
         /// <summary>
         /// Lấy toàn bộ dữ liệu
         /// </summary>

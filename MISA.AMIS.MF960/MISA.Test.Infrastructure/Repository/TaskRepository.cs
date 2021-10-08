@@ -27,7 +27,7 @@ namespace MISA.Test.Infrastructure.Repository
         /// </summary>
         /// <returns>Danh sách nhân viên và dữ liệu phân trang</returns>
         /// CreatedBy: PHDUONG(27/08/2021)
-        public List<Task> GetTasksByProjectId(int ProjectId)
+        public List<Task> GetTasksByProjectId(Guid ProjectId)
         {
             using (_dbConnection = new MySqlConnection(_configuration.GetConnectionString("SqlConnection")))
             {

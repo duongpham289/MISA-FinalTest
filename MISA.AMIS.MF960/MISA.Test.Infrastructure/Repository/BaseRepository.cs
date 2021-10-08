@@ -67,7 +67,7 @@ namespace MISA.Test.Infrastructure.Repository
         /// </summary>
         /// <returns></returns>
         /// CreatedBy: PHDUONG(27/08/2021)
-        public int Add(MISAEntity entity)
+        public virtual int Add(MISAEntity entity)
         {
             using (_dbConnection = new MySqlConnection(_configuration.GetConnectionString("SqlConnection")))
             {

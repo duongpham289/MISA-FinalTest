@@ -32,7 +32,7 @@ namespace MISA.AMIS.MF960.Controllers
         /// <returns>Danh sách Thực thể dạng Json</returns>
         /// CreatedBy: PHDUONG(07/08/2021)
         [HttpGet("getByProjectId/{ProjectId}")]
-        public IActionResult GetTasksByProjectId(int ProjectId)
+        public IActionResult GetTasksByProjectId(Guid ProjectId)
         {
 
             try
