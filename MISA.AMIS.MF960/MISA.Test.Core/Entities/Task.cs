@@ -49,10 +49,35 @@ namespace MISA.Test.Core.Entities
         public string AssigneeEmail { get; set; }
 
         /// <summary>
+        /// Ava người thực hiện
+        /// </summary>
+        /// CreatedBY: PHDUONG(30/09/2021)
+        public string AssigneeAvatar { get; set; }
+
+        /// <summary>
+        /// Màu Ava người thực hiện
+        /// </summary>
+        /// CreatedBY: PHDUONG(30/09/2021)
+        public string AssigneeAvatarColor { get; set; }
+
+        /// <summary>
+        /// Người giao việc
+        /// </summary>
+        /// CreatedBY: PHDUONG(30/09/2021)
+        public string AssignerName { get; set; }
+
+
+        /// <summary>
         /// Id dự án
         /// </summary>
         /// CreatedBY: PHDUONG(30/09/2021)
         public Guid ProjectId { get; set; }
+
+        /// <summary>
+        /// NTên dự án
+        /// </summary>
+        /// CreatedBY: PHDUONG(30/09/2021)
+        public string ProjectName { get; set; }
 
         #endregion
     }

@@ -108,8 +108,8 @@ namespace Web07.FinalTest.MF960.Controllers
         /// </summary>
         /// <returns>Danh sách Thực thể dạng Json</returns>
         /// CreatedBy: PHDUONG(07/08/2021)
-        [HttpGet("{userId}")]
-        public override IActionResult GetById(Guid userId)
+        [HttpGet("getByUserId/{userId}")]
+        public IActionResult GetByUserId(Guid userId)
         {
 
             try

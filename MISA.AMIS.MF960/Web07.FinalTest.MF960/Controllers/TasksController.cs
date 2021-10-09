@@ -31,22 +31,22 @@ namespace MISA.AMIS.MF960.Controllers
         /// </summary>
         /// <returns>Danh sách Thực thể dạng Json</returns>
         /// CreatedBy: PHDUONG(07/08/2021)
-        [HttpGet("getByProjectId/{ProjectId}")]
-        public IActionResult GetTasksByProjectId(Guid ProjectId)
+        [HttpGet("getByProjectId/{projectId}")]
+        public IActionResult GetTasksByProjectId(Guid projectId)
         {
 
             try
             {
-                var entities = _taskRepository.GetTasksByProjectId(ProjectId);
+                var entities = _taskRepository.GetTasksByProjectId(projectId);
 
-                //if (entities)
-                //{
+                if (entities.Count > 0)
+                {
                     return StatusCode(200, entities);
-                //}
-                //else
-                //{
-                //    return NoContent();
-                //}
+                }
+                else
+                {
+                    return NoContent();
+                }
 
             }
             catch (Exception ex)

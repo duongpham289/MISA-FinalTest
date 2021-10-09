@@ -114,6 +114,11 @@ namespace MISA.Test.Infrastructure.Repository
 
                     var propValue = prop.GetValue(entity);
 
+                    if (propName == $"{_className}Id")
+                    {
+                        propValue = entityId;
+                    }
+
                     dynamicParam.Add($"@{propName}", propValue);
 
                 }
