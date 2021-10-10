@@ -33,7 +33,7 @@ namespace Web07.FinalTest.MF960.Controllers
         /// Thêm mới 1 bản ghi vào cơ sở dữ liệu
         /// </summary>
         /// <returns></returns>
-        /// CreatedBy: PHDUONG(07/08/2021)
+        /// CreatedBy: PHDUONG(07/10/2021)
         [HttpPost]
         public override IActionResult Insert(Department department)
         {
@@ -70,7 +70,7 @@ namespace Web07.FinalTest.MF960.Controllers
         /// Thêm mới 1 bản ghi vào cơ sở dữ liệu
         /// </summary>
         /// <returns></returns>
-        /// CreatedBy: PHDUONG(07/08/2021)
+        /// CreatedBy: PHDUONG(07/10/2021)
         [HttpPost("addDepartmentUser")]
         public IActionResult InsertDepartmentUser(DepartmentUser departmentUser)
         {
@@ -107,7 +107,7 @@ namespace Web07.FinalTest.MF960.Controllers
         /// Lấy toàn bộ dữ liệu
         /// </summary>
         /// <returns>Danh sách Thực thể dạng Json</returns>
-        /// CreatedBy: PHDUONG(07/08/2021)
+        /// CreatedBy: PHDUONG(07/10/2021)
         [HttpGet("getByUserId/{userId}")]
         public IActionResult GetByUserId(Guid userId)
         {

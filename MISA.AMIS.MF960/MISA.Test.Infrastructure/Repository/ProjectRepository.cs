@@ -23,10 +23,10 @@ namespace MISA.Test.Infrastructure.Repository
 
         #region Methods
         /// <summary>
-        /// Lấy danh sách Thực thể từ DataBase
+        /// Lấy danh sách Dự án
         /// </summary>
-        /// <returns>List Thực thể</returns>
-        /// CreatedBy: PHDUONG(27/08/2021)
+        /// <returns>List Dự án</returns>
+        /// CreatedBy: PHDUONG(06/10/2021)
         public List<Project> GetByUserId(Guid userId)
         {
             using (_dbConnection = new MySqlConnection(_configuration.GetConnectionString("SqlConnection")))
@@ -74,9 +74,9 @@ namespace MISA.Test.Infrastructure.Repository
         }
 
         /// <summary>
-        /// Thêm mới phòng ban
+        /// Thêm mới ProjectUser
         /// </summary>
-        /// <param name="department">Phòng ban</param>
+        /// <param name="projectUser"></param>
         /// <returns></returns>
         /// CreatedBy: PHDUONG(07/10/2021)
         public int AddProjectUser(ProjectUser projectUser)
