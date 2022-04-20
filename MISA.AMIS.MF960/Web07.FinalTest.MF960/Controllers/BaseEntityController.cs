@@ -34,7 +34,7 @@ namespace Web07.FinalTest.MF960.Controllers
         /// Lấy toàn bộ dữ liệu
         /// </summary>
         /// <returns>Danh sách Thực thể dạng Json</returns>
-        /// CreatedBy: PHDUONG(07/08/2021)
+        /// CreatedBy: PHDUONG(07/10/2021)
         [HttpGet]
         public virtual IActionResult Get()
         {
@@ -263,7 +263,7 @@ namespace Web07.FinalTest.MF960.Controllers
         /// </summary>
         /// <param name="entityProp"></param>
         /// <returns></returns>
-        /// CreatedBy: PHDUONG(07/08/2021)
+        /// CreatedBy: PHDUONG(07/10/2021)
         [HttpGet("checkDuplicate/{entityProp}")]
         public virtual IActionResult CheckDuplicated(string entityProp)
         {

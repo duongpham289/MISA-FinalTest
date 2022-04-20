@@ -55,9 +55,9 @@ namespace MISA.Test.Infrastructure.Repository
         }
 
         /// <summary>
-        /// Thêm mới phòng ban
+        /// Thêm mới DepartmentUser
         /// </summary>
-        /// <param name="departmentUser">Phòng ban</param>
+        /// <param name="departmentUser"></param>
         /// <returns></returns>
         /// CreatedBy: PHDUONG(07/10/2021)
         public int AddDepartmentUser(DepartmentUser departmentUser)
@@ -89,16 +89,16 @@ namespace MISA.Test.Infrastructure.Repository
         }
 
         /// <summary>
-        /// Lấy danh sách Thực thể từ DataBase
+        /// Lấy danh sách Phòng ban theo userId
         /// </summary>
-        /// <returns>List Thực thể</returns>
+        /// <returns>List Phòng ban</returns>
         /// CreatedBy: PHDUONG(27/08/2021)
-        public List<Department> GetByUserId(Guid entityId)
+        public List<Department> GetByUserId(Guid userId)
         {
             using (_dbConnection = new MySqlConnection(_configuration.GetConnectionString("SqlConnection")))
             {
                 DynamicParameters parameters = new DynamicParameters();
-                parameters.Add($"@UserId", entityId);
+                parameters.Add($"@UserId", userId);
                 var departments = _dbConnection.Query<Department>($"Proc_GetDepartmentByUserId", param: parameters, commandType: CommandType.StoredProcedure);
 
                 return departments.AsList();
