@@ -66,6 +66,38 @@ namespace Web07.FinalTest.MF960.Controllers
             }
 
         }
+        
+        /// <summary>
+        /// Lấy thông tin phân trang nhân viên
+        /// </summary>
+        /// <returns>Dữ liệu phân trang</returns>
+        /// CreatedBy:PHDUONG(27/08/2021)
+        [HttpGet("getUserProject/{projectId}")]
+        public IActionResult GetUserByProject(Guid projectId)
+        {
+            try
+            {
+                var serviceResult = _userRepository.GetUserByProject(projectId);
+
+                if (serviceResult.Count() > 0)
+                    return StatusCode(200, serviceResult);
+                else
+                    return NoContent();
+            }
+            catch (Exception ex)
+            {
+                var errorObj = new
+                {
+                    devMsg = ex.Message,
+                    userMsg = MISA.Test.Core.Resources.ResourceVN.ExceptionError_Msg,
+                    errorCode = "misa-001",
+                    moreInfo = "https://openapi.misa.com.vn/errorcode/misa-001",
+                    traceId = ""
+                };
+                return StatusCode(500, errorObj);
+            }
+
+        }
         #endregion
     }
 }
