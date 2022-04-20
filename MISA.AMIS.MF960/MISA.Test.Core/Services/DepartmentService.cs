@@ -27,11 +27,11 @@ namespace MISA.Test.Core.Services
 
         #region Methods
         /// <summary>
-        /// Lấy dữ liệu Phòng ban và sự án theo user ID
+        /// Thêm mới dữ liệu
         /// </summary>
         /// <param name="entity">Dữ liệu truyền vào</param>
         /// <returns></returns>
-        /// CreatedBy: PHDUONG(04/10/2021)
+        /// CreatedBy: PHDUONG(16/08/2021)
         public ServiceResult GetDepartmentsWithProjects(Guid userId)
         {
 
@@ -48,13 +48,14 @@ namespace MISA.Test.Core.Services
                 {
                     if (project.DepartmentId == department.DepartmentId)
                     {
+                        department.IsBelongToCurrentUser = true;
                         department.ListProjects.Add(project);
                     }
+                    else if (department.UserId == userId)
+                    {
+                        department.IsBelongToCurrentUser = true;
+                    }
 
-                }
-                if (department.UserId == userId)
-                {
-                    department.IsBelongToCurrentUser = true;
                 }
             }
 
